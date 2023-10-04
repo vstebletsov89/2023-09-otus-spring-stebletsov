@@ -20,7 +20,7 @@ public class QuestionServiceImpl implements QuestionService {
         System.out.println("Hello, " + person);
 
         for (Question question : questions) {
-            System.out.println(question.getText());
+            System.out.println(question.text());
         }
     }
 

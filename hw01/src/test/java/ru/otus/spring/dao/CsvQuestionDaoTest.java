@@ -18,7 +18,7 @@ class CsvQuestionDaoTest {
         assertEquals(5, questions.size());
 
         // check parsed question/answer
-        assertEquals("What word is often abbreviated as Fn on a keyboard?", questions.get(1).getText());
-        assertEquals("Function", questions.get(1).getAnswer());
+        assertEquals("What word is often abbreviated as Fn on a keyboard?", questions.get(1).text());
+        assertEquals("Function", questions.get(1).answers().get(0).text());
     }
 }
