@@ -6,9 +6,11 @@ import ru.otus.spring.domain.Question;
 
 public class QuestionServiceImpl implements QuestionService {
     private final QuestionDao questionDao;
+    private final IOService ioService;
 
-    public QuestionServiceImpl(QuestionDao questionDao) {
+    public QuestionServiceImpl(QuestionDao questionDao, IOService ioService) {
         this.questionDao = questionDao;
+        this.ioService = ioService;
     }
 
 
@@ -17,10 +19,10 @@ public class QuestionServiceImpl implements QuestionService {
         var questions = questionDao.loadQuestions();
 
         Person person = new Person("Slava", "Stebletsov");
-        System.out.println("Hello, " + person);
+        ioService.println("Hello, " + person);
 
         for (Question question : questions) {
-            System.out.println(question.text());
+            ioService.println(question.text());
         }
     }
 
