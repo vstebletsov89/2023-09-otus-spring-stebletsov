@@ -6,12 +6,12 @@ import org.springframework.core.io.Resource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class QuestionDaoImplTest {
+class CsvQuestionDaoTest {
 
     @Test
     void loadQuestions() {
         Resource resource = new ClassPathResource("questions.csv");
-        QuestionDao questionDao = new QuestionDaoImpl(resource);
+        QuestionDao questionDao = new CsvQuestionDao(resource);
         var questions = questionDao.loadQuestions();
 
         // 5 questions must be processed

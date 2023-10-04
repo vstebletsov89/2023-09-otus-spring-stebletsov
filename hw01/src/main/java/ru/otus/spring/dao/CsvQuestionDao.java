@@ -7,14 +7,15 @@ import ru.otus.spring.domain.Question;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class QuestionDaoImpl implements QuestionDao {
+public class CsvQuestionDao implements QuestionDao {
 
     private final Resource resource;
 
-    public QuestionDaoImpl(Resource resource) {
+    public CsvQuestionDao(Resource resource) {
         this.resource = resource;
     }
 
@@ -23,8 +24,7 @@ public class QuestionDaoImpl implements QuestionDao {
 
         List<Question> questions;
         Resource resource = getResource();
-        try {
-            InputStreamReader reader = new InputStreamReader(resource.getInputStream());
+        try (InputStreamReader reader = new InputStreamReader(resource.getInputStream())) {
             questions = new CsvToBeanBuilder<Question>(reader)
                     .withType(Question.class)
                     .build()
