@@ -1,6 +1,6 @@
 package ru.otus.spring.service;
 
-public class ConsoleIOService implements IOService{
+public class ConsoleIOService implements IOService {
 
     @Override
     public void println(String message) {

@@ -6,6 +6,7 @@ import ru.otus.spring.domain.Question;
 
 public class QuestionServiceImpl implements QuestionService {
     private final QuestionDao questionDao;
+
     private final IOService ioService;
 
     public QuestionServiceImpl(QuestionDao questionDao, IOService ioService) {
