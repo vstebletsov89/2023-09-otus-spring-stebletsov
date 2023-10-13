@@ -8,6 +8,6 @@ public class AnswerCsvConverter extends AbstractCsvConverter {
     @Override
     public Object convertToRead(String value) {
         var valueArr = value.split("%");
-        return new Answer(valueArr[0], Boolean.parseBoolean(valueArr[1]));
+        return new Answer(valueArr[0], true);
     }
 }

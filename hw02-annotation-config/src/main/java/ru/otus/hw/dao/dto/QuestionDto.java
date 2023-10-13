@@ -3,6 +3,7 @@ package ru.otus.hw.dao.dto;
 import com.opencsv.bean.CsvBindAndSplitByPosition;
 import com.opencsv.bean.CsvBindByPosition;
 import lombok.Data;
+import org.springframework.context.annotation.Bean;
 import ru.otus.hw.domain.Answer;
 import ru.otus.hw.domain.Question;
 
@@ -18,6 +19,7 @@ public class QuestionDto {
     @CsvBindAndSplitByPosition(position = 1, collectionType = ArrayList.class, elementType = Answer.class,
             converter = AnswerCsvConverter.class, splitOn = "\\|")
     private List<Answer> answers;
+
 
     public Question toDomainObject() {
         return new Question(text, answers);
