@@ -4,50 +4,76 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ru.otus</groupId>
-    <artifactId>otus-spring</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <modules>
-        <module>hw01</module>
-        <module>hw02-annotation-config</module>
-    </modules>
 
-    <packaging>pom</packaging>
+    <groupId>ru.otus.hw</groupId>
+    <artifactId>hw02-annotation-config</artifactId>
+    <version>1.0</version>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>6.0.12</spring.version>
+        <opencsv.version>5.8</opencsv.version>
+        <junit.version>5.10.0</junit.version>
+        <mockito.version>5.4.0</mockito.version>
+        <assertj.version>3.24.2</assertj.version>
+        <lombok.version>1.18.28</lombok.version>
         <checkstyle-plugin.version>3.2.2</checkstyle-plugin.version>
         <checkstyle.version>10.11.0</checkstyle.version>
-        <checkstyle.config.url>https://raw.githubusercontent.com/OtusTeam/Spring/master/checkstyle.xml</checkstyle.config.url>
+        <checkstyle.config.url>
+            https://raw.githubusercontent.com/OtusTeam/Spring/master/checkstyle.xml
+        </checkstyle.config.url>
     </properties>
-
     <dependencies>
-        <!-- Это зависимость spring-context, содержит базовую функциональность IoC -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
-            <version>5.7.1</version>
+            <version>${opencsv.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-collections</groupId>
+                    <artifactId>commons-collections</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.10.0</version>
+            <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
+            <version>${junit.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+            <version>${mockito.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+            <version>${assertj.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
+            <optional>true</optional>
+            <version>${lombok.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -74,7 +100,13 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.3.0</version>
+                <!--Настроить для создания jar с зависимостями-->
+            </plugin>
         </plugins>
     </build>
-
 </project>
