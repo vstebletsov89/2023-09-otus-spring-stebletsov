@@ -44,16 +44,18 @@ class TestServiceImplTest {
         StudentServiceImpl studentService = new StudentServiceImpl(ioService);
         doReturn("StudentFirstName").when(ioService).readStringWithPrompt("Please input your first name");
         doReturn("StudentLastName").when(ioService).readStringWithPrompt("Please input your last name");
-        Student student = studentService.determineCurrentStudent();
-        assertEquals("StudentFirstName StudentLastName", student.getFullName());
 
+        Student student = studentService.determineCurrentStudent();
+
+        assertEquals("StudentFirstName StudentLastName", student.getFullName());
 
         QuestionDao questionDao = mock(QuestionDao.class);
         doReturn(questions).when(questionDao).findAll();
         TestServiceImpl testService = new TestServiceImpl(ioService, questionDao);
         doReturn("first answer", "second answer", "third answer", "wrong answer", "wrong answer").when(ioService).readString();
-        var testResult = testService.executeTestFor(student);
-        assertEquals(3, testResult.getRightAnswersCount());
 
+        var testResult = testService.executeTestFor(student);
+
+        assertEquals(3, testResult.getRightAnswersCount());
     }
 }

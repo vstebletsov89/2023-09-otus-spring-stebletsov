@@ -16,7 +16,9 @@ class ResultServiceImplTest {
         TestResult testResult = mock(TestResult.class);
         doReturn(4).when(testResult).getRightAnswersCount();
         doReturn(new Student("Ivan", "Ivanov")).when(testResult).getStudent();
+
         resultService.showResult(testResult);
+
         verify(ioService, atLeast(1)).printLine("Congratulations! You passed test!");
     }
 
@@ -28,7 +30,9 @@ class ResultServiceImplTest {
         TestResult testResult = mock(TestResult.class);
         doReturn(4).when(testResult).getRightAnswersCount();
         doReturn(new Student("Ivan", "Ivanov")).when(testResult).getStudent();
+
         resultService.showResult(testResult);
+
         verify(ioService, atLeast(1)).printLine("Sorry. You fail test.");
     }
 
