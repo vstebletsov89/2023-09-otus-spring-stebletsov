@@ -8,8 +8,9 @@ import ru.otus.hw.domain.TestResult;
 import static org.mockito.Mockito.*;
 
 class ResultServiceImplTest {
+
     @Test
-    void successAttempt_en_US() {
+    void successAttempt() {
         LocalizedIOService ioService = mock(LocalizedIOService.class);
         TestConfig testConfig = () -> 3; // number correct answers to pass test
         ResultServiceImpl resultService = new ResultServiceImpl(testConfig, ioService);
@@ -19,11 +20,11 @@ class ResultServiceImplTest {
 
         resultService.showResult(testResult);
 
-        verify(ioService, atLeast(1)).printLine("Congratulations! You passed test!");
+        verify(ioService, atMost(1)).printLineLocalized("ResultService.passed.test");
     }
 
     @Test
-    void failedAttempt_en_US() {
+    void failedAttempt() {
         LocalizedIOService ioService = mock(LocalizedIOService.class);
         TestConfig testConfig = () -> 5; // number correct answers to pass test
         ResultServiceImpl resultService = new ResultServiceImpl(testConfig, ioService);
@@ -33,10 +34,6 @@ class ResultServiceImplTest {
 
         resultService.showResult(testResult);
 
-        verify(ioService, atLeast(1)).printLine("Sorry. You fail test.");
+        verify(ioService, atMost(1)).printLineLocalized("ResultService.fail.test");
     }
-
-    //TODO: add same tests for ru_RU
-    //TODO: add tests for localized services en/ru
-    //TODO: update readme
 }

@@ -2,10 +2,7 @@ package ru.otus.hw.service;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import ru.otus.hw.config.LocaleConfig;
 
 import java.util.Locale;
@@ -20,6 +17,7 @@ class LocalizedMessagesServiceImplTest {
     static void prepareMessages() {
         messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:messages");
+        messageSource.setFallbackToSystemLocale(false);
     }
 
     @Test

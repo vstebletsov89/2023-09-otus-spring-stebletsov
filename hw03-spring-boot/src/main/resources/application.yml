@@ -3,6 +3,8 @@ spring:
     baseName: messages
     encoding: UTF-8
     fallbackToSystemLocale: false
+  application:
+    name: "Homework #3"
 test:
   rightAnswersCountToPass: 3
   locale: ru_RU #en_US
