@@ -4,7 +4,7 @@ spring:
     encoding: UTF-8
     fallbackToSystemLocale: false
   application:
-    name: "Homework #4"
+    name: "Homework #4 (test env)"
   shell:
     interactive:
       enabled: false

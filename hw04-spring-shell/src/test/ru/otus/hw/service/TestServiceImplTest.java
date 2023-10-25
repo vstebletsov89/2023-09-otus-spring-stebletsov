@@ -2,7 +2,13 @@ package ru.otus.hw.service;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ru.otus.hw.dao.QuestionDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.otus.hw.config.LocaleConfig;
+import ru.otus.hw.config.TestConfig;
+import ru.otus.hw.config.TestFileNameProvider;
+import ru.otus.hw.dao.CsvQuestionDao;
 import ru.otus.hw.domain.Answer;
 import ru.otus.hw.domain.Question;
 import ru.otus.hw.domain.Student;
@@ -12,9 +18,30 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 
+@SpringBootTest
 class TestServiceImplTest {
+
+    @MockBean
+    private LocaleConfig localeConfig;
+
+    @MockBean
+    private TestConfig testConfig;
+
+    @MockBean
+    private TestFileNameProvider testFileNameProvider;
+
+    @MockBean
+    private LocalizedIOService localizedIOService;
+
+    @MockBean
+    private CsvQuestionDao csvQuestionDao;
+
+    @Autowired
+    private StudentServiceImpl studentService;
+
+    @Autowired
+    private TestServiceImpl testService;
 
     static List<Question> questions = new ArrayList<>();
 
@@ -40,22 +67,21 @@ class TestServiceImplTest {
 
     @Test
     void executeTestFor() {
-        LocalizedIOService ioService = mock(LocalizedIOService.class);
-        StudentServiceImpl studentService = new StudentServiceImpl(ioService);
-        doReturn("StudentFirstName").when(ioService).readStringWithPromptLocalized("StudentService.input.first.name");
-        doReturn("StudentLastName").when(ioService).readStringWithPromptLocalized("StudentService.input.last.name");
+        doReturn("StudentFirstName").when(localizedIOService).readStringWithPromptLocalized("StudentService.input.first.name");
+        doReturn("StudentLastName").when(localizedIOService).readStringWithPromptLocalized("StudentService.input.last.name");
 
         Student student = studentService.determineCurrentStudent();
 
         assertEquals("StudentFirstName StudentLastName", student.getFullName());
 
-        QuestionDao questionDao = mock(QuestionDao.class);
-        doReturn(questions).when(questionDao).findAll();
-        TestServiceImpl testService = new TestServiceImpl(ioService, questionDao);
-        doReturn("first answer", "second answer", "third answer", "wrong answer", "wrong answer").when(ioService).readString();
+        doReturn(questions).when(csvQuestionDao).findAll();
+        doReturn("first answer", "second answer", "third answer", "wrong answer", "wrong answer").when(localizedIOService).readString();
 
         var testResult = testService.executeTestFor(student);
 
         assertEquals(3, testResult.getRightAnswersCount());
     }
+
+    //TODO: перенести тесты на @SpringBootTest . Компоненты и моки взять из тестового контекста
+    //в остальном это должны быть юнит тесты/ Spring shell отключить
 }

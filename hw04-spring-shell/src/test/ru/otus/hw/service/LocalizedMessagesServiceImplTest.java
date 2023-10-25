@@ -1,29 +1,30 @@
 package ru.otus.hw.service;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.hw.config.LocaleConfig;
 
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doReturn;
 
+@SpringBootTest(classes = {LocalizedMessagesServiceImpl.class,
+                           MessageSourceAutoConfiguration.class})
 class LocalizedMessagesServiceImplTest {
 
-    static ReloadableResourceBundleMessageSource messageSource;
+    @MockBean
+    private LocaleConfig localeConfig;
 
-    @BeforeAll
-    static void prepareMessages() {
-        messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:messages");
-        messageSource.setFallbackToSystemLocale(false);
-    }
+    @Autowired
+    private LocalizedMessagesServiceImpl localizedMessagesService;
 
     @Test
     void getMessage_en_US() {
-        LocaleConfig localeConfig = () -> Locale.forLanguageTag("en-US");
-        LocalizedMessagesServiceImpl localizedMessagesService = new LocalizedMessagesServiceImpl(localeConfig, messageSource);
+        doReturn(Locale.forLanguageTag("en-US")).when(localeConfig).getLocale();
 
         String localizedMessage = localizedMessagesService.getMessage("TestService.enter.the.answer");
 
@@ -32,8 +33,7 @@ class LocalizedMessagesServiceImplTest {
 
     @Test
     void getMessage_ru_RU() {
-        LocaleConfig localeConfig = () -> Locale.forLanguageTag("ru-RU");
-        LocalizedMessagesServiceImpl localizedMessagesService = new LocalizedMessagesServiceImpl(localeConfig, messageSource);
+        doReturn(Locale.forLanguageTag("ru-RU")).when(localeConfig).getLocale();
 
         String localizedMessage = localizedMessagesService.getMessage("TestService.enter.the.answer");
 

@@ -1,21 +1,27 @@
 package ru.otus.hw.dao;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.hw.config.TestFileNameProvider;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 
+@SpringBootTest(classes = {CsvQuestionDao.class})
 class CsvQuestionDaoTest {
+
+    @MockBean
+    private TestFileNameProvider testFileNameProvider;
+
+    @Autowired
+    private CsvQuestionDao csvQuestionDao;
 
     @Test
     void findAll_en_US() {
-        TestFileNameProvider testFileNameProvider = mock(TestFileNameProvider.class);
         doReturn("/questions.csv").when(testFileNameProvider).getTestFileName();
-        QuestionDao questionDao = new CsvQuestionDao(testFileNameProvider);
-
-        var questions = questionDao.findAll();
+        var questions = csvQuestionDao.findAll();
 
         // 5 questions must be processed
         assertEquals(5, questions.size());
@@ -26,11 +32,9 @@ class CsvQuestionDaoTest {
 
     @Test
     void findAll_ru_RU() {
-        TestFileNameProvider testFileNameProvider = mock(TestFileNameProvider.class);
         doReturn("/questions_ru.csv").when(testFileNameProvider).getTestFileName();
-        QuestionDao questionDao = new CsvQuestionDao(testFileNameProvider);
 
-        var questions = questionDao.findAll();
+        var questions = csvQuestionDao.findAll();
 
         // 5 questions must be processed
         assertEquals(5, questions.size());

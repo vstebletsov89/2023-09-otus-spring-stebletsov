@@ -5,6 +5,7 @@ spring:
     fallbackToSystemLocale: false
   application:
     name: "Homework #4"
+
 test:
   rightAnswersCountToPass: 3
   locale: ru_RU #en_US
