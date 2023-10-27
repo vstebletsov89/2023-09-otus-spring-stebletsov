@@ -81,7 +81,4 @@ class TestServiceImplTest {
 
         assertEquals(3, testResult.getRightAnswersCount());
     }
-
-    //TODO: перенести тесты на @SpringBootTest . Компоненты и моки взять из тестового контекста
-    //в остальном это должны быть юнит тесты/ Spring shell отключить
 }

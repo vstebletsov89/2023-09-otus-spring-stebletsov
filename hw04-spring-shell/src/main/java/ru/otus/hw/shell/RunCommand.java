@@ -15,6 +15,4 @@ public class RunCommand {
     public void runTest() {
         testRunnerService.run();
     }
-
-    //TODO: add readme
 }
