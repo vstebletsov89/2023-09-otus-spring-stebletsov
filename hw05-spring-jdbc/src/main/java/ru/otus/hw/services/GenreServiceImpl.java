@@ -21,6 +21,8 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Optional<Genre> findById(long id) {
-        return Optional.ofNullable(genreRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Genre with id %d not found".formatted(id))));
+        return Optional.ofNullable(
+                genreRepository.findById(id).orElseThrow(() ->
+                        new EntityNotFoundException("Genre with id %d not found".formatted(id))));
     }
 }

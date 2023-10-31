@@ -9,7 +9,6 @@ import ru.otus.hw.models.Author;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,6 +18,7 @@ import java.util.Optional;
 public class AuthorRepositoryJdbc implements AuthorRepository {
 
     private static final String COLUMN_ID = "id";
+
     private static final String COLUMN_FULL_NAME = "full_name";
 
     private final NamedParameterJdbcOperations namedParameterJdbcOperations;
