@@ -133,8 +133,6 @@ class BookRepositoryJdbcTest {
         return getDbBooks(dbAuthors, dbGenres);
     }
 
-    //TODO: add tests for GenreRepository
-    //TODO: add tests for AuthorService
     //TODO: add tests for GenreService
     //TODO: add tests for BookService
 }
