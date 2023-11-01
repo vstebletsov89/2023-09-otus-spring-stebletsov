@@ -1,9 +1,8 @@
 package ru.otus.hw.repositories;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.otus.hw.models.Author;
 
@@ -14,18 +13,21 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
 public class AuthorRepositoryJdbc implements AuthorRepository {
 
     private static final String COLUMN_ID = "id";
 
     private static final String COLUMN_FULL_NAME = "full_name";
 
-    private final NamedParameterJdbcOperations namedParameterJdbcOperations;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    public AuthorRepositoryJdbc(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
 
     @Override
     public List<Author> findAll() {
-        return namedParameterJdbcOperations.query("SELECT id, full_name FROM authors",
+        return namedParameterJdbcTemplate.query("SELECT id, full_name FROM authors",
                 new AuthorRowMapper());
     }
 
@@ -33,7 +35,7 @@ public class AuthorRepositoryJdbc implements AuthorRepository {
     public Optional<Author> findById(long id) {
         try {
             return Optional.ofNullable(
-                    namedParameterJdbcOperations.queryForObject(
+                    namedParameterJdbcTemplate.queryForObject(
                             "SELECT id, full_name FROM authors WHERE id = :id",
                             Map.of(COLUMN_ID, id),
                             new AuthorRowMapper()));

@@ -1,9 +1,8 @@
 package ru.otus.hw.repositories;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.otus.hw.models.Genre;
 
@@ -14,25 +13,28 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
 public class GenreRepositoryJdbc implements GenreRepository {
 
     private static final String COLUMN_ID = "id";
 
     private static final String COLUMN_NAME = "name";
 
-    private final NamedParameterJdbcOperations namedParameterJdbcOperations;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    public GenreRepositoryJdbc(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
 
     @Override
     public List<Genre> findAll() {
-        return namedParameterJdbcOperations.query(
+        return namedParameterJdbcTemplate.query(
                 "SELECT id, name FROM genres", new GenreRowMapper());
     }
 
     @Override
     public Optional<Genre> findById(long id) {
         try {
-            return Optional.ofNullable(namedParameterJdbcOperations.queryForObject(
+            return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(
                     "SELECT id, name FROM genres WHERE id = :id",
                     Map.of(COLUMN_ID, id),
                     new GenreRowMapper()));
