@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Репозиторий на основе Jdbc для работы с книгами ")
+@DisplayName("Репозиторий на основе Jdbc для работы с книгами")
 @JdbcTest
 @Import({BookRepositoryJdbc.class, GenreRepositoryJdbc.class})
 class BookRepositoryJdbcTest {
@@ -43,6 +43,7 @@ class BookRepositoryJdbcTest {
     @MethodSource("getDbBooks")
     void shouldReturnCorrectBookById(Book expectedBook) {
         var actualBook = repositoryJdbc.findById(expectedBook.getId());
+
         assertThat(actualBook).isPresent()
                 .get()
                 .isEqualTo(expectedBook);
@@ -55,6 +56,7 @@ class BookRepositoryJdbcTest {
         var expectedBooks = dbBooks;
 
         assertThat(actualBooks).containsExactlyElementsOf(expectedBooks);
+
         actualBooks.forEach(System.out::println);
     }
 
@@ -63,6 +65,7 @@ class BookRepositoryJdbcTest {
     void shouldSaveNewBook() {
         var expectedBook = new Book(0, "BookTitle_10500", dbAuthors.get(0), dbGenres.get(0));
         var returnedBook = repositoryJdbc.save(expectedBook);
+
         assertThat(returnedBook).isNotNull()
                 .matches(book -> book.getId() > 0)
                 .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedBook);
@@ -84,6 +87,7 @@ class BookRepositoryJdbcTest {
                 .isNotEqualTo(expectedBook);
 
         var returnedBook = repositoryJdbc.save(expectedBook);
+
         assertThat(returnedBook).isNotNull()
                 .matches(book -> book.getId() > 0)
                 .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedBook);
@@ -97,26 +101,29 @@ class BookRepositoryJdbcTest {
     @DisplayName("должен удалять книгу по id ")
     @Test
     void shouldDeleteBook() {
+
         assertThat(repositoryJdbc.findById(1L)).isPresent();
+
         repositoryJdbc.deleteById(1L);
+
         assertThat(repositoryJdbc.findById(1L)).isEmpty();
     }
 
     private static List<Author> getDbAuthors() {
         return IntStream.range(1, 4).boxed()
-                .map(id -> new Author(id, "Author_" + id))
+                .map(id -> new Author(id, "TestAuthor_" + id))
                 .toList();
     }
 
     private static List<Genre> getDbGenres() {
         return IntStream.range(1, 4).boxed()
-                .map(id -> new Genre(id, "Genre_" + id))
+                .map(id -> new Genre(id, "TestGenre_" + id))
                 .toList();
     }
 
     private static List<Book> getDbBooks(List<Author> dbAuthors, List<Genre> dbGenres) {
         return IntStream.range(1, 4).boxed()
-                .map(id -> new Book(id, "BookTitle_" + id, dbAuthors.get(id - 1), dbGenres.get(id - 1)))
+                .map(id -> new Book(id, "TestBookTitle_" + id, dbAuthors.get(id - 1), dbGenres.get(id - 1)))
                 .toList();
     }
 
@@ -125,4 +132,9 @@ class BookRepositoryJdbcTest {
         var dbGenres = getDbGenres();
         return getDbBooks(dbAuthors, dbGenres);
     }
+
+    //TODO: add tests for GenreRepository
+    //TODO: add tests for AuthorService
+    //TODO: add tests for GenreService
+    //TODO: add tests for BookService
 }

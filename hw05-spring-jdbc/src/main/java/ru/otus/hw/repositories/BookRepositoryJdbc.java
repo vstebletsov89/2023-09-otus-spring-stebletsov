@@ -49,7 +49,7 @@ public class BookRepositoryJdbc implements BookRepository {
                                     FROM books b
                                     JOIN genres  g ON b.genre_id  = g.id
                                     JOIN authors a ON b.author_id = a.id
-                                    WHERE id = :id
+                                    WHERE b.id = :id
                                     """,
                             Map.of(COLUMN_ID, id),
                             new BookRowMapper()));
