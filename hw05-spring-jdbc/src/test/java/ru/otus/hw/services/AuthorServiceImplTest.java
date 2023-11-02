@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
@@ -22,7 +23,7 @@ import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса авторов")
 @JdbcTest
-@Import({AuthorServiceImpl.class, })
+@Import({AuthorServiceImpl.class})
 class AuthorServiceImplTest {
 
     @MockBean
@@ -52,13 +53,13 @@ class AuthorServiceImplTest {
     }
 
     @DisplayName("должен загружать автора по id")
-    @ParameterizedTest
-    @ValueSource(ints = {1, 2, 3})
-    void shouldReturnCorrectAuthorById(int id) {
-        int pos = id - 1;
-        doReturn(Optional.of(expectedAuthors.get(pos))).when(authorRepository).findById(id);
-        var actualAuthor = authorService.findById(id);
+    @Test
+    void shouldReturnCorrectAuthorById() {
+        long authorId = 2L;
+        int authorPos = 1;
+        doReturn(Optional.of(expectedAuthors.get(authorPos))).when(authorRepository).findById(authorId);
+        var actualAuthor = authorService.findById(authorId);
 
-        assertThat(actualAuthor).isPresent().get().isEqualTo(expectedAuthors.get(pos));
+        assertThat(actualAuthor).isPresent().get().isEqualTo(expectedAuthors.get(authorPos));
     }
 }

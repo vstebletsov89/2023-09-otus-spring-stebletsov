@@ -132,7 +132,4 @@ class BookRepositoryJdbcTest {
         var dbGenres = getDbGenres();
         return getDbBooks(dbAuthors, dbGenres);
     }
-
-    //TODO: add tests for GenreService
-    //TODO: add tests for BookService
 }
