@@ -11,3 +11,5 @@ spring:
   shell:
     interactive:
       enabled: false
+  flyway:
+    enabled: false
