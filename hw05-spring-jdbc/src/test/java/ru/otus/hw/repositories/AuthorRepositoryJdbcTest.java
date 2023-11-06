@@ -49,7 +49,7 @@ class AuthorRepositoryJdbcTest {
     void shouldReturnCorrectAuthorById(Author expectedAuthor) {
         var actualAuthor = authorRepositoryJdbc.findById(expectedAuthor.getId());
 
-        assertThat(actualAuthor).isPresent().get().isEqualTo(expectedAuthor);
+        assertEquals(expectedAuthor, actualAuthor);
     }
 
     private static List<Author> getDbAuthors() {

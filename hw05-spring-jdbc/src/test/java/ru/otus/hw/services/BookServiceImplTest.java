@@ -16,10 +16,9 @@ import ru.otus.hw.repositories.GenreRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса книг")
@@ -71,10 +70,10 @@ class BookServiceImplTest {
     void shouldReturnCorrectBookById() {
         long bookId = 2L;
         int bookPos = 1;
-        doReturn(Optional.of(expectedBooks.get(bookPos))).when(bookRepository).findById(bookId);
+        doReturn(expectedBooks.get(bookPos)).when(bookRepository).findById(bookId);
         var actualBook = bookService.findById(bookId);
 
-        assertThat(actualBook).isPresent().get().isEqualTo(expectedBooks.get(bookPos));
+        assertEquals(expectedBooks.get(bookPos), actualBook);
     }
 
 
@@ -84,8 +83,8 @@ class BookServiceImplTest {
         Book expectedBook = expectedBooks.get(0);
         expectedBook.setId(null);
         doReturn(expectedBook).when(bookRepository).save(expectedBook);
-        doReturn(Optional.of(expectedBook.getAuthor())).when(authorRepository).findById(expectedBook.getAuthor().getId());
-        doReturn(Optional.of(expectedBook.getGenre())).when(genreRepository).findById(expectedBook.getGenre().getId());
+        doReturn(expectedBook.getAuthor()).when(authorRepository).findById(expectedBook.getAuthor().getId());
+        doReturn(expectedBook.getGenre()).when(genreRepository).findById(expectedBook.getGenre().getId());
         var actualBook = bookService.insert(
                 expectedBook.getTitle(),
                 expectedBook.getAuthor().getId(),
@@ -99,8 +98,8 @@ class BookServiceImplTest {
     void shouldUpdateBook() {
         Book newBook = expectedBooks.get(1);
         doReturn(newBook).when(bookRepository).save(newBook);
-        doReturn(Optional.of(newBook.getAuthor())).when(authorRepository).findById(newBook.getAuthor().getId());
-        doReturn(Optional.of(newBook.getGenre())).when(genreRepository).findById(newBook.getGenre().getId());
+        doReturn(newBook.getAuthor()).when(authorRepository).findById(newBook.getAuthor().getId());
+        doReturn(newBook.getGenre()).when(genreRepository).findById(newBook.getGenre().getId());
         var actualBook = bookService.update(
                 2L,
                 newBook.getTitle(),

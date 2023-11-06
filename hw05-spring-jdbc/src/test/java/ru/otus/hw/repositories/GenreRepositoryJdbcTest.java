@@ -8,14 +8,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
-import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Genre;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Репозиторий на основе Jdbc для работы с жанрами")
 @JdbcTest
@@ -49,7 +48,7 @@ class GenreRepositoryJdbcTest {
     void shouldReturnCorrectGenreById(Genre expectedGenre) {
         var actualGenre = genreRepositoryJdbc.findById(expectedGenre.getId());
 
-        assertThat(actualGenre).isPresent().get().isEqualTo(expectedGenre);
+        assertEquals(expectedGenre, actualGenre);
     }
 
     private static List<Genre> getDbGenres() {

@@ -12,9 +12,7 @@ import ru.otus.hw.repositories.GenreRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 
@@ -55,9 +53,9 @@ class GenreServiceImplTest {
     void shouldReturnCorrectGenreById() {
         long genreId = 1L;
         int genrePos = 0;
-        doReturn(Optional.of(expectedGenres.get(genrePos))).when(genreRepository).findById(genreId);
+        doReturn(expectedGenres.get(genrePos)).when(genreRepository).findById(genreId);
         var actualGenre = genreService.findById(genreId);
 
-        assertThat(actualGenre).isPresent().get().isEqualTo(expectedGenres.get(genrePos));
+        assertEquals(expectedGenres.get(genrePos), actualGenre);
     }
 }

@@ -17,6 +17,7 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Репозиторий на основе Jdbc для работы с книгами")
 @JdbcTest
@@ -45,9 +46,7 @@ class BookRepositoryJdbcTest {
     void shouldReturnCorrectBookById(Book expectedBook) {
         var actualBook = repositoryJdbc.findById(expectedBook.getId());
 
-        assertThat(actualBook).isPresent()
-                .get()
-                .isEqualTo(expectedBook);
+        assertEquals(expectedBook, actualBook);
     }
 
     @DisplayName("должен загружать список всех книг")
@@ -71,10 +70,7 @@ class BookRepositoryJdbcTest {
                 .matches(book -> book.getId() > 0)
                 .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedBook);
 
-        assertThat(repositoryJdbc.findById(returnedBook.getId()))
-                .isPresent()
-                .get()
-                .isEqualTo(returnedBook);
+        assertEquals(returnedBook, repositoryJdbc.findById(returnedBook.getId()));
     }
 
     @DisplayName("должен сохранять измененную книгу")
@@ -82,10 +78,7 @@ class BookRepositoryJdbcTest {
     void shouldSaveUpdatedBook() {
         var expectedBook = new Book(1L, "BookTitle_10500", dbAuthors.get(2), dbGenres.get(2));
 
-        assertThat(repositoryJdbc.findById(expectedBook.getId()))
-                .isPresent()
-                .get()
-                .isNotEqualTo(expectedBook);
+        assertNotEquals(expectedBook, repositoryJdbc.findById(expectedBook.getId()));
 
         var returnedBook = repositoryJdbc.save(expectedBook);
 
@@ -93,21 +86,18 @@ class BookRepositoryJdbcTest {
                 .matches(book -> book.getId() > 0)
                 .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedBook);
 
-        assertThat(repositoryJdbc.findById(returnedBook.getId()))
-                .isPresent()
-                .get()
-                .isEqualTo(returnedBook);
+        assertEquals(returnedBook, repositoryJdbc.findById(returnedBook.getId()));
     }
 
     @DisplayName("должен удалять книгу по id ")
     @Test
     void shouldDeleteBook() {
 
-        assertThat(repositoryJdbc.findById(1L)).isPresent();
+        assertNotNull(repositoryJdbc.findById(1L));
 
         repositoryJdbc.deleteById(1L);
 
-        assertThat(repositoryJdbc.findById(1L)).isEmpty();
+        assertNull(repositoryJdbc.findById(1L));
     }
 
     private static List<Author> getDbAuthors() {

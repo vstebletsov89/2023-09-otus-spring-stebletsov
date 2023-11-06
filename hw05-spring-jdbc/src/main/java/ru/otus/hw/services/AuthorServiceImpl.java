@@ -7,7 +7,6 @@ import ru.otus.hw.models.Author;
 import ru.otus.hw.repositories.AuthorRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -20,9 +19,11 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Optional<Author> findById(long id) {
-        return Optional.ofNullable(
-                authorRepository.findById(id).orElseThrow(() ->
-                                new NotFoundException("Author with id %d not found".formatted(id))));
+    public Author findById(long id) {
+        var author = authorRepository.findById(id);
+        if  (author == null) {
+            throw new NotFoundException("Author with id %d not found".formatted(id));
+        }
+        return author;
     }
 }

@@ -7,7 +7,6 @@ import ru.otus.hw.models.Genre;
 import ru.otus.hw.repositories.GenreRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -20,9 +19,11 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Optional<Genre> findById(long id) {
-        return Optional.ofNullable(
-                genreRepository.findById(id).orElseThrow(() ->
-                        new NotFoundException("Genre with id %d not found".formatted(id))));
+    public Genre findById(long id) {
+        var genre = genreRepository.findById(id);
+        if  (genre == null) {
+            throw new NotFoundException("Genre with id %d not found".formatted(id));
+        }
+        return genre;
     }
 }

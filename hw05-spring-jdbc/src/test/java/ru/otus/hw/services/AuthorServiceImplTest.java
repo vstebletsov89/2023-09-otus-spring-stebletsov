@@ -57,9 +57,9 @@ class AuthorServiceImplTest {
     void shouldReturnCorrectAuthorById() {
         long authorId = 2L;
         int authorPos = 1;
-        doReturn(Optional.of(expectedAuthors.get(authorPos))).when(authorRepository).findById(authorId);
+        doReturn(expectedAuthors.get(authorPos)).when(authorRepository).findById(authorId);
         var actualAuthor = authorService.findById(authorId);
 
-        assertThat(actualAuthor).isPresent().get().isEqualTo(expectedAuthors.get(authorPos));
+        assertEquals(expectedAuthors.get(authorPos), actualAuthor);
     }
 }

@@ -9,7 +9,6 @@ import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.GenreRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -21,8 +20,12 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
 
     @Override
-    public Optional<Book> findById(long id) {
-        return bookRepository.findById(id);
+    public Book findById(long id) {
+        var book = bookRepository.findById(id);
+        if  (book == null) {
+            throw new NotFoundException("Book with id %d not found".formatted(id));
+        }
+        return book;
     }
 
     @Override
@@ -46,10 +49,14 @@ public class BookServiceImpl implements BookService {
     }
 
     private Book save(Long id, String title, long authorId, long genreId) {
-        var author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new NotFoundException("Author with id %d not found".formatted(authorId)));
-        var genre = genreRepository.findById(genreId)
-                .orElseThrow(() -> new NotFoundException("Genre with id %d not found".formatted(genreId)));
+        var author = authorRepository.findById(authorId);
+        if  (author == null) {
+            throw new NotFoundException("Author with id %d not found".formatted(authorId));
+        }
+        var genre = genreRepository.findById(genreId);
+        if  (genre == null) {
+            throw new NotFoundException("Genre with id %d not found".formatted(genreId));
+        }
         var book = new Book(id, title, author, genre);
         return bookRepository.save(book);
     }
