@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.otus.hw.converters.BookConverter;
+import ru.otus.hw.models.Book;
+import ru.otus.hw.services.AuthorService;
 import ru.otus.hw.services.BookService;
+import ru.otus.hw.services.GenreService;
 
 import java.util.stream.Collectors;
 
@@ -13,6 +16,10 @@ import java.util.stream.Collectors;
 public class BookCommands {
 
     private final BookService bookService;
+
+    private final AuthorService authorService;
+
+    private final GenreService genreService;
 
     private final BookConverter bookConverter;
 
@@ -30,13 +37,23 @@ public class BookCommands {
 
     @ShellMethod(value = "Insert book", key = "bins")
     public String insertBook(String title, long authorId, long genreId) {
-        var savedBook = bookService.insert(title, authorId, genreId);
+        var savedBook = bookService.insert(
+                new Book(
+                        null,
+                        title,
+                        authorService.findById(authorId),
+                        genreService.findById(genreId)));
         return bookConverter.bookToString(savedBook);
     }
 
     @ShellMethod(value = "Update book", key = "bupd")
     public String updateBook(long id, String title, long authorId, long genreId) {
-        var savedBook = bookService.update(id, title, authorId, genreId);
+        var savedBook = bookService.update(
+                new Book(
+                        id,
+                        title,
+                        authorService.findById(authorId),
+                        genreService.findById(genreId)));
         return bookConverter.bookToString(savedBook);
     }
 

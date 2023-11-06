@@ -34,13 +34,24 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book insert(String title, long authorId, long genreId) {
-        return save(null, title, authorId, genreId);
+    public Book insert(Book book) {
+        return save(null,
+                book.getTitle(),
+                book.getAuthor().getId(),
+                book.getGenre().getId());
     }
 
     @Override
-    public Book update(Long id, String title, long authorId, long genreId) {
-        return save(id, title, authorId, genreId);
+    public Book update(Book book) {
+        var updatedBook = bookRepository.findById(book.getId());
+        if  (updatedBook == null) {
+            throw new NotFoundException("Book with id %d not found".formatted(book.getId()));
+        }
+
+        return save(book.getId(),
+                book.getTitle(),
+                book.getAuthor().getId(),
+                book.getGenre().getId());
     }
 
     @Override

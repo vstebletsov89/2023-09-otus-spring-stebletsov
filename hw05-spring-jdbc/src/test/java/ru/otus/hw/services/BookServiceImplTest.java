@@ -85,10 +85,11 @@ class BookServiceImplTest {
         doReturn(expectedBook).when(bookRepository).save(expectedBook);
         doReturn(expectedBook.getAuthor()).when(authorRepository).findById(expectedBook.getAuthor().getId());
         doReturn(expectedBook.getGenre()).when(genreRepository).findById(expectedBook.getGenre().getId());
-        var actualBook = bookService.insert(
+        var actualBook = bookService.insert( new Book(
+                null,
                 expectedBook.getTitle(),
-                expectedBook.getAuthor().getId(),
-                expectedBook.getGenre().getId());
+                expectedBook.getAuthor(),
+                expectedBook.getGenre()));
 
         assertThat(actualBook).isEqualTo(expectedBook);
     }
@@ -98,13 +99,15 @@ class BookServiceImplTest {
     void shouldUpdateBook() {
         Book newBook = expectedBooks.get(1);
         doReturn(newBook).when(bookRepository).save(newBook);
+        doReturn(newBook).when(bookRepository).findById(2L);
         doReturn(newBook.getAuthor()).when(authorRepository).findById(newBook.getAuthor().getId());
         doReturn(newBook.getGenre()).when(genreRepository).findById(newBook.getGenre().getId());
-        var actualBook = bookService.update(
+
+        var actualBook = bookService.update( new Book(
                 2L,
                 newBook.getTitle(),
-                newBook.getAuthor().getId(),
-                newBook.getGenre().getId());
+                newBook.getAuthor(),
+                newBook.getGenre()));
 
         assertThat(actualBook).isEqualTo(newBook);
     }
