@@ -2,7 +2,7 @@ package ru.otus.hw.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.hw.exceptions.EntityNotFoundException;
+import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.repositories.AuthorRepository;
 
@@ -23,6 +23,6 @@ public class AuthorServiceImpl implements AuthorService {
     public Optional<Author> findById(long id) {
         return Optional.ofNullable(
                 authorRepository.findById(id).orElseThrow(() ->
-                                new EntityNotFoundException("Author with id %d not found".formatted(id))));
+                                new NotFoundException("Author with id %d not found".formatted(id))));
     }
 }

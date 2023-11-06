@@ -82,7 +82,7 @@ class BookServiceImplTest {
     @Test
     void shouldSaveNewBook() {
         Book expectedBook = expectedBooks.get(0);
-        expectedBook.setId(0);
+        expectedBook.setId(null);
         doReturn(expectedBook).when(bookRepository).save(expectedBook);
         doReturn(Optional.of(expectedBook.getAuthor())).when(authorRepository).findById(expectedBook.getAuthor().getId());
         doReturn(Optional.of(expectedBook.getGenre())).when(genreRepository).findById(expectedBook.getGenre().getId());

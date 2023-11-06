@@ -2,7 +2,7 @@ package ru.otus.hw.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.hw.exceptions.EntityNotFoundException;
+import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.models.Genre;
 import ru.otus.hw.repositories.GenreRepository;
 
@@ -23,6 +23,6 @@ public class GenreServiceImpl implements GenreService {
     public Optional<Genre> findById(long id) {
         return Optional.ofNullable(
                 genreRepository.findById(id).orElseThrow(() ->
-                        new EntityNotFoundException("Genre with id %d not found".formatted(id))));
+                        new NotFoundException("Genre with id %d not found".formatted(id))));
     }
 }

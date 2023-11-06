@@ -15,10 +15,6 @@ import java.util.Optional;
 @Repository
 public class GenreRepositoryJdbc implements GenreRepository {
 
-    private static final String COLUMN_ID = "id";
-
-    private static final String COLUMN_NAME = "name";
-
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public GenreRepositoryJdbc(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -36,7 +32,7 @@ public class GenreRepositoryJdbc implements GenreRepository {
         try {
             return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(
                     "SELECT id, name FROM genres WHERE id = :id",
-                    Map.of(COLUMN_ID, id),
+                    Map.of("id", id),
                     new GenreRowMapper()));
         } catch (DataAccessException ex) {
             return Optional.empty();
@@ -47,7 +43,7 @@ public class GenreRepositoryJdbc implements GenreRepository {
 
         @Override
         public Genre mapRow(ResultSet rs, int i) throws SQLException {
-            return new Genre(rs.getLong(COLUMN_ID), rs.getString(COLUMN_NAME));
+            return new Genre(rs.getLong("id"), rs.getString("name"));
         }
     }
 }

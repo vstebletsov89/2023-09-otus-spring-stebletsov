@@ -15,10 +15,6 @@ import java.util.Optional;
 @Repository
 public class AuthorRepositoryJdbc implements AuthorRepository {
 
-    private static final String COLUMN_ID = "id";
-
-    private static final String COLUMN_FULL_NAME = "full_name";
-
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public AuthorRepositoryJdbc(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -37,7 +33,7 @@ public class AuthorRepositoryJdbc implements AuthorRepository {
             return Optional.ofNullable(
                     namedParameterJdbcTemplate.queryForObject(
                             "SELECT id, full_name FROM authors WHERE id = :id",
-                            Map.of(COLUMN_ID, id),
+                            Map.of("id", id),
                             new AuthorRowMapper()));
         } catch (DataAccessException ex) {
             return Optional.empty();
@@ -48,8 +44,8 @@ public class AuthorRepositoryJdbc implements AuthorRepository {
 
         @Override
         public Author mapRow(ResultSet rs, int i) throws SQLException {
-            return new Author(rs.getLong(COLUMN_ID),
-                              rs.getString(COLUMN_FULL_NAME));
+            return new Author(rs.getLong("id"),
+                              rs.getString("full_name"));
         }
     }
 }

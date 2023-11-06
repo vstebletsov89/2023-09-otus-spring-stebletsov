@@ -19,10 +19,6 @@ import java.util.Optional;
 @Repository
 public class BookRepositoryJdbc implements BookRepository {
 
-    private static final String COLUMN_ID = "id";
-
-    private static final String COLUMN_TITLE = "title";
-
     private static final String COLUMN_AUTHOR_ID = "author_id";
 
     private static final String COLUMN_AUTHOR_FULL_NAME = "author_full_name";
@@ -51,7 +47,7 @@ public class BookRepositoryJdbc implements BookRepository {
                                     JOIN authors a ON b.author_id = a.id
                                     WHERE b.id = :id
                                     """,
-                            Map.of(COLUMN_ID, id),
+                            Map.of("id", id),
                             new BookRowMapper()));
         } catch (DataAccessException ex) {
             return Optional.empty();
@@ -74,7 +70,7 @@ public class BookRepositoryJdbc implements BookRepository {
 
     @Override
     public Book save(Book book) {
-        if (book.getId() == 0) {
+        if (book.getId() == null) {
             return insert(book);
         }
         return update(book);
@@ -84,7 +80,7 @@ public class BookRepositoryJdbc implements BookRepository {
     public void deleteById(long id) {
         namedParameterJdbcTemplate.update(
                 "DELETE FROM books WHERE id = :id",
-                Map.of(COLUMN_ID, id));
+                Map.of("id", id));
     }
 
     private Book insert(Book book) {
@@ -92,7 +88,7 @@ public class BookRepositoryJdbc implements BookRepository {
         namedParameterJdbcTemplate.update(
                 "INSERT INTO books (title, author_id, genre_id) VALUES (:title, :author_id, :genre_id)",
                 new MapSqlParameterSource(
-                        Map.of(COLUMN_TITLE, book.getTitle(),
+                        Map.of("title", book.getTitle(),
                                 COLUMN_AUTHOR_ID, book.getAuthor().getId(),
                                 COLUMN_GENRE_ID, book.getGenre().getId())),
                 keyHolder);
@@ -106,8 +102,8 @@ public class BookRepositoryJdbc implements BookRepository {
                         UPDATE books SET title = :title,
                         author_id = :author_id, genre_id = :genre_id WHERE id = :id
                         """,
-                Map.of(COLUMN_ID, book.getId(),
-                        COLUMN_TITLE, book.getTitle(),
+                Map.of("id", book.getId(),
+                        "title", book.getTitle(),
                         COLUMN_AUTHOR_ID, book.getAuthor().getId(),
                         COLUMN_GENRE_ID, book.getGenre().getId()));
         return book;
@@ -119,7 +115,7 @@ public class BookRepositoryJdbc implements BookRepository {
         public Book mapRow(ResultSet rs, int rowNum) throws SQLException {
             Genre genre = new Genre(rs.getLong(COLUMN_GENRE_ID), rs.getString(COLUMN_GENRE_NAME));
             Author author = new Author(rs.getLong(COLUMN_AUTHOR_ID), rs.getString(COLUMN_AUTHOR_FULL_NAME));
-            return new Book(rs.getLong(COLUMN_ID), rs.getString(COLUMN_TITLE), author, genre);
+            return new Book(rs.getLong("id"), rs.getString("title"), author, genre);
         }
     }
 }

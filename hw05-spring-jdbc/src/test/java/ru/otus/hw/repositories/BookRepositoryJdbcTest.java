@@ -14,6 +14,7 @@ import ru.otus.hw.models.Genre;
 
 import java.util.List;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,7 +64,7 @@ class BookRepositoryJdbcTest {
     @DisplayName("должен сохранять новую книгу")
     @Test
     void shouldSaveNewBook() {
-        var expectedBook = new Book(0, "BookTitle_10500", dbAuthors.get(0), dbGenres.get(0));
+        var expectedBook = new Book(null, "BookTitle_10500", dbAuthors.get(0), dbGenres.get(0));
         var returnedBook = repositoryJdbc.save(expectedBook);
 
         assertThat(returnedBook).isNotNull()
@@ -122,8 +123,10 @@ class BookRepositoryJdbcTest {
     }
 
     private static List<Book> getDbBooks(List<Author> dbAuthors, List<Genre> dbGenres) {
-        return IntStream.range(1, 4).boxed()
-                .map(id -> new Book(id, "TestBookTitle_" + id, dbAuthors.get(id - 1), dbGenres.get(id - 1)))
+        return LongStream.range(1, 4).boxed()
+                .map(id -> new Book(id, "TestBookTitle_" + id,
+                        dbAuthors.get((id.intValue() - 1)),
+                        dbGenres.get(id.intValue() - 1)))
                 .toList();
     }
 
