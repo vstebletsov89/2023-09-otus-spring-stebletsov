@@ -18,14 +18,6 @@ import java.util.Map;
 @Repository
 public class BookRepositoryJdbc implements BookRepository {
 
-    private static final String COLUMN_AUTHOR_ID = "author_id";
-
-    private static final String COLUMN_AUTHOR_FULL_NAME = "author_full_name";
-
-    private static final String COLUMN_GENRE_ID = "genre_id";
-
-    private static final String COLUMN_GENRE_NAME = "genre_name";
-
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public BookRepositoryJdbc(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -87,8 +79,8 @@ public class BookRepositoryJdbc implements BookRepository {
                 "INSERT INTO books (title, author_id, genre_id) VALUES (:title, :author_id, :genre_id)",
                 new MapSqlParameterSource(
                         Map.of("title", book.getTitle(),
-                                COLUMN_AUTHOR_ID, book.getAuthor().getId(),
-                                COLUMN_GENRE_ID, book.getGenre().getId())),
+                                "author_id", book.getAuthor().getId(),
+                                "genre_id", book.getGenre().getId())),
                 keyHolder);
         book.setId(keyHolder.getKeyAs(Long.class));
         return book;
@@ -102,8 +94,8 @@ public class BookRepositoryJdbc implements BookRepository {
                         """,
                 Map.of("id", book.getId(),
                         "title", book.getTitle(),
-                        COLUMN_AUTHOR_ID, book.getAuthor().getId(),
-                        COLUMN_GENRE_ID, book.getGenre().getId()));
+                        "author_id", book.getAuthor().getId(),
+                        "genre_id", book.getGenre().getId()));
         return book;
     }
 
@@ -111,8 +103,8 @@ public class BookRepositoryJdbc implements BookRepository {
 
         @Override
         public Book mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Genre genre = new Genre(rs.getLong(COLUMN_GENRE_ID), rs.getString(COLUMN_GENRE_NAME));
-            Author author = new Author(rs.getLong(COLUMN_AUTHOR_ID), rs.getString(COLUMN_AUTHOR_FULL_NAME));
+            Genre genre = new Genre(rs.getLong("genre_id"), rs.getString("genre_name"));
+            Author author = new Author(rs.getLong("author_id"), rs.getString("author_full_name"));
             return new Book(rs.getLong("id"), rs.getString("title"), author, genre);
         }
     }
