@@ -8,4 +8,4 @@ spring:
       enabled: false
   flyway:
     enabled: true
-    locations: classpath:db/tests
+    locations: classpath:db/migration/1.0,classpath:db/tests
