@@ -4,9 +4,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.repositories.AuthorRepository;
 
@@ -17,8 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса авторов")
-@JdbcTest
-@Import({AuthorServiceImpl.class})
+@SpringBootTest(classes = {AuthorServiceImpl.class})
 class AuthorServiceImplTest {
 
     @MockBean

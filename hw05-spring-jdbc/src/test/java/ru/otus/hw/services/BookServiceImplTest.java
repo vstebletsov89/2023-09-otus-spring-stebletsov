@@ -4,9 +4,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
@@ -22,8 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса книг")
-@JdbcTest
-@Import({BookServiceImpl.class})
+@SpringBootTest(classes = {BookServiceImpl.class})
 class BookServiceImplTest {
 
     @MockBean
@@ -85,7 +83,7 @@ class BookServiceImplTest {
         doReturn(expectedBook).when(bookRepository).save(expectedBook);
         doReturn(expectedBook.getAuthor()).when(authorRepository).findById(expectedBook.getAuthor().getId());
         doReturn(expectedBook.getGenre()).when(genreRepository).findById(expectedBook.getGenre().getId());
-        var actualBook = bookService.insert( new Book(
+        var actualBook = bookService.create( new Book(
                 null,
                 expectedBook.getTitle(),
                 expectedBook.getAuthor(),

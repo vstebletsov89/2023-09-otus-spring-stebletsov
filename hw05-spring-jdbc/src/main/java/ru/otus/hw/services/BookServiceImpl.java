@@ -34,11 +34,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book insert(Book book) {
-        return save(null,
-                book.getTitle(),
-                book.getAuthor().getId(),
-                book.getGenre().getId());
+    public Book create(Book book) {
+        return save(book);
     }
 
     @Override
@@ -48,10 +45,7 @@ public class BookServiceImpl implements BookService {
             throw new NotFoundException("Book with id %d not found".formatted(book.getId()));
         }
 
-        return save(book.getId(),
-                book.getTitle(),
-                book.getAuthor().getId(),
-                book.getGenre().getId());
+        return save(book);
     }
 
     @Override
@@ -59,16 +53,16 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
-    private Book save(Long id, String title, long authorId, long genreId) {
-        var author = authorRepository.findById(authorId);
+    private Book save(Book book) {
+        var author = authorRepository.findById(book.getAuthor().getId());
         if  (author == null) {
-            throw new NotFoundException("Author with id %d not found".formatted(authorId));
+            throw new NotFoundException("Author with id %d not found".formatted(book.getAuthor().getId()));
         }
-        var genre = genreRepository.findById(genreId);
+        var genre = genreRepository.findById(book.getGenre().getId());
         if  (genre == null) {
-            throw new NotFoundException("Genre with id %d not found".formatted(genreId));
+            throw new NotFoundException("Genre with id %d not found".formatted(book.getGenre().getId()));
         }
-        var book = new Book(id, title, author, genre);
-        return bookRepository.save(book);
+        var newBook = new Book(book.getId(), book.getTitle(), author, genre);
+        return bookRepository.save(newBook);
     }
 }

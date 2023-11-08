@@ -1,6 +1,6 @@
 package ru.otus.hw.repositories;
 
-import org.springframework.dao.DataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -33,7 +33,7 @@ public class AuthorRepositoryJdbc implements AuthorRepository {
                             "SELECT id, full_name FROM authors WHERE id = :id",
                             Map.of("id", id),
                             new AuthorRowMapper());
-        } catch (DataAccessException ex) {
+        } catch (IncorrectResultSizeDataAccessException ex) {
             return null;
         }
     }

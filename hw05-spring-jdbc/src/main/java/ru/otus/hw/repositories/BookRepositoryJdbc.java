@@ -1,6 +1,6 @@
 package ru.otus.hw.repositories;
 
-import org.springframework.dao.DataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -39,7 +39,7 @@ public class BookRepositoryJdbc implements BookRepository {
                                     """,
                             Map.of("id", id),
                             new BookRowMapper());
-        } catch (DataAccessException ex) {
+        } catch (IncorrectResultSizeDataAccessException ex) {
             return null;
         }
     }
