@@ -21,11 +21,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book findById(long id) {
-        var book = bookRepository.findById(id);
-        if  (book == null) {
-            throw new NotFoundException("Book with id %d not found".formatted(id));
-        }
-        return book;
+        return bookRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Book with id %d not found".formatted(id)));
     }
 
     @Override
@@ -40,11 +37,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book update(Book book) {
-        var updatedBook = bookRepository.findById(book.getId());
-        if  (updatedBook == null) {
-            throw new NotFoundException("Book with id %d not found".formatted(book.getId()));
-        }
-
+        var updatedBook =
+                bookRepository.findById(book.getId()).orElseThrow(
+                        () -> new NotFoundException("Book with id %d not found".formatted(book.getId()))
+                );
         return save(book);
     }
 
@@ -54,14 +50,16 @@ public class BookServiceImpl implements BookService {
     }
 
     private Book save(Book book) {
-        var author = authorRepository.findById(book.getAuthor().getId());
-        if  (author == null) {
-            throw new NotFoundException("Author with id %d not found".formatted(book.getAuthor().getId()));
-        }
-        var genre = genreRepository.findById(book.getGenre().getId());
-        if  (genre == null) {
-            throw new NotFoundException("Genre with id %d not found".formatted(book.getGenre().getId()));
-        }
+        var author =
+                authorRepository.findById(book.getAuthor().getId()).orElseThrow(
+                        () -> new NotFoundException("Author with id %d not found".
+                                formatted(book.getAuthor().getId())
+                        ));
+        var genre =
+                genreRepository.findById(book.getGenre().getId()).orElseThrow(
+                        () -> new NotFoundException("Genre with id %d not found".
+                                formatted(book.getGenre().getId())
+                        ));
         var newBook = new Book(book.getId(), book.getTitle(), author, genre);
         return bookRepository.save(newBook);
     }

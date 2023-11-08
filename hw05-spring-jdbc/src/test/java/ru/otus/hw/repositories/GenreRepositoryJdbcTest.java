@@ -48,7 +48,16 @@ class GenreRepositoryJdbcTest {
     void shouldReturnCorrectGenreById(Genre expectedGenre) {
         var actualGenre = genreRepositoryJdbc.findById(expectedGenre.getId());
 
-        assertEquals(expectedGenre, actualGenre);
+        assertThat(actualGenre).isPresent()
+                        .get().isEqualTo(expectedGenre);
+    }
+
+    @DisplayName("должен вернуть пустой результат для неверного id")
+    @Test
+    void shouldReturnEmptyResultForInvalidId() {
+        var actualGenre = genreRepositoryJdbc.findById(99L);
+
+        assertThat(actualGenre).isNotPresent();
     }
 
     private static List<Genre> getDbGenres() {

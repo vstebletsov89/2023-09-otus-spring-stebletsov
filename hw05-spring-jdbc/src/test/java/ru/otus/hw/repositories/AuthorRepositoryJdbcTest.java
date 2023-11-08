@@ -49,7 +49,16 @@ class AuthorRepositoryJdbcTest {
     void shouldReturnCorrectAuthorById(Author expectedAuthor) {
         var actualAuthor = authorRepositoryJdbc.findById(expectedAuthor.getId());
 
-        assertEquals(expectedAuthor, actualAuthor);
+        assertThat(actualAuthor).isPresent()
+                        .get().isEqualTo(expectedAuthor);
+    }
+
+    @DisplayName("должен вернуть пустой результат для неверного id")
+    @Test
+    void shouldReturnEmptyResultForInvalidId() {
+        var actualAuthor = authorRepositoryJdbc.findById(99L);
+
+        assertThat(actualAuthor).isNotPresent();
     }
 
     private static List<Author> getDbAuthors() {

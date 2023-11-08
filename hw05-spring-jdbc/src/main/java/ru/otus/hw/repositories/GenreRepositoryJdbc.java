@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class GenreRepositoryJdbc implements GenreRepository {
@@ -27,14 +28,14 @@ public class GenreRepositoryJdbc implements GenreRepository {
     }
 
     @Override
-    public Genre findById(long id) {
+    public Optional<Genre> findById(long id) {
         try {
-            return namedParameterJdbcTemplate.queryForObject(
+            return Optional.of(namedParameterJdbcTemplate.queryForObject(
                     "SELECT id, name FROM genres WHERE id = :id",
                     Map.of("id", id),
-                    new GenreRowMapper());
+                    new GenreRowMapper()));
         } catch (IncorrectResultSizeDataAccessException ex) {
-            return null;
+            return Optional.empty();
         }
     }
 

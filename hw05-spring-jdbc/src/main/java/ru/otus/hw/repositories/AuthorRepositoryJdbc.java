@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class AuthorRepositoryJdbc implements AuthorRepository {
@@ -27,14 +28,14 @@ public class AuthorRepositoryJdbc implements AuthorRepository {
     }
 
     @Override
-    public Author findById(long id) {
+    public Optional<Author> findById(long id) {
         try {
-            return namedParameterJdbcTemplate.queryForObject(
+            return Optional.of(namedParameterJdbcTemplate.queryForObject(
                             "SELECT id, full_name FROM authors WHERE id = :id",
                             Map.of("id", id),
-                            new AuthorRowMapper());
+                            new AuthorRowMapper()));
         } catch (IncorrectResultSizeDataAccessException ex) {
-            return null;
+            return Optional.empty();
         }
     }
 

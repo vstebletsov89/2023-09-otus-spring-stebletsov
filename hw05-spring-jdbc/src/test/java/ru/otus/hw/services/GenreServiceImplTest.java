@@ -6,13 +6,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.models.Genre;
 import ru.otus.hw.repositories.GenreRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса жанров")
@@ -51,9 +54,19 @@ class GenreServiceImplTest {
     void shouldReturnCorrectGenreById() {
         long genreId = 1L;
         int genrePos = 0;
-        doReturn(expectedGenres.get(genrePos)).when(genreRepository).findById(genreId);
+        doReturn(Optional.of(expectedGenres.get(genrePos))).when(genreRepository).findById(genreId);
         var actualGenre = genreService.findById(genreId);
 
         assertEquals(expectedGenres.get(genrePos), actualGenre);
+    }
+
+    @DisplayName("должен выбрасывать исключение для неверного id")
+    @Test
+    void shouldReturnExceptionForInvalidId() {
+        doReturn(Optional.empty()).when(genreRepository).findById(99L);
+        var exception = assertThrows(NotFoundException.class,
+                () -> genreService.findById(99L));
+
+        assertEquals("Genre with id 99 not found", exception.getMessage());
     }
 }

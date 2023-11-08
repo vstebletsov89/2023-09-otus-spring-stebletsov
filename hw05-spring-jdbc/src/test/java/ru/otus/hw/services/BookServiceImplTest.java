@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
@@ -15,9 +16,11 @@ import ru.otus.hw.repositories.GenreRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса книг")
@@ -68,10 +71,20 @@ class BookServiceImplTest {
     void shouldReturnCorrectBookById() {
         long bookId = 2L;
         int bookPos = 1;
-        doReturn(expectedBooks.get(bookPos)).when(bookRepository).findById(bookId);
+        doReturn(Optional.of(expectedBooks.get(bookPos))).when(bookRepository).findById(bookId);
         var actualBook = bookService.findById(bookId);
 
         assertEquals(expectedBooks.get(bookPos), actualBook);
+    }
+
+    @DisplayName("должен выбрасывать исключение для неверного id")
+    @Test
+    void shouldReturnExceptionForInvalidId() {
+        doReturn(Optional.empty()).when(bookRepository).findById(99L);
+        var exception = assertThrows(NotFoundException.class,
+                () -> bookService.findById(99L));
+
+        assertEquals("Book with id 99 not found", exception.getMessage());
     }
 
 
@@ -81,8 +94,8 @@ class BookServiceImplTest {
         Book expectedBook = expectedBooks.get(0);
         expectedBook.setId(null);
         doReturn(expectedBook).when(bookRepository).save(expectedBook);
-        doReturn(expectedBook.getAuthor()).when(authorRepository).findById(expectedBook.getAuthor().getId());
-        doReturn(expectedBook.getGenre()).when(genreRepository).findById(expectedBook.getGenre().getId());
+        doReturn(Optional.of(expectedBook.getAuthor())).when(authorRepository).findById(expectedBook.getAuthor().getId());
+        doReturn(Optional.of(expectedBook.getGenre())).when(genreRepository).findById(expectedBook.getGenre().getId());
         var actualBook = bookService.create( new Book(
                 null,
                 expectedBook.getTitle(),
@@ -97,9 +110,9 @@ class BookServiceImplTest {
     void shouldUpdateBook() {
         Book newBook = expectedBooks.get(1);
         doReturn(newBook).when(bookRepository).save(newBook);
-        doReturn(newBook).when(bookRepository).findById(2L);
-        doReturn(newBook.getAuthor()).when(authorRepository).findById(newBook.getAuthor().getId());
-        doReturn(newBook.getGenre()).when(genreRepository).findById(newBook.getGenre().getId());
+        doReturn(Optional.of(newBook)).when(bookRepository).findById(2L);
+        doReturn(Optional.of(newBook.getAuthor())).when(authorRepository).findById(newBook.getAuthor().getId());
+        doReturn(Optional.of(newBook.getGenre())).when(genreRepository).findById(newBook.getGenre().getId());
 
         var actualBook = bookService.update( new Book(
                 2L,

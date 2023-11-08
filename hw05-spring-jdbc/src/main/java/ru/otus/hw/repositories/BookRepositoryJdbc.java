@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class BookRepositoryJdbc implements BookRepository {
@@ -25,9 +26,9 @@ public class BookRepositoryJdbc implements BookRepository {
     }
 
     @Override
-    public Book findById(long id) {
+    public Optional<Book> findById(long id) {
         try {
-            return namedParameterJdbcTemplate.queryForObject(
+            return Optional.of(namedParameterJdbcTemplate.queryForObject(
                             """
                                     SELECT b.id, b.title,
                                       a.id AS author_id, a.full_name AS author_full_name, 
@@ -38,9 +39,9 @@ public class BookRepositoryJdbc implements BookRepository {
                                     WHERE b.id = :id
                                     """,
                             Map.of("id", id),
-                            new BookRowMapper());
+                            new BookRowMapper()));
         } catch (IncorrectResultSizeDataAccessException ex) {
-            return null;
+            return Optional.empty();
         }
     }
 

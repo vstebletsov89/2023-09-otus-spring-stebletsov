@@ -6,13 +6,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.repositories.AuthorRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса авторов")
@@ -50,9 +53,19 @@ class AuthorServiceImplTest {
     void shouldReturnCorrectAuthorById() {
         long authorId = 2L;
         int authorPos = 1;
-        doReturn(expectedAuthors.get(authorPos)).when(authorRepository).findById(authorId);
+        doReturn(Optional.of(expectedAuthors.get(authorPos))).when(authorRepository).findById(authorId);
         var actualAuthor = authorService.findById(authorId);
 
         assertEquals(expectedAuthors.get(authorPos), actualAuthor);
+    }
+
+    @DisplayName("должен выбрасывать исключение для неверного id")
+    @Test
+    void shouldReturnExceptionForInvalidId() {
+        doReturn(Optional.empty()).when(authorRepository).findById(99L);
+        var exception = assertThrows(NotFoundException.class,
+                () -> authorService.findById(99L));
+
+        assertEquals("Author with id 99 not found", exception.getMessage());
     }
 }
