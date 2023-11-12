@@ -6,7 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.exceptions.NotFoundException;
+import ru.otus.hw.mappers.AuthorMapper;
+import ru.otus.hw.mappers.BookMapperImpl;
+import ru.otus.hw.mappers.GenreMapper;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
@@ -40,6 +44,7 @@ class BookServiceImplTest {
     private BookService bookService;
 
     static List<Book> expectedBooks = new ArrayList<>();
+    static List<BookDto> expectedBooksDto = new ArrayList<>();
 
     @BeforeAll
     static void setExpectedBooks() {
@@ -54,6 +59,8 @@ class BookServiceImplTest {
                         new Author(3L, "TestAuthor3"),
                         new Genre(3L, "TestGenre3"))
         );
+        expectedBooksDto =
+                expectedBooks.stream().map(BookMapperImpl.INSTANCE::bookToBookDto).toList();
     }
 
     @DisplayName("должен загружать список всех книг")
@@ -63,7 +70,8 @@ class BookServiceImplTest {
         var actualBooks = bookService.findAll();
 
         assertEquals(3, actualBooks.size());
-        assertEquals(expectedBooks, actualBooks);
+        actualBooks.forEach(System.out::println);
+        assertEquals(expectedBooksDto, actualBooks);
     }
 
     @DisplayName("должен загружать книгу по id")
@@ -74,7 +82,7 @@ class BookServiceImplTest {
         doReturn(Optional.of(expectedBooks.get(bookPos))).when(bookRepository).findById(bookId);
         var actualBook = bookService.findById(bookId);
 
-        assertEquals(expectedBooks.get(bookPos), actualBook);
+        assertEquals(expectedBooksDto.get(bookPos), actualBook);
     }
 
     @DisplayName("должен выбрасывать исключение для неверного id")
@@ -96,13 +104,15 @@ class BookServiceImplTest {
         doReturn(expectedBook).when(bookRepository).save(expectedBook);
         doReturn(Optional.of(expectedBook.getAuthor())).when(authorRepository).findById(expectedBook.getAuthor().getId());
         doReturn(Optional.of(expectedBook.getGenre())).when(genreRepository).findById(expectedBook.getGenre().getId());
-        var actualBook = bookService.create( new Book(
+        var actualBook = bookService.create( new BookDto(
                 null,
                 expectedBook.getTitle(),
-                expectedBook.getAuthor(),
-                expectedBook.getGenre()));
+                AuthorMapper.INSTANCE.authorToAuthorDto(
+                        expectedBook.getAuthor()),
+                GenreMapper.INSTANCE.genreToGenreDto(
+                        expectedBook.getGenre())));
 
-        assertThat(actualBook).isEqualTo(expectedBook);
+        assertThat(actualBook.toModelObject()).isEqualTo(expectedBook);
     }
 
     @DisplayName("должен обновить книгу")
@@ -114,12 +124,12 @@ class BookServiceImplTest {
         doReturn(Optional.of(newBook.getAuthor())).when(authorRepository).findById(newBook.getAuthor().getId());
         doReturn(Optional.of(newBook.getGenre())).when(genreRepository).findById(newBook.getGenre().getId());
 
-        var actualBook = bookService.update( new Book(
+        var actualBook = bookService.update( new BookDto(
                 2L,
                 newBook.getTitle(),
-                newBook.getAuthor(),
-                newBook.getGenre()));
+                AuthorMapper.INSTANCE.authorToAuthorDto(newBook.getAuthor()),
+                GenreMapper.INSTANCE.genreToGenreDto(newBook.getGenre())));
 
-        assertThat(actualBook).isEqualTo(newBook);
+        assertThat(actualBook.toModelObject()).isEqualTo(newBook);
     }
 }

@@ -1,14 +1,10 @@
 spring:
-
   application:
     name: "Homework #5"
-
   datasource:
     url: jdbc:h2:mem:maindb
-
   flyway:
     enabled: true
-
   jpa:
     generate-ddl: false
     hibernate:

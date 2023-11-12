@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.exceptions.NotFoundException;
+import ru.otus.hw.mappers.AuthorMapper;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.repositories.AuthorRepository;
 
@@ -29,6 +31,7 @@ class AuthorServiceImplTest {
     private AuthorService authorService;
 
     static List<Author> expectedAuthors = new ArrayList<>();
+    static List<AuthorDto> expectedAuthorsDto = new ArrayList<>();
 
     @BeforeAll
     static void setExpectedAuthors() {
@@ -36,6 +39,8 @@ class AuthorServiceImplTest {
                 new Author(1L, "TestAuthor1"),
                 new Author(2L, "TestAuthor2"),
                 new Author(3L, "TestAuthor3"));
+        expectedAuthorsDto =
+                expectedAuthors.stream().map(AuthorMapper.INSTANCE::authorToAuthorDto).toList();
     }
 
     @DisplayName("должен загружать список всех aвторов")
@@ -45,7 +50,7 @@ class AuthorServiceImplTest {
         var actualAuthors = authorService.findAll();
 
         assertEquals(3, actualAuthors.size());
-        assertEquals(expectedAuthors, actualAuthors);
+        assertEquals(expectedAuthorsDto, actualAuthors);
     }
 
     @DisplayName("должен загружать автора по id")
@@ -56,7 +61,7 @@ class AuthorServiceImplTest {
         doReturn(Optional.of(expectedAuthors.get(authorPos))).when(authorRepository).findById(authorId);
         var actualAuthor = authorService.findById(authorId);
 
-        assertEquals(expectedAuthors.get(authorPos), actualAuthor);
+        assertEquals(expectedAuthors.get(authorPos), actualAuthor.toModelObject());
     }
 
     @DisplayName("должен выбрасывать исключение для неверного id")

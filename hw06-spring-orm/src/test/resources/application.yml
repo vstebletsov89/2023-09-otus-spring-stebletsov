@@ -9,3 +9,8 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration/1.0,classpath:db/tests
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true

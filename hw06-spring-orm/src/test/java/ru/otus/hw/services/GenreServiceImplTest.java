@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.exceptions.NotFoundException;
+import ru.otus.hw.mappers.GenreMapper;
 import ru.otus.hw.models.Genre;
 import ru.otus.hw.repositories.GenreRepository;
 
@@ -29,6 +31,7 @@ class GenreServiceImplTest {
     private GenreService genreService;
 
     static List<Genre> expectedGenres = new ArrayList<>();
+    static List<GenreDto> expectedGenresDto = new ArrayList<>();
 
     @BeforeAll
     static void setExpectedGenres() {
@@ -37,6 +40,8 @@ class GenreServiceImplTest {
                 new Genre(2L, "TestGenre2"),
                 new Genre(3L, "TestGenre3")
         );
+        expectedGenresDto =
+                expectedGenres.stream().map(GenreMapper.INSTANCE::genreToGenreDto).toList();
     }
 
     @DisplayName("должен загружать список всех жанров")
@@ -46,7 +51,7 @@ class GenreServiceImplTest {
         var actualGenres = genreService.findAll();
 
         assertEquals(3, actualGenres.size());
-        assertEquals(expectedGenres, actualGenres);
+        assertEquals(expectedGenresDto, actualGenres);
     }
 
     @DisplayName("должен загружать жанр по id")
@@ -57,7 +62,7 @@ class GenreServiceImplTest {
         doReturn(Optional.of(expectedGenres.get(genrePos))).when(genreRepository).findById(genreId);
         var actualGenre = genreService.findById(genreId);
 
-        assertEquals(expectedGenres.get(genrePos), actualGenre);
+        assertEquals(expectedGenresDto.get(genrePos), actualGenre);
     }
 
     @DisplayName("должен выбрасывать исключение для неверного id")
