@@ -99,7 +99,13 @@ class BookServiceImplTest {
     @DisplayName("должен сохранять новую книгу")
     @Test
     void shouldSaveNewBook() {
-        Book expectedBook = expectedBooks.get(0);
+        Book returnedBook = expectedBooks.get(0);
+        Book expectedBook = new Book(
+                returnedBook.getId(),
+                returnedBook.getTitle(),
+                returnedBook.getAuthor(),
+                returnedBook.getGenre()
+        );
         expectedBook.setId(null);
         doReturn(expectedBook).when(bookRepository).save(expectedBook);
         doReturn(Optional.of(expectedBook.getAuthor())).when(authorRepository).findById(expectedBook.getAuthor().getId());
