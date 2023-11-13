@@ -9,7 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.mappers.AuthorMapper;
-import ru.otus.hw.mappers.BookMapperImpl;
+import ru.otus.hw.mappers.BookMapper;
 import ru.otus.hw.mappers.GenreMapper;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
@@ -60,7 +60,7 @@ class BookServiceImplTest {
                         new Genre(3L, "TestGenre3"))
         );
         expectedBooksDto =
-                expectedBooks.stream().map(BookMapperImpl.INSTANCE::bookToBookDto).toList();
+                expectedBooks.stream().map(BookMapper.INSTANCE::bookToBookDto).toList();
     }
 
     @DisplayName("должен загружать список всех книг")

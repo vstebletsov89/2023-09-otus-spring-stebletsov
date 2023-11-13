@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GenreRepositoryJpaTest {
 
     @Autowired
-    private GenreRepositoryJpa genreRepositoryJdbc;
+    private GenreRepositoryJpa genreRepositoryJpa;
 
     private List<Genre> dbGenres;
 
@@ -33,7 +33,7 @@ class GenreRepositoryJpaTest {
     @DisplayName("должен загружать список всех жанров")
     @Test
     void shouldReturnCorrectGenresList() {
-        var actualGenres = genreRepositoryJdbc.findAll();
+        var actualGenres = genreRepositoryJpa.findAll();
         var expectedGenres = dbGenres;
 
         assertThat(actualGenres).containsExactlyElementsOf(expectedGenres);
@@ -45,7 +45,7 @@ class GenreRepositoryJpaTest {
     @ParameterizedTest
     @MethodSource("getDbGenres")
     void shouldReturnCorrectGenreById(Genre expectedGenre) {
-        var actualGenre = genreRepositoryJdbc.findById(expectedGenre.getId());
+        var actualGenre = genreRepositoryJpa.findById(expectedGenre.getId());
 
         assertThat(actualGenre).isPresent()
                         .get().isEqualTo(expectedGenre);
@@ -54,7 +54,7 @@ class GenreRepositoryJpaTest {
     @DisplayName("должен вернуть пустой результат для неверного id")
     @Test
     void shouldReturnEmptyResultForInvalidId() {
-        var actualGenre = genreRepositoryJdbc.findById(99L);
+        var actualGenre = genreRepositoryJpa.findById(99L);
 
         assertThat(actualGenre).isNotPresent();
     }
