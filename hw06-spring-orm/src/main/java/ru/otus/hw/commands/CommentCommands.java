@@ -42,7 +42,7 @@ public class CommentCommands {
                 new CommentDto(
                         null,
                         text,
-                        bookService.findById(bookId)));
+                        bookId));
 
         return commentConverter.commentToString(savedComment);
     }
@@ -53,7 +53,7 @@ public class CommentCommands {
                 new CommentDto(
                         id,
                         text,
-                        bookService.findById(bookId)));
+                        bookId));
 
         return commentConverter.commentToString(savedComment);
     }

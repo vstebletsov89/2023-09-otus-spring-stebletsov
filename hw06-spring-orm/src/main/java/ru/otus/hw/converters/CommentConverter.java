@@ -7,12 +7,11 @@ import ru.otus.hw.dto.CommentDto;
 @RequiredArgsConstructor
 @Component
 public class CommentConverter {
-    private final BookConverter bookConverter;
 
     public String commentToString(CommentDto commentDto) {
-        return "Id: %d, text: %s, book: {%s}".formatted(
+        return "Id: %d, text: %s, bookId: {%d}".formatted(
                 commentDto.getId(),
                 commentDto.getText(),
-                bookConverter.bookToString(commentDto.getBookDto()));
+                commentDto.getBookId());
     }
 }

@@ -13,9 +13,9 @@ public class CommentDto {
 
     private String text;
 
-    private BookDto bookDto;
+    private Long bookId;
 
     public Comment toModelObject() {
-        return new Comment(id, text, bookDto.toModelObject());
+        return new Comment(id, text, null);
     }
 }

@@ -11,6 +11,6 @@ public interface CommentMapper {
 
     CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
-    @Mapping(target = "bookDto", source = "comment.book")
+    @Mapping(target = "bookId", source = "book.id")
     CommentDto commentToCommentDto(Comment comment);
 }
