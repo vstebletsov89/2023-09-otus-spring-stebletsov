@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:h2:mem:testdb
   application:
-    name: "Homework #5 (test env)"
+    name: "Homework #6 (test env)"
   shell:
     interactive:
       enabled: false

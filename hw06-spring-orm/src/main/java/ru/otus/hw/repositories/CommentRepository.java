@@ -14,10 +14,5 @@ public interface CommentRepository {
 
     void deleteById(long id);
 
-    //TODO: implement repo
-    //TODO: add dto and mapper
-    //TODO: implement service
     //TODO: add tests for repo and service
-    //TODO: add shell commands for comments
-
 }
