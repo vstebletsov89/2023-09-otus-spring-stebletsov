@@ -14,5 +14,4 @@ public interface CommentRepository {
 
     void deleteById(long id);
 
-    //TODO: add tests for service
 }

@@ -2,12 +2,9 @@ package ru.otus.hw.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.CommentDto;
 import ru.otus.hw.exceptions.NotFoundException;
-import ru.otus.hw.mappers.BookMapper;
 import ru.otus.hw.mappers.CommentMapper;
-import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.CommentRepository;

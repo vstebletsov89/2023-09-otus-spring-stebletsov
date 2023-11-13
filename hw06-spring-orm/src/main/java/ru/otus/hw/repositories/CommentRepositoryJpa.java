@@ -3,12 +3,10 @@ package ru.otus.hw.repositories;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Repository;
-import ru.otus.hw.mappers.CommentMapper;
-import ru.otus.hw.models.Book;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.models.Comment;
 
 import java.util.List;
