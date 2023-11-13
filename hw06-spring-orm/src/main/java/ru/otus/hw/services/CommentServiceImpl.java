@@ -42,7 +42,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto create(CommentDto commentDto) {
-        return save(commentDto.toModelObject());
+        return save(commentDto);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
                 commentRepository.findById(commentDto.getId()).orElseThrow(
                         () -> new NotFoundException("Comment with id %d not found".formatted(commentDto.getId())));
 
-        return save(commentDto.toModelObject());
+        return save(commentDto);
     }
 
     @Override
@@ -59,13 +59,13 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.deleteById(id);
     }
 
-    private CommentDto save(Comment comment) {
+    private CommentDto save(CommentDto commentDto) {
         var book =
-                bookRepository.findById(comment.getBook().getId()).orElseThrow(
+                bookRepository.findById(commentDto.getBookId()).orElseThrow(
                         () -> new NotFoundException("Book with id %d not found".
-                                formatted(comment.getBook().getId())
+                                formatted(commentDto.getBookId())
                         ));
-        var newComment = new Comment(comment.getId(), comment.getText(), book);
+        var newComment = new Comment(commentDto.getId(), commentDto.getText(), book);
         return CommentMapper.INSTANCE.commentToCommentDto(
                 commentRepository.save(newComment));
     }

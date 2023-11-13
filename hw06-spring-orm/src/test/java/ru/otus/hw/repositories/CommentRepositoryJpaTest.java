@@ -55,7 +55,7 @@ class CommentRepositoryJpaTest {
     @DisplayName("должен загружать список всех коментариев для книги")
     @Test
     void shouldReturnCorrectCommentsByBookId() {
-        var actualComments = commentRepositoryJpa.findAllByBookId(1);
+        var actualComments = commentRepositoryJpa.findAllByBookId(1L);
         var expectedComments = List.of(dbComments.get(0));
 
         assertEquals(1, actualComments.size());

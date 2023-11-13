@@ -129,7 +129,6 @@ class BookServiceImplTest {
         doReturn(Optional.of(newBook)).when(bookRepository).findById(2L);
         doReturn(Optional.of(newBook.getAuthor())).when(authorRepository).findById(newBook.getAuthor().getId());
         doReturn(Optional.of(newBook.getGenre())).when(genreRepository).findById(newBook.getGenre().getId());
-
         var actualBook = bookService.update( new BookDto(
                 2L,
                 newBook.getTitle(),
