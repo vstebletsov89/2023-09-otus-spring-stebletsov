@@ -1,17 +1,25 @@
 package ru.otus.hw.mappers;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.models.Book;
 
-@Mapper(uses = {AuthorMapper.class, GenreMapper.class})
-public interface BookMapper {
 
-    BookMapper INSTANCE = Mappers.getMapper(BookMapper.class);
+@Component
+public class BookMapper {
 
-    @Mapping(target = "authorDto", source = "book.author")
-    @Mapping(target = "genreDto", source = "book.genre")
-    BookDto bookToBookDto(Book book);
+    public static BookDto bookToBookDto(Book book) {
+
+        if (book == null) {
+            return null;
+        }
+
+        BookDto bookDto = new BookDto();
+        bookDto.setId(book.getId());
+        bookDto.setTitle(book.getTitle());
+        bookDto.setAuthorDto(AuthorMapper.authorToAuthorDto(book.getAuthor()));
+        bookDto.setGenreDto(GenreMapper.genreToGenreDto(book.getGenre()));
+
+        return bookDto;
+    }
 }

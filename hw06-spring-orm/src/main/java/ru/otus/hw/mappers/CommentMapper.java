@@ -1,16 +1,24 @@
 package ru.otus.hw.mappers;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 import ru.otus.hw.dto.CommentDto;
 import ru.otus.hw.models.Comment;
 
-@Mapper(uses = {BookMapper.class})
-public interface CommentMapper {
 
-    CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
+@Component
+public class CommentMapper {
 
-    @Mapping(target = "bookId", source = "book.id")
-    CommentDto commentToCommentDto(Comment comment);
+    public static CommentDto commentToCommentDto(Comment comment) {
+
+        if (comment == null) {
+            return null;
+        }
+
+        CommentDto commentDto = new CommentDto();
+        commentDto.setId(comment.getId());
+        commentDto.setText(comment.getText());
+        commentDto.setBookId(comment.getBook().getId());
+
+        return commentDto;
+    }
 }

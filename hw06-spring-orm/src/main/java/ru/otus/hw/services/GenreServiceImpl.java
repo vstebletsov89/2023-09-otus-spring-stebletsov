@@ -17,12 +17,12 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public List<GenreDto> findAll() {
         return genreRepository.findAll().stream()
-                .map(GenreMapper.INSTANCE::genreToGenreDto).toList();
+                .map(GenreMapper::genreToGenreDto).toList();
     }
 
     @Override
     public GenreDto findById(long id) {
-        return GenreMapper.INSTANCE.genreToGenreDto(
+        return GenreMapper.genreToGenreDto(
                 genreRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Genre with id %d not found".formatted(id))));
     }

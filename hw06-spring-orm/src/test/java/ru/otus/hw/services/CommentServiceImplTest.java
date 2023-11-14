@@ -48,7 +48,7 @@ class CommentServiceImplTest {
                 new Comment(3L, "TestComment3", expectedBook)
         );
         expectedCommentsDto =
-                expectedComments.stream().map(CommentMapper.INSTANCE::commentToCommentDto).toList();
+                expectedComments.stream().map(CommentMapper::commentToCommentDto).toList();
     }
 
     @DisplayName("должен загружать комент по id")
@@ -89,7 +89,7 @@ class CommentServiceImplTest {
     void shouldSaveNewComment() {
         var newComment = new CommentDto(null, "newComment", 1L);
         var expectedComment = new Comment(null, "newComment", expectedBook);
-        var expectedCommentDto = CommentMapper.INSTANCE.commentToCommentDto(
+        var expectedCommentDto = CommentMapper.commentToCommentDto(
                 expectedComment);
         doReturn(Optional.of(expectedBook)).when(bookRepository).findById(1L);
         doReturn(expectedComment).when(commentRepository).save(expectedComment);
@@ -102,7 +102,7 @@ class CommentServiceImplTest {
     @Test
     void shouldSaveUpdatedComment() {
         var expectedComment = new Comment(1L, "updatedComment", expectedBook);
-        var expectedCommentDto = CommentMapper.INSTANCE.commentToCommentDto(
+        var expectedCommentDto = CommentMapper.commentToCommentDto(
                 expectedComment);
         doReturn(Optional.of(expectedComment)).when(commentRepository).findById(1L);
         doReturn(Optional.of(expectedBook)).when(bookRepository).findById(1L);

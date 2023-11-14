@@ -1,14 +1,22 @@
 package ru.otus.hw.mappers;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.models.Author;
 
-@Mapper
-public interface AuthorMapper {
+@Component
+public class AuthorMapper {
 
-    AuthorMapper INSTANCE = Mappers.getMapper(AuthorMapper.class);
+    public static AuthorDto authorToAuthorDto(Author author) {
 
-    AuthorDto authorToAuthorDto(Author author);
+        if (author == null) {
+            return null;
+        }
+
+        AuthorDto authorDto = new AuthorDto();
+        authorDto.setId(author.getId());
+        authorDto.setFullName(author.getFullName());
+
+        return authorDto;
+    }
 }

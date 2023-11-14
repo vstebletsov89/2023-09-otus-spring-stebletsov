@@ -17,12 +17,12 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public List<AuthorDto> findAll() {
       return authorRepository.findAll().stream().
-                map(AuthorMapper.INSTANCE::authorToAuthorDto).toList();
+                map(AuthorMapper::authorToAuthorDto).toList();
     }
 
     @Override
     public AuthorDto findById(long id) {
-        return AuthorMapper.INSTANCE.authorToAuthorDto(
+        return AuthorMapper.authorToAuthorDto(
         authorRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Author with id %d not found".formatted(id))));
     }

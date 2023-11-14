@@ -60,7 +60,7 @@ class BookServiceImplTest {
                         new Genre(3L, "TestGenre3"))
         );
         expectedBooksDto =
-                expectedBooks.stream().map(BookMapper.INSTANCE::bookToBookDto).toList();
+                expectedBooks.stream().map(BookMapper::bookToBookDto).toList();
     }
 
     @DisplayName("должен загружать список всех книг")
@@ -113,9 +113,9 @@ class BookServiceImplTest {
         var actualBook = bookService.create( new BookDto(
                 null,
                 expectedBook.getTitle(),
-                AuthorMapper.INSTANCE.authorToAuthorDto(
+                AuthorMapper.authorToAuthorDto(
                         expectedBook.getAuthor()),
-                GenreMapper.INSTANCE.genreToGenreDto(
+                GenreMapper.genreToGenreDto(
                         expectedBook.getGenre())));
 
         assertThat(actualBook.toModelObject()).isEqualTo(expectedBook);
@@ -132,8 +132,8 @@ class BookServiceImplTest {
         var actualBook = bookService.update( new BookDto(
                 2L,
                 newBook.getTitle(),
-                AuthorMapper.INSTANCE.authorToAuthorDto(newBook.getAuthor()),
-                GenreMapper.INSTANCE.genreToGenreDto(newBook.getGenre())));
+                AuthorMapper.authorToAuthorDto(newBook.getAuthor()),
+                GenreMapper.genreToGenreDto(newBook.getGenre())));
 
         assertThat(actualBook.toModelObject()).isEqualTo(newBook);
     }

@@ -40,7 +40,7 @@ class AuthorServiceImplTest {
                 new Author(2L, "TestAuthor2"),
                 new Author(3L, "TestAuthor3"));
         expectedAuthorsDto =
-                expectedAuthors.stream().map(AuthorMapper.INSTANCE::authorToAuthorDto).toList();
+                expectedAuthors.stream().map(AuthorMapper::authorToAuthorDto).toList();
     }
 
     @DisplayName("должен загружать список всех aвторов")

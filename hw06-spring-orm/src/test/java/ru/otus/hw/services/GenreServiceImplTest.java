@@ -41,7 +41,7 @@ class GenreServiceImplTest {
                 new Genre(3L, "TestGenre3")
         );
         expectedGenresDto =
-                expectedGenres.stream().map(GenreMapper.INSTANCE::genreToGenreDto).toList();
+                expectedGenres.stream().map(GenreMapper::genreToGenreDto).toList();
     }
 
     @DisplayName("должен загружать список всех жанров")
