@@ -11,6 +11,7 @@ import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.CommentRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -34,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
                         .orElseThrow(() -> new NotFoundException("Book with id %d not found"
                                 .formatted(id)
                         ));
-        return commentRepository.findAllByBookId(id)
+        return commentRepository.findAllByBookId(book.getId())
                 .stream()
                 .map(CommentMapper::commentToCommentDto)
                 .toList();
@@ -56,16 +57,19 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     @Override
     public CommentDto update(CommentDto commentDto) {
-        bookRepository.findById(commentDto.getBookId())
-                .orElseThrow(() -> new NotFoundException("Book with id %d not found"
-                        .formatted(commentDto.getBookId())
-                ));
 
         var updatedComment =
                 commentRepository.findById(commentDto.getId())
                         .orElseThrow(() -> new NotFoundException("Comment with id %d not found"
                                 .formatted(commentDto.getId())));
 
+        if (!Objects.equals(updatedComment.getBook().getId(), commentDto.getBookId())) {
+                var book =  bookRepository.findById(commentDto.getBookId())
+                        .orElseThrow(() -> new NotFoundException("Book with id %d not found"
+                                .formatted(commentDto.getBookId())
+                        ));
+                updatedComment.setBook(book);
+        }
         updatedComment.setText(commentDto.getText());
         return CommentMapper.commentToCommentDto(commentRepository.save(updatedComment));
     }
