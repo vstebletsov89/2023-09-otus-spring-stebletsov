@@ -9,10 +9,6 @@ public class GenreMapper {
 
     public static GenreDto genreToGenreDto(Genre genre) {
 
-        if (genre == null) {
-            return null;
-        }
-
         GenreDto genreDto = new GenreDto();
         genreDto.setId(genre.getId());
         genreDto.setName(genre.getName());

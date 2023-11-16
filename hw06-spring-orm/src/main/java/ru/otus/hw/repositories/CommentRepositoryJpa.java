@@ -1,19 +1,15 @@
 package ru.otus.hw.repositories;
 
-import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.models.Comment;
 
 import java.util.List;
 import java.util.Optional;
-
-import static org.springframework.data.jpa.repository.EntityGraph.EntityGraphType.FETCH;
 
 @RequiredArgsConstructor
 @Repository
@@ -36,13 +32,9 @@ public class CommentRepositoryJpa implements CommentRepository {
         TypedQuery<Comment> query =
                 em.createQuery("select c from Comment c where c.book.id = :id", Comment.class);
         query.setParameter("id", id);
-        EntityGraph<?> entityGraph =
-                em.getEntityGraph("comment-entity-graph");
-        query.setHint(FETCH.getKey(), entityGraph);
         return query.getResultList();
     }
 
-    @Transactional
     @Override
     public Comment save(Comment comment) {
         if (comment.getId() == null) {
@@ -52,7 +44,6 @@ public class CommentRepositoryJpa implements CommentRepository {
         return em.merge(comment);
     }
 
-    @Transactional
     @Override
     public void deleteById(long id) {
         Comment comment = em.find(Comment.class, id);

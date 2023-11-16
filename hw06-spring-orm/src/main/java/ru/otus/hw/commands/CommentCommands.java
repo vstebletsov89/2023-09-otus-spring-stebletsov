@@ -22,7 +22,8 @@ public class CommentCommands {
 
     @ShellMethod(value = "Find all comments by book id", key = "ac")
     public String findAllCommentsByBookId(long bookId) {
-        return commentService.findAllByBookId(bookId).stream()
+        return commentService.findAllByBookId(bookId)
+                .stream()
                 .map(commentConverter::commentToString)
                 .collect(Collectors.joining("," + System.lineSeparator()));
     }

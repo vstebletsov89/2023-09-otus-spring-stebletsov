@@ -10,10 +10,6 @@ public class BookMapper {
 
     public static BookDto bookToBookDto(Book book) {
 
-        if (book == null) {
-            return null;
-        }
-
         BookDto bookDto = new BookDto();
         bookDto.setId(book.getId());
         bookDto.setTitle(book.getTitle());

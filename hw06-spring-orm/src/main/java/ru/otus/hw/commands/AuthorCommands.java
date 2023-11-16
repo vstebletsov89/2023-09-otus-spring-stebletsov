@@ -18,13 +18,14 @@ public class AuthorCommands {
 
     @ShellMethod(value = "Find all authors", key = "aa")
     public String findAllAuthors() {
-        return authorService.findAll().stream()
+        return authorService.findAll()
+                .stream()
                 .map(authorConverter::authorToString)
                 .collect(Collectors.joining("," + System.lineSeparator()));
     }
 
     @ShellMethod(value = "Find author by id", key = "fa")
     public String findAuthorById(long id) {
-       return authorConverter.authorToString(authorService.findById(id));
+        return authorConverter.authorToString(authorService.findById(id));
     }
 }

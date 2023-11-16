@@ -60,7 +60,9 @@ class BookServiceImplTest {
                         new Genre(3L, "TestGenre3"))
         );
         expectedBooksDto =
-                expectedBooks.stream().map(BookMapper::bookToBookDto).toList();
+                expectedBooks.stream()
+                        .map(BookMapper::bookToBookDto)
+                        .toList();
     }
 
     @DisplayName("должен загружать список всех книг")

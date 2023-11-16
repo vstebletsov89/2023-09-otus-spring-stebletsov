@@ -9,10 +9,6 @@ public class AuthorMapper {
 
     public static AuthorDto authorToAuthorDto(Author author) {
 
-        if (author == null) {
-            return null;
-        }
-
         AuthorDto authorDto = new AuthorDto();
         authorDto.setId(author.getId());
         authorDto.setFullName(author.getFullName());

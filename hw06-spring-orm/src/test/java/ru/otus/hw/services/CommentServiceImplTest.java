@@ -48,7 +48,9 @@ class CommentServiceImplTest {
                 new Comment(3L, "TestComment3", expectedBook)
         );
         expectedCommentsDto =
-                expectedComments.stream().map(CommentMapper::commentToCommentDto).toList();
+                expectedComments.stream()
+                        .map(CommentMapper::commentToCommentDto)
+                        .toList();
     }
 
     @DisplayName("должен загружать комент по id")

@@ -1,7 +1,7 @@
 --date: 2023-04-11
 --author: vstebletsov
 
-create table books (
+create table if not exists books (
    id bigserial,
    title varchar(255),
    author_id bigint references authors (id) on delete cascade,

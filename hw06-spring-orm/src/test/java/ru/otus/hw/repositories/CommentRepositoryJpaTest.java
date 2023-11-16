@@ -1,23 +1,20 @@
 package ru.otus.hw.repositories;
 
+import jakarta.persistence.TypedQuery;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import ru.otus.hw.models.Author;
-import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
-import ru.otus.hw.models.Genre;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @DisplayName("Репозиторий на основе Jpa для работы с коментариями")
 @DataJpaTest
@@ -27,6 +24,9 @@ class CommentRepositoryJpaTest {
     @Autowired
     private CommentRepositoryJpa commentRepositoryJpa;
 
+    @Autowired
+    private TestEntityManager testEntityManager;
+
     private List<Comment> dbComments;
 
     @BeforeEach
@@ -35,9 +35,9 @@ class CommentRepositoryJpaTest {
     }
 
     @DisplayName("должен загружать коментарий по id")
-    @ParameterizedTest
-    @MethodSource("getDbComments")
-    void shouldReturnCorrectCommentById(Comment expectedComment) {
+    @Test
+    void shouldReturnCorrectCommentById() {
+        var expectedComment = dbComments.get(0);
         var actualComment = commentRepositoryJpa.findById(expectedComment.getId());
 
         assertThat(actualComment).isPresent()
@@ -102,15 +102,9 @@ class CommentRepositoryJpaTest {
         assertThat(commentRepositoryJpa.findById(3L)).isEmpty();
     }
 
-    private static List<Comment> getDbComments() {
-        return IntStream.range(1, 4).boxed()
-                .map(id -> new Comment(id.longValue(), "TestCommentText_" + id,
-                        new Book(id.longValue(),
-                                "TestBookTitle_" + id,
-                                new Author(id.longValue(),
-                                        "TestAuthor_" + id),
-                                new Genre(id.longValue(),
-                                        "TestGenre_" + id))))
-                .toList();
+    private List<Comment> getDbComments() {
+        TypedQuery<Comment> query = testEntityManager.getEntityManager()
+                .createQuery("select c from Comment c", Comment.class);
+        return query.getResultList();
     }
 }
