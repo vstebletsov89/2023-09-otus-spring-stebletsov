@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.dto.CommentDto;
+import ru.otus.hw.exceptions.InvalidStateException;
 import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.mappers.CommentMapper;
 import ru.otus.hw.models.Comment;
@@ -64,11 +65,7 @@ public class CommentServiceImpl implements CommentService {
                                 .formatted(commentDto.getId())));
 
         if (!Objects.equals(updatedComment.getBook().getId(), commentDto.getBookId())) {
-                var book =  bookRepository.findById(commentDto.getBookId())
-                        .orElseThrow(() -> new NotFoundException("Book with id %d not found"
-                                .formatted(commentDto.getBookId())
-                        ));
-                updatedComment.setBook(book);
+            throw new InvalidStateException("Cannot change comment for another book");
         }
         updatedComment.setText(commentDto.getText());
         return CommentMapper.commentToCommentDto(commentRepository.save(updatedComment));
