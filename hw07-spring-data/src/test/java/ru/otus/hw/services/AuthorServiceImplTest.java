@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
@@ -63,7 +64,9 @@ class AuthorServiceImplTest {
         doReturn(Optional.of(expectedAuthors.get(authorPos))).when(authorRepository).findById(authorId);
         var actualAuthor = authorService.findById(authorId);
 
-        assertEquals(expectedAuthors.get(authorPos), actualAuthor.toModelObject());
+        assertThat(actualAuthor)
+                .usingRecursiveComparison()
+                .isEqualTo(expectedAuthorsDto.get(authorPos));
     }
 
     @DisplayName("должен выбрасывать исключение для неверного id")

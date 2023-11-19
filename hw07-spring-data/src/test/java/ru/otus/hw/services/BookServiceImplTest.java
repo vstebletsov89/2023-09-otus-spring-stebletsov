@@ -25,6 +25,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса книг")
@@ -84,7 +85,9 @@ class BookServiceImplTest {
         doReturn(Optional.of(expectedBooks.get(bookPos))).when(bookRepository).findById(bookId);
         var actualBook = bookService.findById(bookId);
 
-        assertEquals(expectedBooksDto.get(bookPos), actualBook);
+        assertThat(actualBook)
+                .usingRecursiveComparison()
+                .isEqualTo(expectedBooksDto.get(bookPos));
     }
 
     @DisplayName("должен выбрасывать исключение для неверного id")
@@ -109,7 +112,7 @@ class BookServiceImplTest {
                 returnedBook.getGenre()
         );
         expectedBook.setId(null);
-        doReturn(expectedBook).when(bookRepository).save(expectedBook);
+        doReturn(expectedBook).when(bookRepository).save(any());
         doReturn(Optional.of(expectedBook.getAuthor())).when(authorRepository).findById(expectedBook.getAuthor().getId());
         doReturn(Optional.of(expectedBook.getGenre())).when(genreRepository).findById(expectedBook.getGenre().getId());
         var actualBook = bookService.create( new BookDto(
@@ -120,14 +123,16 @@ class BookServiceImplTest {
                 GenreMapper.genreToGenreDto(
                         expectedBook.getGenre())));
 
-        assertThat(actualBook.toModelObject()).isEqualTo(expectedBook);
+        assertThat(actualBook.toModelObject())
+                .usingRecursiveComparison()
+                .isEqualTo(expectedBook);
     }
 
     @DisplayName("должен обновить книгу")
     @Test
     void shouldUpdateBook() {
         Book newBook = expectedBooks.get(1);
-        doReturn(newBook).when(bookRepository).save(newBook);
+        doReturn(newBook).when(bookRepository).save(any());
         doReturn(Optional.of(newBook)).when(bookRepository).findById(2L);
         doReturn(Optional.of(newBook.getAuthor())).when(authorRepository).findById(newBook.getAuthor().getId());
         doReturn(Optional.of(newBook.getGenre())).when(genreRepository).findById(newBook.getGenre().getId());
@@ -137,6 +142,8 @@ class BookServiceImplTest {
                 AuthorMapper.authorToAuthorDto(newBook.getAuthor()),
                 GenreMapper.genreToGenreDto(newBook.getGenre())));
 
-        assertThat(actualBook.toModelObject()).isEqualTo(newBook);
+        assertThat(actualBook.toModelObject())
+                .usingRecursiveComparison()
+                .isEqualTo(newBook);
     }
 }

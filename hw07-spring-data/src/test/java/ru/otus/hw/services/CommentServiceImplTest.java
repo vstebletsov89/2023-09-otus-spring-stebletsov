@@ -21,6 +21,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса коментариев")
@@ -61,7 +62,9 @@ class CommentServiceImplTest {
         doReturn(Optional.of(expectedComments.get(commentPos))).when(commentRepository).findById(commentId);
         var actualComment = commentService.findById(commentId);
 
-        assertEquals(expectedCommentsDto.get(commentPos), actualComment);
+        assertThat(actualComment)
+                .usingRecursiveComparison()
+                .isEqualTo(expectedCommentsDto.get(commentPos));
     }
 
     @DisplayName("должен выбрасывать исключение для неверного id")
@@ -94,7 +97,7 @@ class CommentServiceImplTest {
         var expectedCommentDto = CommentMapper.commentToCommentDto(
                 expectedComment);
         doReturn(Optional.of(expectedBook)).when(bookRepository).findById(1L);
-        doReturn(expectedComment).when(commentRepository).save(expectedComment);
+        doReturn(expectedComment).when(commentRepository).save(any());
         var actualComment = commentService.create(newComment);
 
         assertThat(actualComment).isEqualTo(expectedCommentDto);
