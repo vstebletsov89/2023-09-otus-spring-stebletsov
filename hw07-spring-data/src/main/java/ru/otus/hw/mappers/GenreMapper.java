@@ -15,4 +15,9 @@ public class GenreMapper {
 
         return genreDto;
     }
+
+    public static Genre toModel(GenreDto genreDto) {
+
+        return new Genre(genreDto.getId(), genreDto.getName());
+    }
 }

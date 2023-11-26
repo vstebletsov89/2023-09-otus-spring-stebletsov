@@ -17,4 +17,10 @@ public class CommentMapper {
 
         return commentDto;
     }
+
+    public static Comment toModel(CommentDto commentDto) {
+        return new Comment(commentDto.getId(),
+                commentDto.getText(),
+                null);
+    }
 }

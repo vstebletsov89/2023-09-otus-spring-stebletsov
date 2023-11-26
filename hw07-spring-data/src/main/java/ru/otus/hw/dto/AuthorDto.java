@@ -3,7 +3,6 @@ package ru.otus.hw.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.otus.hw.models.Author;
 
 @Data
 @AllArgsConstructor
@@ -14,7 +13,4 @@ public class AuthorDto {
 
     private String fullName;
 
-    public Author toModelObject() {
-        return new Author(id, fullName);
-    }
 }

@@ -15,4 +15,8 @@ public class AuthorMapper {
 
         return authorDto;
     }
+
+    public static Author toModel(AuthorDto authorDto) {
+        return new Author(authorDto.getId(), authorDto.getFullName());
+    }
 }

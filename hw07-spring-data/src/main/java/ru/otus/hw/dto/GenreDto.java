@@ -3,7 +3,6 @@ package ru.otus.hw.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.otus.hw.models.Genre;
 
 @Data
 @AllArgsConstructor
@@ -13,7 +12,4 @@ public class GenreDto {
 
     private String name;
 
-    public Genre toModelObject() {
-        return new Genre(id, name);
-    }
 }

@@ -40,7 +40,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public BookDto create(BookDto bookDto) {
-        return save(bookDto.toModelObject());
+        return save(BookMapper.toModel(bookDto));
     }
 
     @Transactional
@@ -50,7 +50,7 @@ public class BookServiceImpl implements BookService {
                 bookRepository.findById(bookDto.getId())
                         .orElseThrow(() -> new NotFoundException("Book with id %d not found".formatted(bookDto.getId()))
                 );
-        return save(bookDto.toModelObject());
+        return save(BookMapper.toModel(bookDto));
     }
 
     @Transactional

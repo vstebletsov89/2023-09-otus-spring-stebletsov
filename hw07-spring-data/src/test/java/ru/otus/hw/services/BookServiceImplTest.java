@@ -123,7 +123,7 @@ class BookServiceImplTest {
                 GenreMapper.genreToGenreDto(
                         expectedBook.getGenre())));
 
-        assertThat(actualBook.toModelObject())
+        assertThat(BookMapper.toModel(actualBook))
                 .usingRecursiveComparison()
                 .isEqualTo(expectedBook);
     }
@@ -142,7 +142,7 @@ class BookServiceImplTest {
                 AuthorMapper.authorToAuthorDto(newBook.getAuthor()),
                 GenreMapper.genreToGenreDto(newBook.getGenre())));
 
-        assertThat(actualBook.toModelObject())
+        assertThat(BookMapper.toModel(actualBook))
                 .usingRecursiveComparison()
                 .isEqualTo(newBook);
     }

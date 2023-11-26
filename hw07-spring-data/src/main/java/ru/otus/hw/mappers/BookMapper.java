@@ -18,4 +18,12 @@ public class BookMapper {
 
         return bookDto;
     }
+
+    public static Book toModel(BookDto bookDto) {
+
+        return new Book(bookDto.getId(),
+                bookDto.getTitle(),
+                AuthorMapper.toModel(bookDto.getAuthorDto()),
+                GenreMapper.toModel(bookDto.getGenreDto()));
+    }
 }

@@ -3,7 +3,6 @@ package ru.otus.hw.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.otus.hw.models.Book;
 
 @Data
 @AllArgsConstructor
@@ -17,8 +16,4 @@ public class BookDto {
 
     private GenreDto genreDto;
 
-    public Book toModelObject() {
-
-        return new Book(id, title, authorDto.toModelObject(), genreDto.toModelObject());
-    }
 }
