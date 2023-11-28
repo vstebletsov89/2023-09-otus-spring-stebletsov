@@ -62,7 +62,7 @@ class BookServiceImplTest {
         );
         expectedBooksDto =
                 expectedBooks.stream()
-                        .map(BookMapper::bookToBookDto)
+                        .map(BookMapper::toDto)
                         .toList();
     }
 
@@ -118,9 +118,9 @@ class BookServiceImplTest {
         var actualBook = bookService.create( new BookDto(
                 null,
                 expectedBook.getTitle(),
-                AuthorMapper.authorToAuthorDto(
+                AuthorMapper.toDto(
                         expectedBook.getAuthor()),
-                GenreMapper.genreToGenreDto(
+                GenreMapper.toDto(
                         expectedBook.getGenre())));
 
         assertThat(BookMapper.toModel(actualBook))
@@ -139,8 +139,8 @@ class BookServiceImplTest {
         var actualBook = bookService.update( new BookDto(
                 2L,
                 newBook.getTitle(),
-                AuthorMapper.authorToAuthorDto(newBook.getAuthor()),
-                GenreMapper.genreToGenreDto(newBook.getGenre())));
+                AuthorMapper.toDto(newBook.getAuthor()),
+                GenreMapper.toDto(newBook.getGenre())));
 
         assertThat(BookMapper.toModel(actualBook))
                 .usingRecursiveComparison()

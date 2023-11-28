@@ -8,7 +8,7 @@ import ru.otus.hw.models.Comment;
 @Component
 public class CommentMapper {
 
-    public static CommentDto commentToCommentDto(Comment comment) {
+    public static CommentDto toDto(Comment comment) {
 
         CommentDto commentDto = new CommentDto();
         commentDto.setId(comment.getId());

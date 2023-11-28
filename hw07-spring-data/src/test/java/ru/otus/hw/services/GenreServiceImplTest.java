@@ -43,7 +43,7 @@ class GenreServiceImplTest {
         );
         expectedGenresDto =
                 expectedGenres.stream()
-                        .map(GenreMapper::genreToGenreDto)
+                        .map(GenreMapper::toDto)
                         .toList();
     }
 

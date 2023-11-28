@@ -18,13 +18,13 @@ public class AuthorServiceImpl implements AuthorService {
     public List<AuthorDto> findAll() {
         return authorRepository.findAll()
                 .stream()
-                .map(AuthorMapper::authorToAuthorDto)
+                .map(AuthorMapper::toDto)
                 .toList();
     }
 
     @Override
     public AuthorDto findById(long id) {
-        return AuthorMapper.authorToAuthorDto(
+        return AuthorMapper.toDto(
                 authorRepository.findById(id)
                         .orElseThrow(() -> new NotFoundException("Author with id %d not found".formatted(id))));
     }

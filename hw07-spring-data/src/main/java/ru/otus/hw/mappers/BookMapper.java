@@ -8,19 +8,18 @@ import ru.otus.hw.models.Book;
 @Component
 public class BookMapper {
 
-    public static BookDto bookToBookDto(Book book) {
+    public static BookDto toDto(Book book) {
 
         BookDto bookDto = new BookDto();
         bookDto.setId(book.getId());
         bookDto.setTitle(book.getTitle());
-        bookDto.setAuthorDto(AuthorMapper.authorToAuthorDto(book.getAuthor()));
-        bookDto.setGenreDto(GenreMapper.genreToGenreDto(book.getGenre()));
+        bookDto.setAuthorDto(AuthorMapper.toDto(book.getAuthor()));
+        bookDto.setGenreDto(GenreMapper.toDto(book.getGenre()));
 
         return bookDto;
     }
 
     public static Book toModel(BookDto bookDto) {
-
         return new Book(bookDto.getId(),
                 bookDto.getTitle(),
                 AuthorMapper.toModel(bookDto.getAuthorDto()),

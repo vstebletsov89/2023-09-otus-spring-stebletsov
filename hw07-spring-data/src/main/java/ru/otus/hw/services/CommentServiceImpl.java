@@ -24,7 +24,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto findById(long id) {
-        return CommentMapper.commentToCommentDto(
+        return CommentMapper.toDto(
                 commentRepository.findById(id)
                         .orElseThrow(() -> new NotFoundException("Comment with id %d not found".formatted(id))));
     }
@@ -38,7 +38,7 @@ public class CommentServiceImpl implements CommentService {
                         ));
         return commentRepository.findAllByBookId(book.getId())
                 .stream()
-                .map(CommentMapper::commentToCommentDto)
+                .map(CommentMapper::toDto)
                 .toList();
     }
 
@@ -51,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
                                 .formatted(commentDto.getBookId())
                         ));
         var newComment = new Comment(commentDto.getId(), commentDto.getText(), book);
-        return CommentMapper.commentToCommentDto(
+        return CommentMapper.toDto(
                 commentRepository.save(newComment));
     }
 
@@ -68,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
             throw new InvalidStateException("Cannot change comment for another book");
         }
         updatedComment.setText(commentDto.getText());
-        return CommentMapper.commentToCommentDto(commentRepository.save(updatedComment));
+        return CommentMapper.toDto(commentRepository.save(updatedComment));
     }
 
     @Transactional

@@ -50,7 +50,7 @@ class CommentServiceImplTest {
         );
         expectedCommentsDto =
                 expectedComments.stream()
-                        .map(CommentMapper::commentToCommentDto)
+                        .map(CommentMapper::toDto)
                         .toList();
     }
 
@@ -94,7 +94,7 @@ class CommentServiceImplTest {
     void shouldSaveNewComment() {
         var newComment = new CommentDto(null, "newComment", 1L);
         var expectedComment = new Comment(null, "newComment", expectedBook);
-        var expectedCommentDto = CommentMapper.commentToCommentDto(
+        var expectedCommentDto = CommentMapper.toDto(
                 expectedComment);
         doReturn(Optional.of(expectedBook)).when(bookRepository).findById(1L);
         doReturn(expectedComment).when(commentRepository).save(any());
@@ -107,7 +107,7 @@ class CommentServiceImplTest {
     @Test
     void shouldSaveUpdatedComment() {
         var expectedComment = new Comment(1L, "updatedComment", expectedBook);
-        var expectedCommentDto = CommentMapper.commentToCommentDto(
+        var expectedCommentDto = CommentMapper.toDto(
                 expectedComment);
         doReturn(Optional.of(expectedComment)).when(commentRepository).findById(1L);
         doReturn(Optional.of(expectedBook)).when(bookRepository).findById(1L);

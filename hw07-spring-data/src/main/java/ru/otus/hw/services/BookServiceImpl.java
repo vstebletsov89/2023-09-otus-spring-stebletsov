@@ -24,7 +24,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto findById(long id) {
-        return BookMapper.bookToBookDto(
+        return BookMapper.toDto(
                 bookRepository.findById(id)
                         .orElseThrow(() -> new NotFoundException("Book with id %d not found".formatted(id))));
     }
@@ -33,7 +33,7 @@ public class BookServiceImpl implements BookService {
     public List<BookDto> findAll() {
         return bookRepository.findAll()
                 .stream()
-                .map(BookMapper::bookToBookDto)
+                .map(BookMapper::toDto)
                 .toList();
     }
 
@@ -71,6 +71,6 @@ public class BookServiceImpl implements BookService {
                                 .formatted(book.getGenre().getId())
                         ));
         var newBook = new Book(book.getId(), book.getTitle(), author, genre);
-        return BookMapper.bookToBookDto(bookRepository.save(newBook));
+        return BookMapper.toDto(bookRepository.save(newBook));
     }
 }

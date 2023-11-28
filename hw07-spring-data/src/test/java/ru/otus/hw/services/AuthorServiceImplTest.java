@@ -42,7 +42,7 @@ class AuthorServiceImplTest {
                 new Author(3L, "TestAuthor3"));
         expectedAuthorsDto =
                 expectedAuthors.stream()
-                        .map(AuthorMapper::authorToAuthorDto)
+                        .map(AuthorMapper::toDto)
                         .toList();
     }
 
