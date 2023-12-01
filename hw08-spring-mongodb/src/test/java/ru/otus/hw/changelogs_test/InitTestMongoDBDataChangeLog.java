@@ -1,0 +1,59 @@
+package ru.otus.hw.changelogs_test;
+
+import com.github.cloudyrock.mongock.ChangeLog;
+import com.github.cloudyrock.mongock.ChangeSet;
+import com.mongodb.client.MongoDatabase;
+import ru.otus.hw.models.Author;
+import ru.otus.hw.models.Book;
+import ru.otus.hw.models.Comment;
+import ru.otus.hw.models.Genre;
+import ru.otus.hw.repositories.AuthorRepository;
+import ru.otus.hw.repositories.BookRepository;
+import ru.otus.hw.repositories.CommentRepository;
+import ru.otus.hw.repositories.GenreRepository;
+
+import java.util.List;
+
+@ChangeLog(order = "001")
+public class InitTestMongoDBDataChangeLog {
+
+    private List<Author> authors;
+    private List<Genre> genres;
+    private List<Book> books;
+
+    @ChangeSet(order = "000", id = "dropDB", author = "vstebletsov", runAlways = true)
+    public void dropDB(MongoDatabase database){
+        database.drop();
+    }
+
+    @ChangeSet(order = "001", id = "initAuthors", author = "vstebletsov", runAlways = true)
+    public void initAuthors(AuthorRepository repository){
+        var author1 = repository.save(new Author("TestAuthor_1"));
+        var author2 = repository.save(new Author("TestAuthor_2"));
+        var author3 = repository.save(new Author("TestAuthor_3"));
+        authors = List.of(author1, author2, author3);
+    }
+
+    @ChangeSet(order = "002", id = "initGenres", author = "vstebletsov", runAlways = true)
+    public void initGenres(GenreRepository repository){
+        var genre1 = repository.save(new Genre("TestGenre_1"));
+        var genre2 = repository.save(new Genre("TestGenre_2"));
+        var genre3 = repository.save(new Genre("TestGenre_3"));
+        genres = List.of(genre1, genre2, genre3);
+    }
+
+    @ChangeSet(order = "003", id = "initBooks", author = "vstebletsov", runAlways = true)
+    public void initBooks(BookRepository repository){
+        var book1 = repository.save(new Book("TestBookTitle_1", authors.get(0), genres.get(0)));
+        var book2 = repository.save(new Book("TestBookTitle_2", authors.get(1), genres.get(1)));
+        var book3 = repository.save(new Book("TestBookTitle_3", authors.get(2), genres.get(2)));
+        books = List.of(book1, book2, book3);
+    }
+
+    @ChangeSet(order = "004", id = "initComments", author = "vstebletsov", runAlways = true)
+    public void initComments(CommentRepository repository){
+        repository.save(new Comment( "TestCommentText_1", books.get(0)));
+        repository.save(new Comment("TestCommentText_2", books.get(1)));
+        repository.save(new Comment("TestCommentText_3", books.get(2)));
+    }
+}

@@ -3,25 +3,17 @@ spring:
     name: "Homework #8 (test env)"
   data:
     mongodb:
-      port: 27017
+      port: 0
       database: test
-      host: localhost
-
-  shell:
-    interactive:
-      enabled: false
-    command:
-      version:
-        enabled: false
 de:
   flapdoodle:
     mongodb:
       embedded:
-        version: 4.7.0
+        version: 4.0.2
 
 mongock:
   change-logs-scan-package:
-    - ru.otus.hw.changelogs
+    - ru.otus.hw.changelogs_test
   mongo-db:
     write-concern:
       journal: false
