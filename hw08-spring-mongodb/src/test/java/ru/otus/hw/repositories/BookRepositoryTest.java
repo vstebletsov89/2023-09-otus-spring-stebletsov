@@ -3,13 +3,13 @@ package ru.otus.hw.repositories;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import ru.otus.hw.models.Book;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Репозиторий для работы с книгами")
-@DataJpaTest
+@DataMongoTest
 class BookRepositoryTest {
 
     @Autowired

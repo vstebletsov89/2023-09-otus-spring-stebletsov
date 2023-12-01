@@ -25,7 +25,7 @@ public class AuthorCommands {
     }
 
     @ShellMethod(value = "Find author by id", key = "fa")
-    public String findAuthorById(long id) {
+    public String findAuthorById(String id) {
         return authorConverter.authorToString(authorService.findById(id));
     }
 }

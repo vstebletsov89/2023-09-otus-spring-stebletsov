@@ -23,19 +23,17 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    public CommentDto findById(long id) {
+    public CommentDto findById(String id) {
         return CommentMapper.toDto(
                 commentRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException("Comment with id %d not found".formatted(id))));
+                        .orElseThrow(() -> new NotFoundException("Comment with id " + id + " not found")));
     }
 
     @Override
-    public List<CommentDto> findAllByBookId(long id) {
+    public List<CommentDto> findAllByBookId(String id) {
         var book =
                 bookRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException("Book with id %d not found"
-                                .formatted(id)
-                        ));
+                        .orElseThrow(() -> new NotFoundException("Book with id " + id + " not found"));
         return commentRepository.findAllByBookId(book.getId())
                 .stream()
                 .map(CommentMapper::toDto)
@@ -47,9 +45,8 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto create(CommentDto commentDto) {
         var book =
                 bookRepository.findById(commentDto.getBookId())
-                        .orElseThrow(() -> new NotFoundException("Book with id %d not found"
-                                .formatted(commentDto.getBookId())
-                        ));
+                        .orElseThrow(() -> new NotFoundException("Book with id " +
+                                commentDto.getBookId() + " not found"));
         var newComment = new Comment(commentDto.getId(), commentDto.getText(), book);
         return CommentMapper.toDto(
                 commentRepository.save(newComment));
@@ -61,8 +58,8 @@ public class CommentServiceImpl implements CommentService {
 
         var updatedComment =
                 commentRepository.findById(commentDto.getId())
-                        .orElseThrow(() -> new NotFoundException("Comment with id %d not found"
-                                .formatted(commentDto.getId())));
+                        .orElseThrow(() -> new NotFoundException("Comment with id " +
+                                commentDto.getId() + " not found"));
 
         if (!Objects.equals(updatedComment.getBook().getId(), commentDto.getBookId())) {
             throw new InvalidStateException("Cannot change comment for another book");
@@ -73,7 +70,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public void deleteById(long id) {
+    public void deleteById(String id) {
         commentRepository.deleteById(id);
     }
 

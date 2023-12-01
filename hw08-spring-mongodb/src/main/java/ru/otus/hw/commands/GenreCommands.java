@@ -25,7 +25,7 @@ public class GenreCommands {
     }
 
     @ShellMethod(value = "Find genre by id", key = "fg")
-    public String findGenreById(long id) {
+    public String findGenreById(String id) {
         return genreConverter.genreToString(genreService.findById(id));
     }
 }

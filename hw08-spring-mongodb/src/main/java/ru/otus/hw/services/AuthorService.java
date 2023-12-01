@@ -7,5 +7,5 @@ import java.util.List;
 public interface AuthorService {
     List<AuthorDto> findAll();
 
-    AuthorDto findById(long id);
+    AuthorDto findById(String id);
 }

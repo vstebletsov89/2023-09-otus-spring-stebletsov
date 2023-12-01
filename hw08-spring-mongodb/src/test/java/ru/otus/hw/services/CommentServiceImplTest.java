@@ -39,14 +39,14 @@ class CommentServiceImplTest {
 
     static List<Comment> expectedComments = new ArrayList<>();
     static List<CommentDto> expectedCommentsDto = new ArrayList<>();
-    static Book expectedBook = new Book(1L, "testBook", null, null);
+    static Book expectedBook = new Book("1", "testBook", null, null);
 
     @BeforeAll
     static void setExpectedComments() {
         expectedComments = List.of(
-                new Comment(1L, "TestComment1", expectedBook),
-                new Comment(2L, "TestComment2", expectedBook),
-                new Comment(3L, "TestComment3", expectedBook)
+                new Comment("1", "TestComment1", expectedBook),
+                new Comment("2", "TestComment2", expectedBook),
+                new Comment("3", "TestComment3", expectedBook)
         );
         expectedCommentsDto =
                 expectedComments.stream()
@@ -57,7 +57,7 @@ class CommentServiceImplTest {
     @DisplayName("должен загружать комент по id")
     @Test
     void shouldReturnCorrectCommentById() {
-        long commentId = 2L;
+        String commentId = "2";
         int commentPos = 1;
         doReturn(Optional.of(expectedComments.get(commentPos))).when(commentRepository).findById(commentId);
         var actualComment = commentService.findById(commentId);
@@ -70,9 +70,9 @@ class CommentServiceImplTest {
     @DisplayName("должен выбрасывать исключение для неверного id")
     @Test
     void shouldReturnExceptionForInvalidId() {
-        doReturn(Optional.empty()).when(commentRepository).findById(99L);
+        doReturn(Optional.empty()).when(commentRepository).findById("99");
         var exception = assertThrows(NotFoundException.class,
-                () -> commentService.findById(99L));
+                () -> commentService.findById("99"));
 
         assertEquals("Comment with id 99 not found", exception.getMessage());
     }
@@ -80,9 +80,9 @@ class CommentServiceImplTest {
     @DisplayName("должен загружать список всех коментариев для книги")
     @Test
     void shouldReturnCorrectCommentsByBookId() {
-        doReturn(Optional.of(expectedBook)).when(bookRepository).findById(1L);
-        doReturn(expectedComments).when(commentRepository).findAllByBookId(1L);
-        var actualComments = commentService.findAllByBookId(1L);
+        doReturn(Optional.of(expectedBook)).when(bookRepository).findById("1");
+        doReturn(expectedComments).when(commentRepository).findAllByBookId("1");
+        var actualComments = commentService.findAllByBookId("1");
 
         assertEquals(3, actualComments.size());
         actualComments.forEach(System.out::println);
@@ -92,11 +92,11 @@ class CommentServiceImplTest {
     @DisplayName("должен сохранять новый коммент")
     @Test
     void shouldSaveNewComment() {
-        var newComment = new CommentDto(null, "newComment", 1L);
+        var newComment = new CommentDto(null, "newComment", "1");
         var expectedComment = new Comment(null, "newComment", expectedBook);
         var expectedCommentDto = CommentMapper.toDto(
                 expectedComment);
-        doReturn(Optional.of(expectedBook)).when(bookRepository).findById(1L);
+        doReturn(Optional.of(expectedBook)).when(bookRepository).findById("1");
         doReturn(expectedComment).when(commentRepository).save(any());
         var actualComment = commentService.create(newComment);
 
@@ -106,14 +106,14 @@ class CommentServiceImplTest {
     @DisplayName("должен обновить коммент")
     @Test
     void shouldSaveUpdatedComment() {
-        var expectedComment = new Comment(1L, "updatedComment", expectedBook);
+        var expectedComment = new Comment("1", "updatedComment", expectedBook);
         var expectedCommentDto = CommentMapper.toDto(
                 expectedComment);
-        doReturn(Optional.of(expectedComment)).when(commentRepository).findById(1L);
-        doReturn(Optional.of(expectedBook)).when(bookRepository).findById(1L);
+        doReturn(Optional.of(expectedComment)).when(commentRepository).findById("1");
+        doReturn(Optional.of(expectedBook)).when(bookRepository).findById("1");
         doReturn(expectedComment).when(commentRepository).save(expectedComment);
         var actualComment = commentService.update(
-            new CommentDto(1L, expectedComment.getText(), expectedComment.getBook().getId())
+            new CommentDto("1", expectedComment.getText(), expectedComment.getBook().getId())
         );
 
         assertThat(actualComment).isEqualTo(expectedCommentDto);

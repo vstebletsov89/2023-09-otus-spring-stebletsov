@@ -1,5 +1,7 @@
 package ru.otus.hw.services;
 
+import org.bson.codecs.ObjectIdGenerator;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,9 +39,9 @@ class AuthorServiceImplTest {
     @BeforeAll
     static void setExpectedAuthors() {
         expectedAuthors = List.of(
-                new Author(1L, "TestAuthor1"),
-                new Author(2L, "TestAuthor2"),
-                new Author(3L, "TestAuthor3"));
+                new Author("1", "TestAuthor1"),
+                new Author("2", "TestAuthor2"),
+                new Author("3", "TestAuthor3"));
         expectedAuthorsDto =
                 expectedAuthors.stream()
                         .map(AuthorMapper::toDto)
@@ -59,7 +61,7 @@ class AuthorServiceImplTest {
     @DisplayName("должен загружать автора по id")
     @Test
     void shouldReturnCorrectAuthorById() {
-        long authorId = 2L;
+        String authorId = "2";
         int authorPos = 1;
         doReturn(Optional.of(expectedAuthors.get(authorPos))).when(authorRepository).findById(authorId);
         var actualAuthor = authorService.findById(authorId);
@@ -72,9 +74,9 @@ class AuthorServiceImplTest {
     @DisplayName("должен выбрасывать исключение для неверного id")
     @Test
     void shouldReturnExceptionForInvalidId() {
-        doReturn(Optional.empty()).when(authorRepository).findById(99L);
+        doReturn(Optional.empty()).when(authorRepository).findById("99");
         var exception = assertThrows(NotFoundException.class,
-                () -> authorService.findById(99L));
+                () -> authorService.findById("99"));
 
         assertEquals("Author with id 99 not found", exception.getMessage());
     }

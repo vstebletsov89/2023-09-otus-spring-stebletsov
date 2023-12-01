@@ -1,16 +1,33 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:testdb
   application:
-    name: "Homework #7 (test env)"
+    name: "Homework #8 (test env)"
+  data:
+    mongodb:
+      port: 27017
+      database: test
+      host: localhost
+
   shell:
     interactive:
       enabled: false
-  flyway:
-    enabled: true
-    locations: classpath:db/migration/1.0,classpath:db/tests
-  jpa:
-    generate-ddl: false
-    hibernate:
-      ddl-auto: none
-    show-sql: true
+    command:
+      version:
+        enabled: false
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.7.0
+
+mongock:
+  change-logs-scan-package:
+    - ru.otus.hw.changelogs
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+logging:
+  level:
+    com.github.cloudyrock.mongock: DEBUG
+    root: ERROR

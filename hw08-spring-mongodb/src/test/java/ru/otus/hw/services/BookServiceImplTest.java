@@ -50,15 +50,15 @@ class BookServiceImplTest {
     @BeforeAll
     static void setExpectedBooks() {
         expectedBooks = List.of(
-                new Book(1L, "TestBook1",
-                        new Author(1L, "TestAuthor1"),
-                        new Genre(1L, "TestGenre1")),
-                new Book(2L, "TestBook2",
-                        new Author(2L, "TestAuthor2"),
-                        new Genre(2L, "TestGenre2")),
-                new Book(3L, "TestBook3",
-                        new Author(3L, "TestAuthor3"),
-                        new Genre(3L, "TestGenre3"))
+                new Book("1", "TestBook1",
+                        new Author("1", "TestAuthor1"),
+                        new Genre("1", "TestGenre1")),
+                new Book("2", "TestBook2",
+                        new Author("2", "TestAuthor2"),
+                        new Genre("2", "TestGenre2")),
+                new Book("3", "TestBook3",
+                        new Author("3", "TestAuthor3"),
+                        new Genre("3", "TestGenre3"))
         );
         expectedBooksDto =
                 expectedBooks.stream()
@@ -80,7 +80,7 @@ class BookServiceImplTest {
     @DisplayName("должен загружать книгу по id")
     @Test
     void shouldReturnCorrectBookById() {
-        long bookId = 2L;
+        String bookId = "2";
         int bookPos = 1;
         doReturn(Optional.of(expectedBooks.get(bookPos))).when(bookRepository).findById(bookId);
         var actualBook = bookService.findById(bookId);
@@ -93,9 +93,9 @@ class BookServiceImplTest {
     @DisplayName("должен выбрасывать исключение для неверного id")
     @Test
     void shouldReturnExceptionForInvalidId() {
-        doReturn(Optional.empty()).when(bookRepository).findById(99L);
+        doReturn(Optional.empty()).when(bookRepository).findById("99");
         var exception = assertThrows(NotFoundException.class,
-                () -> bookService.findById(99L));
+                () -> bookService.findById("99"));
 
         assertEquals("Book with id 99 not found", exception.getMessage());
     }
@@ -133,11 +133,11 @@ class BookServiceImplTest {
     void shouldUpdateBook() {
         Book newBook = expectedBooks.get(1);
         doReturn(newBook).when(bookRepository).save(any());
-        doReturn(Optional.of(newBook)).when(bookRepository).findById(2L);
+        doReturn(Optional.of(newBook)).when(bookRepository).findById("2");
         doReturn(Optional.of(newBook.getAuthor())).when(authorRepository).findById(newBook.getAuthor().getId());
         doReturn(Optional.of(newBook.getGenre())).when(genreRepository).findById(newBook.getGenre().getId());
         var actualBook = bookService.update( new BookDto(
-                2L,
+                "2",
                 newBook.getTitle(),
                 AuthorMapper.toDto(newBook.getAuthor()),
                 GenreMapper.toDto(newBook.getGenre())));

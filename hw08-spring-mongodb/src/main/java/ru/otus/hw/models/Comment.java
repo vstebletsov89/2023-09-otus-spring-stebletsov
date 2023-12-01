@@ -16,11 +16,16 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "comments")
 public class Comment {
     @Id
-    private Long id;
+    private String id;
 
     @Field(name = "text")
     private String text;
 
     @DBRef
     private Book book;
+
+    public Comment(String text, Book book) {
+        this.text = text;
+        this.book = book;
+    }
 }

@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "books")
 public class Book {
     @Id
-    private Long id;
+    private String id;
 
     @Field(name = "title")
     private String title;
@@ -27,4 +27,10 @@ public class Book {
 
     @Field(name = "genre")
     private Genre genre;
+
+    public Book(String title, Author author, Genre genre) {
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+    }
 }

@@ -37,9 +37,9 @@ class GenreServiceImplTest {
     @BeforeAll
     static void setExpectedGenres() {
         expectedGenres = List.of(
-                new Genre(1L, "TestGenre1"),
-                new Genre(2L, "TestGenre2"),
-                new Genre(3L, "TestGenre3")
+                new Genre("1", "TestGenre1"),
+                new Genre("2", "TestGenre2"),
+                new Genre("3", "TestGenre3")
         );
         expectedGenresDto =
                 expectedGenres.stream()
@@ -60,7 +60,7 @@ class GenreServiceImplTest {
     @DisplayName("должен загружать жанр по id")
     @Test
     void shouldReturnCorrectGenreById() {
-        long genreId = 1L;
+        String genreId = "1";
         int genrePos = 0;
         doReturn(Optional.of(expectedGenres.get(genrePos))).when(genreRepository).findById(genreId);
         var actualGenre = genreService.findById(genreId);
@@ -73,9 +73,9 @@ class GenreServiceImplTest {
     @DisplayName("должен выбрасывать исключение для неверного id")
     @Test
     void shouldReturnExceptionForInvalidId() {
-        doReturn(Optional.empty()).when(genreRepository).findById(99L);
+        doReturn(Optional.empty()).when(genreRepository).findById("99");
         var exception = assertThrows(NotFoundException.class,
-                () -> genreService.findById(99L));
+                () -> genreService.findById("99"));
 
         assertEquals("Genre with id 99 not found", exception.getMessage());
     }

@@ -23,10 +23,10 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
 
     @Override
-    public BookDto findById(long id) {
+    public BookDto findById(String id) {
         return BookMapper.toDto(
                 bookRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException("Book with id %d not found".formatted(id))));
+                        .orElseThrow(() -> new NotFoundException("Book with id " + id + " not found")));
     }
 
     @Override
@@ -48,27 +48,27 @@ public class BookServiceImpl implements BookService {
     public BookDto update(BookDto bookDto) {
         var updatedBook =
                 bookRepository.findById(bookDto.getId())
-                        .orElseThrow(() -> new NotFoundException("Book with id %d not found".formatted(bookDto.getId()))
+                        .orElseThrow(() -> new NotFoundException("Book with id " + bookDto.getId() + " not found")
                 );
         return save(BookMapper.toModel(bookDto));
     }
 
     @Transactional
     @Override
-    public void deleteById(long id) {
+    public void deleteById(String id) {
         bookRepository.deleteById(id);
     }
 
     private BookDto save(Book book) {
         var author =
                 authorRepository.findById(book.getAuthor().getId())
-                        .orElseThrow(() -> new NotFoundException("Author with id %d not found"
-                                .formatted(book.getAuthor().getId())
+                        .orElseThrow(() -> new NotFoundException("Author with id "
+                                + book.getAuthor().getId() + " not found"
                         ));
         var genre =
                 genreRepository.findById(book.getGenre().getId())
-                        .orElseThrow(() -> new NotFoundException("Genre with id %d not found"
-                                .formatted(book.getGenre().getId())
+                        .orElseThrow(() -> new NotFoundException("Genre with id "
+                                + book.getGenre().getId() + " not found"
                         ));
         var newBook = new Book(book.getId(), book.getTitle(), author, genre);
         return BookMapper.toDto(bookRepository.save(newBook));
