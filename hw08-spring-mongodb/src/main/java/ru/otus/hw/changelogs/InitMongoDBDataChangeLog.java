@@ -18,16 +18,18 @@ import java.util.List;
 public class InitMongoDBDataChangeLog {
 
     private List<Author> authors;
+
     private List<Genre> genres;
+
     private List<Book> books;
 
     @ChangeSet(order = "000", id = "dropDB", author = "vstebletsov", runAlways = true)
-    public void dropDB(MongoDatabase database){
+    public void dropDB(MongoDatabase database) {
         database.drop();
     }
 
     @ChangeSet(order = "001", id = "initAuthors", author = "vstebletsov", runAlways = true)
-    public void initAuthors(AuthorRepository repository){
+    public void initAuthors(AuthorRepository repository) {
         var author1 = repository.save(new Author("Author_1"));
         var author2 = repository.save(new Author("Author_2"));
         var author3 = repository.save(new Author("Author_3"));
@@ -35,7 +37,7 @@ public class InitMongoDBDataChangeLog {
     }
 
     @ChangeSet(order = "002", id = "initGenres", author = "vstebletsov", runAlways = true)
-    public void initGenres(GenreRepository repository){
+    public void initGenres(GenreRepository repository) {
         var genre1 = repository.save(new Genre("Genre_1"));
         var genre2 = repository.save(new Genre("Genre_2"));
         var genre3 = repository.save(new Genre("Genre_3"));
@@ -43,7 +45,7 @@ public class InitMongoDBDataChangeLog {
     }
 
     @ChangeSet(order = "003", id = "initBooks", author = "vstebletsov", runAlways = true)
-    public void initBooks(BookRepository repository){
+    public void initBooks(BookRepository repository) {
         var book1 = repository.save(new Book("BookTitle_1", authors.get(0), genres.get(0)));
         var book2 = repository.save(new Book("BookTitle_2", authors.get(1), genres.get(1)));
         var book3 = repository.save(new Book("BookTitle_3", authors.get(2), genres.get(2)));
@@ -51,8 +53,8 @@ public class InitMongoDBDataChangeLog {
     }
 
     @ChangeSet(order = "004", id = "initComments", author = "vstebletsov", runAlways = true)
-    public void initComments(CommentRepository repository){
-        repository.save(new Comment( "CommentText_1", books.get(0)));
+    public void initComments(CommentRepository repository) {
+        repository.save(new Comment("CommentText_1", books.get(0)));
         repository.save(new Comment("CommentText_2", books.get(1)));
         repository.save(new Comment("CommentText_3", books.get(2)));
     }

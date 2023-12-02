@@ -22,4 +22,4 @@ mongock:
 logging:
   level:
     com.github.cloudyrock.mongock: DEBUG
-    root: ERROR
+    root: DEBUG
