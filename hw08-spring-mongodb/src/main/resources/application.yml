@@ -29,6 +29,7 @@ mongock:
 
 logging:
   level:
+    com.github.cloudyrock.mongock: INFO
     root: ERROR
 
 
