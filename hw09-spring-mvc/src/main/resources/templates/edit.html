@@ -24,16 +24,24 @@
 
     <div class="mb-3">
         <label for="book-author-input" >Author:</label>
-        <select id="book-author-input" name="authorId">
-            <option th:each="author : ${authorDtoList}" th:value="${author}" th:text="${author.getFullName()}" th:selected="${author.id==bookDto.getAuthorDto().getId()}">Authors
+        <select id="book-author-input" name="authorDto" th:field="*{authorDto.id}">
+            <option th:each="authorDto : ${authorDtoList}"
+                    th:value="${authorDto.id}"
+                    th:text="${authorDto.getFullName()}"
+                    th:selected="*{authorDto.id}">
+                Authors
             </option>
         </select>
     </div>
 
     <div class="mb-3">
         <label for="book-genre-input" >Genre:</label>
-        <select id="book-genre-input" name="genreId">
-            <option th:each="genre : ${genreDtoList}" th:value="${genre}" th:text="${genre.getName()}" th:selected="${genre.id==bookDto.getGenreDto().getId()}">Genres
+        <select id="book-genre-input" name="genreDto" th:field="*{genreDto.id}">
+            <option th:each="genreDto : ${genreDtoList}"
+                    th:value="${genreDto.id}"
+                    th:text="${genreDto.getName()}"
+                    th:selected="*{genreDto.id}">
+                Genres
             </option>
         </select>
     </div>

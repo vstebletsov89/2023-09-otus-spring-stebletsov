@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.otus.hw.converters.BookConverter;
@@ -36,7 +35,6 @@ public class BookController {
     @GetMapping("/")
     public String listPage(Model model) {
         List<BookDto> bookDtoList = bookService.findAll();
-
         model.addAttribute("bookDtoList", bookDtoList);
         return "list";
     }
@@ -44,7 +42,8 @@ public class BookController {
     @GetMapping("/book/edit")
     public String editPage(@RequestParam("id") long id, Model model) {
         BookDto bookDto = bookService.findById(id);
-        log.debug(bookConverter.bookToString(bookDto));
+        log.info("get/book/edit");
+        log.info(bookConverter.bookToString(bookDto));
         List<AuthorDto> authorDtoList = authorService.findAll();
         List<GenreDto> genreDtoList = genreService.findAll();
 
@@ -55,9 +54,10 @@ public class BookController {
     }
 
     @PostMapping("/book/edit")
-    public String saveBook(@Valid @ModelAttribute BookDto bookDto,
+    public String saveBook(@Valid BookDto bookDto,
                            BindingResult bindingResult, Model model) {
-        log.debug(bookConverter.bookToString(bookDto));
+        log.info("post/book/edit");
+        log.info(bookConverter.bookToString(bookDto));
         if (bindingResult.hasErrors()) {
             return "edit";
         }
