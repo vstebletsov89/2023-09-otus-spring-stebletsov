@@ -1,5 +1,7 @@
 package ru.otus.hw.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,10 +10,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookCreateDto {
+    @NotBlank(message = "{title-field-must-not-be-blank}")
     private String title;
 
+    @NotNull
     private AuthorDto authorDto;
 
+    @NotNull
     private GenreDto genreDto;
 
 }

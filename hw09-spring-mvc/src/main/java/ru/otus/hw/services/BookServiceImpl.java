@@ -3,6 +3,7 @@ package ru.otus.hw.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.mappers.BookMapper;
@@ -39,7 +40,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public BookDto create(BookDto bookDto) {
+    public BookDto create(BookCreateDto bookDto) {
         return save(BookMapper.toModel(bookDto));
     }
 

@@ -8,13 +8,8 @@
 </head>
 <body>
 
-<form id="edit-form" action="edit.html" th:action="@{/book/edit(id=${bookDto.id})}" th:method="post" th:object="${bookDto}">
-    <h3 th:text = "#{book-update-form-header}">Book Info:</h3>
-
-    <div class="mb-3">
-        <label for="id-input" th:text="#{book-field-id} + ':'">ID:</label>
-        <input id="id-input" type="text" readonly="readonly" name="id" th:value="*{id}" value="1"/>
-    </div>
+<form id="create-form" action="create.html" th:action="@{/book/create}" th:method="post" th:object="${bookCreateDto}">
+    <h3 th:text = "#{book-create-form-header}">Add Book:</h3>
 
     <div class="mb-3">
         <label for="book-title-input" th:text="#{book-field-title} + ':'">Title:</label>
@@ -40,7 +35,7 @@
             <option th:each="genreDto : ${genreDtoList}"
                     th:value="${genreDto.id}"
                     th:text="${genreDto.getName()}"
-                    th:selected="*{genreDto.id}">
+                    th:selected="${genreDto.id==bookCreateDto.getGenreDto().getId()}">
                 Genres
             </option>
         </select>

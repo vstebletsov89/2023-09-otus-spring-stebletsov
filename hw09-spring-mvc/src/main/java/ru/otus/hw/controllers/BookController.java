@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.otus.hw.converters.BookConverter;
 import ru.otus.hw.dto.AuthorDto;
+import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.services.AuthorService;
@@ -62,6 +63,31 @@ public class BookController {
             return "edit";
         }
         bookService.update(bookDto);
+        return "redirect:/";
+    }
+
+    @GetMapping("/book/create")
+    public String addPage(Model model) {
+        log.info("get/book/create");
+        BookCreateDto bookCreateDto = new BookCreateDto();
+        List<AuthorDto> authorDtoList = authorService.findAll();
+        List<GenreDto> genreDtoList = genreService.findAll();
+
+        model.addAttribute("bookCreateDto", bookCreateDto);
+        model.addAttribute("authorDtoList", authorDtoList);
+        model.addAttribute("genreDtoList", genreDtoList);
+        return "create";
+    }
+
+    @PostMapping("/book/create")
+    public String addBook(@Valid BookCreateDto bookCreateDto,
+                          BindingResult bindingResult, Model model) {
+        log.info("post/book/create");
+        log.info(bookConverter.bookCreateToString(bookCreateDto));
+        if (bindingResult.hasErrors()) {
+            return "create";
+        }
+        bookService.create(bookCreateDto);
         return "redirect:/";
     }
 
