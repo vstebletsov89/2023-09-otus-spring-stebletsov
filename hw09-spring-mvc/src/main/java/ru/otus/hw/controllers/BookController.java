@@ -45,12 +45,9 @@ public class BookController {
         BookDto bookDto = bookService.findById(id);
         log.info("get/book/edit");
         log.info(bookConverter.bookToString(bookDto));
-        List<AuthorDto> authorDtoList = authorService.findAll();
-        List<GenreDto> genreDtoList = genreService.findAll();
 
         model.addAttribute("bookDto", bookDto);
-        model.addAttribute("authorDtoList", authorDtoList);
-        model.addAttribute("genreDtoList", genreDtoList);
+        loadAuthorsAndGenresToModel(model);
         return "edit";
     }
 
@@ -59,7 +56,9 @@ public class BookController {
                            BindingResult bindingResult, Model model) {
         log.info("post/book/edit");
         log.info(bookConverter.bookToString(bookDto));
+
         if (bindingResult.hasErrors()) {
+            loadAuthorsAndGenresToModel(model);
             return "edit";
         }
         bookService.update(bookDto);
@@ -70,12 +69,8 @@ public class BookController {
     public String addPage(Model model) {
         log.info("get/book/create");
         BookCreateDto bookCreateDto = new BookCreateDto();
-        List<AuthorDto> authorDtoList = authorService.findAll();
-        List<GenreDto> genreDtoList = genreService.findAll();
-
         model.addAttribute("bookCreateDto", bookCreateDto);
-        model.addAttribute("authorDtoList", authorDtoList);
-        model.addAttribute("genreDtoList", genreDtoList);
+        loadAuthorsAndGenresToModel(model);
         return "create";
     }
 
@@ -85,6 +80,7 @@ public class BookController {
         log.info("post/book/create");
         log.info(bookConverter.bookCreateToString(bookCreateDto));
         if (bindingResult.hasErrors()) {
+            loadAuthorsAndGenresToModel(model);
             return "create";
         }
         bookService.create(bookCreateDto);
@@ -92,4 +88,10 @@ public class BookController {
     }
 
     //TODO: add create/read/update/delete for books
+    private void loadAuthorsAndGenresToModel(Model model) {
+        List<AuthorDto> authorDtoList = authorService.findAll();
+        List<GenreDto> genreDtoList = genreService.findAll();
+        model.addAttribute("authorDtoList", authorDtoList);
+        model.addAttribute("genreDtoList", genreDtoList);
+    }
 }
