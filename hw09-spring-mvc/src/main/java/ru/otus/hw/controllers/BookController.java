@@ -87,7 +87,13 @@ public class BookController {
         return "redirect:/";
     }
 
-    //TODO: add create/read/update/delete for books
+    @PostMapping("/book/delete")
+    public String deleteBook (@RequestParam("id") long id){
+        log.info("post/book/delete");
+        bookService.deleteById(id);
+        return "redirect:/";
+    }
+
     private void loadAuthorsAndGenresToModel(Model model) {
         List<AuthorDto> authorDtoList = authorService.findAll();
         List<GenreDto> genreDtoList = genreService.findAll();

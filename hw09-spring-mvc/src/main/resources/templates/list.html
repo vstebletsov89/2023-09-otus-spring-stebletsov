@@ -26,7 +26,12 @@
         <td th:text="${book.getGenreDto().getName()}">Book Genre</td>
         <td>
             <a th:href="@{/book/edit(id=${book.id})}" href="edit.html" th:text="#{edit-button-caption}" class="btn btn-warning">Edit</a>
-            <a th:href="@{/book/delete(id=${book.id})}" th:text="#{delete-button-caption}" class="btn btn-danger">Delete</a>
+            <form action="#" th:action="@{/book/delete(id=${book.id})}" th:method="post" >
+                <button type="submit" th:text="#{delete-button-caption}" class="btn btn-danger">
+                    Delete
+                </button>
+            </form>
+
         </td>
     </tr>
     </tbody>
