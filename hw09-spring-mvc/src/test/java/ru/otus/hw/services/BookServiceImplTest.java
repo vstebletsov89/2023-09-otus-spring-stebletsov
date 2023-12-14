@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.mappers.AuthorMapper;
@@ -115,8 +116,7 @@ class BookServiceImplTest {
         doReturn(expectedBook).when(bookRepository).save(any());
         doReturn(Optional.of(expectedBook.getAuthor())).when(authorRepository).findById(expectedBook.getAuthor().getId());
         doReturn(Optional.of(expectedBook.getGenre())).when(genreRepository).findById(expectedBook.getGenre().getId());
-        var actualBook = bookService.create( new BookDto(
-                null,
+        var actualBook = bookService.create( new BookCreateDto(
                 expectedBook.getTitle(),
                 AuthorMapper.toDto(
                         expectedBook.getAuthor()),

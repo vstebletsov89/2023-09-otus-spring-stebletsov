@@ -88,7 +88,7 @@ public class BookController {
     }
 
     @PostMapping("/book/delete")
-    public String deleteBook (@RequestParam("id") long id){
+    public String deleteBook (@RequestParam("id") long id) {
         log.info("post/book/delete");
         bookService.deleteById(id);
         return "redirect:/";
