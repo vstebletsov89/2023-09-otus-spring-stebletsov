@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -159,6 +161,8 @@ class BookControllerTest {
     @DisplayName("должен удалить книгу и сделать редирект")
     @Test
     void shouldDeleteBookAndRedirect() throws Exception {
+        doNothing().when(bookService).deleteById(anyLong());
+
         mockMvc.perform(post("/book/delete").param("id", "3"))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
