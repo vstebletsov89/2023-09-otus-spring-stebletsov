@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
+import ru.otus.hw.dto.BookUpdateDto;
 import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.mappers.BookMapper;
-import ru.otus.hw.models.Book;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.GenreRepository;
@@ -23,9 +23,11 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
 
+    private final BookMapper bookMapper;
+
     @Override
     public BookDto findById(long id) {
-        return BookMapper.toDto(
+        return bookMapper.toDto(
                 bookRepository.findById(id)
                         .orElseThrow(() -> new NotFoundException("Book with id %d not found".formatted(id))));
     }
@@ -34,24 +36,25 @@ public class BookServiceImpl implements BookService {
     public List<BookDto> findAll() {
         return bookRepository.findAll()
                 .stream()
-                .map(BookMapper::toDto)
+                .map(bookMapper::toDto)
                 .toList();
     }
 
     @Transactional
     @Override
-    public BookDto create(BookCreateDto bookDto) {
-        return save(BookMapper.toModel(bookDto));
+    public BookDto create(BookCreateDto bookCreateDto) {
+        return addBook(bookCreateDto);
     }
 
     @Transactional
     @Override
-    public BookDto update(BookDto bookDto) {
+    public BookDto update(BookUpdateDto bookUpdateDto) {
         var updatedBook =
-                bookRepository.findById(bookDto.getId())
-                        .orElseThrow(() -> new NotFoundException("Book with id %d not found".formatted(bookDto.getId()))
+                bookRepository.findById(bookUpdateDto.getId())
+                        .orElseThrow(() ->
+                                new NotFoundException("Book with id %d not found".formatted(bookUpdateDto.getId()))
                 );
-        return save(BookMapper.toModel(bookDto));
+        return updateBook(bookUpdateDto);
     }
 
     @Transactional
@@ -60,18 +63,33 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
-    private BookDto save(Book book) {
+    private BookDto updateBook(BookUpdateDto bookUpdateDto) {
         var author =
-                authorRepository.findById(book.getAuthor().getId())
+                authorRepository.findById(bookUpdateDto.getAuthorDto().getId())
                         .orElseThrow(() -> new NotFoundException("Author with id %d not found"
-                                .formatted(book.getAuthor().getId())
+                                .formatted(bookUpdateDto.getAuthorDto().getId())
                         ));
         var genre =
-                genreRepository.findById(book.getGenre().getId())
+                genreRepository.findById(bookUpdateDto.getGenreDto().getId())
                         .orElseThrow(() -> new NotFoundException("Genre with id %d not found"
-                                .formatted(book.getGenre().getId())
+                                .formatted(bookUpdateDto.getGenreDto().getId())
                         ));
-        var newBook = new Book(book.getId(), book.getTitle(), author, genre);
-        return BookMapper.toDto(bookRepository.save(newBook));
+        var newBook = bookMapper.toModel(bookUpdateDto, author, genre);
+        return bookMapper.toDto(bookRepository.save(newBook));
+    }
+
+    private BookDto addBook(BookCreateDto bookCreateDto) {
+        var author =
+                authorRepository.findById(bookCreateDto.getAuthorDto().getId())
+                        .orElseThrow(() -> new NotFoundException("Author with id %d not found"
+                                .formatted(bookCreateDto.getAuthorDto().getId())
+                        ));
+        var genre =
+                genreRepository.findById(bookCreateDto.getGenreDto().getId())
+                        .orElseThrow(() -> new NotFoundException("Genre with id %d not found"
+                                .formatted(bookCreateDto.getGenreDto().getId())
+                        ));
+        var newBook = bookMapper.toModel(bookCreateDto, author, genre);
+        return bookMapper.toDto(bookRepository.save(newBook));
     }
 }

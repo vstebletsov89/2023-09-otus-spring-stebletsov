@@ -3,11 +3,13 @@ package ru.otus.hw.services;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
+import ru.otus.hw.dto.BookUpdateDto;
 import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.mappers.AuthorMapper;
 import ru.otus.hw.mappers.BookMapper;
@@ -30,7 +32,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса книг")
-@SpringBootTest(classes = {BookServiceImpl.class})
+@SpringBootTest(classes = {BookServiceImpl.class, BookMapper.class, AuthorMapper.class, GenreMapper.class})
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BookServiceImplTest {
 
     @MockBean
@@ -45,11 +48,20 @@ class BookServiceImplTest {
     @Autowired
     private BookService bookService;
 
+    @Autowired
+    private BookMapper bookMapper;
+
+    @Autowired
+    private AuthorMapper authorMapper;
+
+    @Autowired
+    private GenreMapper genreMapper;
+
     static List<Book> expectedBooks = new ArrayList<>();
     static List<BookDto> expectedBooksDto = new ArrayList<>();
 
     @BeforeAll
-    static void setExpectedBooks() {
+    void setExpectedBooks() {
         expectedBooks = List.of(
                 new Book(1L, "TestBook1",
                         new Author(1L, "TestAuthor1"),
@@ -61,9 +73,10 @@ class BookServiceImplTest {
                         new Author(3L, "TestAuthor3"),
                         new Genre(3L, "TestGenre3"))
         );
+
         expectedBooksDto =
                 expectedBooks.stream()
-                        .map(BookMapper::toDto)
+                        .map(bookMapper::toDto)
                         .toList();
     }
 
@@ -116,14 +129,14 @@ class BookServiceImplTest {
         doReturn(expectedBook).when(bookRepository).save(any());
         doReturn(Optional.of(expectedBook.getAuthor())).when(authorRepository).findById(expectedBook.getAuthor().getId());
         doReturn(Optional.of(expectedBook.getGenre())).when(genreRepository).findById(expectedBook.getGenre().getId());
-        var actualBook = bookService.create( new BookCreateDto(
+        var bookDto = bookService.create( new BookCreateDto(
                 expectedBook.getTitle(),
-                AuthorMapper.toDto(
+                authorMapper.toDto(
                         expectedBook.getAuthor()),
-                GenreMapper.toDto(
+                genreMapper.toDto(
                         expectedBook.getGenre())));
 
-        assertThat(BookMapper.toModel(actualBook))
+        assertThat(bookMapper.toModel(bookDto, expectedBook.getAuthor(), expectedBook.getGenre()))
                 .usingRecursiveComparison()
                 .isEqualTo(expectedBook);
     }
@@ -136,13 +149,13 @@ class BookServiceImplTest {
         doReturn(Optional.of(newBook)).when(bookRepository).findById(2L);
         doReturn(Optional.of(newBook.getAuthor())).when(authorRepository).findById(newBook.getAuthor().getId());
         doReturn(Optional.of(newBook.getGenre())).when(genreRepository).findById(newBook.getGenre().getId());
-        var actualBook = bookService.update( new BookDto(
+        var bookDto = bookService.update( new BookUpdateDto(
                 2L,
                 newBook.getTitle(),
-                AuthorMapper.toDto(newBook.getAuthor()),
-                GenreMapper.toDto(newBook.getGenre())));
+                authorMapper.toDto(newBook.getAuthor()),
+                genreMapper.toDto(newBook.getGenre())));
 
-        assertThat(BookMapper.toModel(actualBook))
+        assertThat(bookMapper.toModel(bookDto, newBook.getAuthor(), newBook.getGenre()))
                 .usingRecursiveComparison()
                 .isEqualTo(newBook);
     }

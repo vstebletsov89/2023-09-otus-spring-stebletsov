@@ -3,6 +3,7 @@ package ru.otus.hw.services;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,7 +26,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса коментариев")
-@SpringBootTest(classes = {CommentServiceImpl.class})
+@SpringBootTest(classes = {CommentServiceImpl.class, CommentMapper.class})
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CommentServiceImplTest {
 
     @MockBean
@@ -37,12 +39,15 @@ class CommentServiceImplTest {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private CommentMapper commentMapper;
+
     static List<Comment> expectedComments = new ArrayList<>();
     static List<CommentDto> expectedCommentsDto = new ArrayList<>();
     static Book expectedBook = new Book(1L, "testBook", null, null);
 
     @BeforeAll
-    static void setExpectedComments() {
+    void setExpectedComments() {
         expectedComments = List.of(
                 new Comment(1L, "TestComment1", expectedBook),
                 new Comment(2L, "TestComment2", expectedBook),
@@ -50,7 +55,7 @@ class CommentServiceImplTest {
         );
         expectedCommentsDto =
                 expectedComments.stream()
-                        .map(CommentMapper::toDto)
+                        .map(commentMapper::toDto)
                         .toList();
     }
 
@@ -94,7 +99,7 @@ class CommentServiceImplTest {
     void shouldSaveNewComment() {
         var newComment = new CommentDto(null, "newComment", 1L);
         var expectedComment = new Comment(null, "newComment", expectedBook);
-        var expectedCommentDto = CommentMapper.toDto(
+        var expectedCommentDto = commentMapper.toDto(
                 expectedComment);
         doReturn(Optional.of(expectedBook)).when(bookRepository).findById(1L);
         doReturn(expectedComment).when(commentRepository).save(any());
@@ -107,7 +112,7 @@ class CommentServiceImplTest {
     @Test
     void shouldSaveUpdatedComment() {
         var expectedComment = new Comment(1L, "updatedComment", expectedBook);
-        var expectedCommentDto = CommentMapper.toDto(
+        var expectedCommentDto = commentMapper.toDto(
                 expectedComment);
         doReturn(Optional.of(expectedComment)).when(commentRepository).findById(1L);
         doReturn(Optional.of(expectedBook)).when(bookRepository).findById(1L);

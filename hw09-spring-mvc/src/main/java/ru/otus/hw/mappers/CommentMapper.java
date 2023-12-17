@@ -1,14 +1,17 @@
 package ru.otus.hw.mappers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.otus.hw.dto.CommentDto;
+import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
 
 
+@RequiredArgsConstructor
 @Component
 public class CommentMapper {
 
-    public static CommentDto toDto(Comment comment) {
+    public CommentDto toDto(Comment comment) {
 
         CommentDto commentDto = new CommentDto();
         commentDto.setId(comment.getId());
@@ -18,9 +21,9 @@ public class CommentMapper {
         return commentDto;
     }
 
-    public static Comment toModel(CommentDto commentDto) {
+    public Comment toModel(CommentDto commentDto, Book book) {
         return new Comment(commentDto.getId(),
                 commentDto.getText(),
-                null);
+                book);
     }
 }

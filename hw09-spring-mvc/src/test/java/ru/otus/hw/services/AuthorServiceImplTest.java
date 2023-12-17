@@ -3,6 +3,7 @@ package ru.otus.hw.services;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса авторов")
-@SpringBootTest(classes = {AuthorServiceImpl.class})
+@SpringBootTest(classes = {AuthorServiceImpl.class, AuthorMapper.class})
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AuthorServiceImplTest {
 
     @MockBean
@@ -31,18 +33,21 @@ class AuthorServiceImplTest {
     @Autowired
     private AuthorService authorService;
 
+    @Autowired
+    private AuthorMapper authorMapper;
+
     static List<Author> expectedAuthors = new ArrayList<>();
     static List<AuthorDto> expectedAuthorsDto = new ArrayList<>();
 
     @BeforeAll
-    static void setExpectedAuthors() {
+    void setExpectedAuthors() {
         expectedAuthors = List.of(
                 new Author(1L, "TestAuthor1"),
                 new Author(2L, "TestAuthor2"),
                 new Author(3L, "TestAuthor3"));
         expectedAuthorsDto =
                 expectedAuthors.stream()
-                        .map(AuthorMapper::toDto)
+                        .map(authorMapper::toDto)
                         .toList();
     }
 

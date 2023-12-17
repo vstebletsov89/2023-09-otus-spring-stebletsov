@@ -14,17 +14,19 @@ import java.util.List;
 public class GenreServiceImpl implements GenreService {
     private final GenreRepository genreRepository;
 
+    private final GenreMapper genreMapper;
+
     @Override
     public List<GenreDto> findAll() {
         return genreRepository.findAll()
                 .stream()
-                .map(GenreMapper::toDto)
+                .map(genreMapper::toDto)
                 .toList();
     }
 
     @Override
     public GenreDto findById(long id) {
-        return GenreMapper.toDto(
+        return genreMapper.toDto(
                 genreRepository.findById(id)
                         .orElseThrow(() -> new NotFoundException("Genre with id %d not found".formatted(id))));
     }

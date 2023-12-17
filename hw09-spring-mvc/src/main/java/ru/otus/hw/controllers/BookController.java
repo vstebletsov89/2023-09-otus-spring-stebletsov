@@ -9,10 +9,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.otus.hw.converters.BookConverter;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
+import ru.otus.hw.dto.BookUpdateDto;
 import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.services.AuthorService;
 import ru.otus.hw.services.BookService;
@@ -31,8 +31,6 @@ public class BookController {
 
     private final GenreService genreService;
 
-    private final BookConverter bookConverter;
-
     @GetMapping("/")
     public String listPage(Model model) {
         List<BookDto> bookDtoList = bookService.findAll();
@@ -44,24 +42,30 @@ public class BookController {
     public String editPage(@RequestParam("id") long id, Model model) {
         BookDto bookDto = bookService.findById(id);
         log.info("get/book/edit");
-        log.info(bookConverter.bookToString(bookDto));
+        BookUpdateDto bookUpdateDto = new BookUpdateDto(
+                bookDto.getId(),
+                bookDto.getTitle(),
+                bookDto.getAuthorDto(),
+                bookDto.getGenreDto()
+        );
+        log.info(bookUpdateDto.toString());
 
-        model.addAttribute("bookDto", bookDto);
+        model.addAttribute("bookUpdateDto", bookUpdateDto);
         loadAuthorsAndGenresToModel(model);
         return "edit";
     }
 
     @PostMapping("/book/edit")
-    public String saveBook(@Valid BookDto bookDto,
+    public String updateBook(@Valid BookUpdateDto bookUpdateDto,
                            BindingResult bindingResult, Model model) {
         log.info("post/book/edit");
-        log.info(bookConverter.bookToString(bookDto));
+        log.info(bookUpdateDto.toString());
 
         if (bindingResult.hasErrors()) {
             loadAuthorsAndGenresToModel(model);
             return "edit";
         }
-        bookService.update(bookDto);
+        bookService.update(bookUpdateDto);
         return "redirect:/";
     }
 
@@ -78,7 +82,7 @@ public class BookController {
     public String addBook(@Valid BookCreateDto bookCreateDto,
                           BindingResult bindingResult, Model model) {
         log.info("post/book/create");
-        log.info(bookConverter.bookCreateToString(bookCreateDto));
+        log.info(bookCreateDto.toString());
         if (bindingResult.hasErrors()) {
             loadAuthorsAndGenresToModel(model);
             return "create";

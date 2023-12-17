@@ -3,6 +3,7 @@ package ru.otus.hw.services;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса жанров")
-@SpringBootTest(classes = {GenreServiceImpl.class})
+@SpringBootTest(classes = {GenreServiceImpl.class, GenreMapper.class})
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GenreServiceImplTest {
 
     @MockBean
@@ -31,11 +33,14 @@ class GenreServiceImplTest {
     @Autowired
     private GenreService genreService;
 
+    @Autowired
+    private GenreMapper genreMapper;
+
     static List<Genre> expectedGenres = new ArrayList<>();
     static List<GenreDto> expectedGenresDto = new ArrayList<>();
 
     @BeforeAll
-    static void setExpectedGenres() {
+    void setExpectedGenres() {
         expectedGenres = List.of(
                 new Genre(1L, "TestGenre1"),
                 new Genre(2L, "TestGenre2"),
@@ -43,7 +48,7 @@ class GenreServiceImplTest {
         );
         expectedGenresDto =
                 expectedGenres.stream()
-                        .map(GenreMapper::toDto)
+                        .map(genreMapper::toDto)
                         .toList();
     }
 

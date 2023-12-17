@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.otus.hw.converters.BookConverter;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
+import ru.otus.hw.dto.BookUpdateDto;
 import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.services.AuthorService;
 import ru.otus.hw.services.BookService;
@@ -45,9 +45,6 @@ class BookControllerTest {
 
     @MockBean
     private GenreService genreService;
-
-    @MockBean
-    private BookConverter bookConverter;
 
     static List<BookDto> expectedBooksDto = new ArrayList<>();
 
@@ -85,6 +82,12 @@ class BookControllerTest {
     @Test
     void shouldReturnEditViewForBook() throws Exception {
         BookDto expectedBook = expectedBooksDto.get(1);
+        BookUpdateDto bookUpdateDto = new BookUpdateDto(
+                expectedBook.getId(),
+                expectedBook.getTitle(),
+                expectedBook.getAuthorDto(),
+                expectedBook.getGenreDto()
+        );
         List<AuthorDto> authorDtoList = List.of(expectedBook.getAuthorDto());
         List<GenreDto> genreDtoList = List.of(expectedBook.getGenreDto());
         doReturn(expectedBook).when(bookService).findById(2L);
@@ -94,7 +97,7 @@ class BookControllerTest {
         mockMvc.perform(get("/book/edit").param("id", "2"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("bookDto", expectedBook))
+                .andExpect(model().attribute("bookUpdateDto", bookUpdateDto))
                 .andExpect(model().attribute("authorDtoList", authorDtoList))
                 .andExpect(model().attribute("genreDtoList", genreDtoList))
                 .andExpect(content().string(containsString(expectedBook.getTitle())))
@@ -111,13 +114,19 @@ class BookControllerTest {
     @Test
     void shouldUpdateBookAndRedirect() throws Exception {
         BookDto expectedBookDto = expectedBooksDto.get(0);
+        BookUpdateDto bookUpdateDto = new BookUpdateDto(
+                expectedBookDto.getId(),
+                expectedBookDto.getTitle(),
+                expectedBookDto.getAuthorDto(),
+                expectedBookDto.getGenreDto()
+        );
 
-        mockMvc.perform(post("/book/edit").flashAttr("bookDto", expectedBookDto))
+        mockMvc.perform(post("/book/edit").flashAttr("bookUpdateDto", bookUpdateDto))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
 
-        verify(bookService, times(1)).update(expectedBookDto);
+        verify(bookService, times(1)).update(bookUpdateDto);
     }
 
     @DisplayName("должен загружать view для добавления книги")
