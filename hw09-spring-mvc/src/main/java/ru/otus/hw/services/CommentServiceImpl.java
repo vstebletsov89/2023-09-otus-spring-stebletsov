@@ -7,7 +7,6 @@ import ru.otus.hw.dto.CommentDto;
 import ru.otus.hw.exceptions.InvalidStateException;
 import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.mappers.CommentMapper;
-import ru.otus.hw.models.Comment;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.CommentRepository;
 
@@ -52,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
                         .orElseThrow(() -> new NotFoundException("Book with id %d not found"
                                 .formatted(commentDto.getBookId())
                         ));
-        var newComment = new Comment(commentDto.getId(), commentDto.getText(), book);
+        var newComment = commentMapper.toModel(commentDto, book);
         return commentMapper.toDto(
                 commentRepository.save(newComment));
     }
