@@ -20,7 +20,7 @@ public class GenreController {
     }
 
     @GetMapping("/api/v1/genres/{id}")
-    public GenreDto getAuthorById(@PathVariable("id") long id) {
+    public GenreDto getGenreById(@PathVariable("id") long id) {
         return genreService.findById(id);
     }
 }

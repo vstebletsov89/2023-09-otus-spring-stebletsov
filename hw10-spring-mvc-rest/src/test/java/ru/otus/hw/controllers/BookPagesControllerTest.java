@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@DisplayName("Проверка работы контроллера")
+@DisplayName("Проверка работы контроллера книг")
 @WebMvcTest(BookPagesController.class)
 class BookPagesControllerTest {
 
