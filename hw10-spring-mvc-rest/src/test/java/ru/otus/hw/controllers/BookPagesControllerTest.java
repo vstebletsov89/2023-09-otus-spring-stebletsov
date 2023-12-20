@@ -31,8 +31,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("Проверка работы контроллера")
-@WebMvcTest(BookController.class)
-class BookControllerTest {
+@WebMvcTest(BookPagesController.class)
+class BookPagesControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
