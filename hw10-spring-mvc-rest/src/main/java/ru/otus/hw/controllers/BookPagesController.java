@@ -16,13 +16,13 @@ public class BookPagesController {
         return "edit";
     }
 
-    @GetMapping("/books/create")
+    @GetMapping("/books/add")
     public String addBookPage() {
         return "add";
     }
 
-    @GetMapping("/books/view")
+    @GetMapping("/books/info")
     public String viewBookPage() {
-        return "view";
+        return "info";
     }
 }

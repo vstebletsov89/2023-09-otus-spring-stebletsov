@@ -10,17 +10,24 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.hw.dto.AuthorDto;
+import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
+import ru.otus.hw.dto.BookUpdateDto;
 import ru.otus.hw.dto.GenreDto;
-import ru.otus.hw.services.AuthorService;
 import ru.otus.hw.services.BookService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -65,6 +72,8 @@ class BookControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(expectedBooksDto)));
+
+        verify(bookService, times((1))).findAll();
     }
 
     @DisplayName("должен загружать книгу")
@@ -78,22 +87,62 @@ class BookControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(expectedBook)));
+
+        verify(bookService, times((1))).findById(expectedBook.getId());
     }
 
+    @DisplayName("должен добавить книгу")
     @Test
-    void addBook() {
-        //TODO:implement it
+    void shouldAddBook() throws Exception {
+        BookCreateDto bookCreateDto = new BookCreateDto("NewBook",
+                new AuthorDto(3L, "Author"),
+                new GenreDto(3L, "Genre"));
+        BookDto expectedBook = expectedBooksDto.get(0);
+        doReturn(expectedBook).when(bookService).create(bookCreateDto);
+
+        mockMvc.perform(post("/api/v1/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(bookCreateDto)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedBook)));
+
+        verify(bookService, times((1))).create(bookCreateDto);
     }
 
+    @DisplayName("должен обновить книгу")
     @Test
-    void updateBook() {
-        //TODO:implement it
+    void shouldUpdateBook() throws Exception {
+        BookUpdateDto bookUpdateDto = new BookUpdateDto(
+                1L,
+                "UpdateBook",
+                new AuthorDto(3L, "Author"),
+                new GenreDto(3L, "Genre"));
+        BookDto expectedBook = expectedBooksDto.get(0);
+        doReturn(expectedBook).when(bookService).update(bookUpdateDto);
+
+        mockMvc.perform(put("/api/v1/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(bookUpdateDto)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedBook)));
+
+        verify(bookService, times((1))).update(bookUpdateDto);
     }
 
+    @DisplayName("должен удалить книгу")
     @Test
-    void deleteBook() {
-        //TODO:implement it
-    }
+    void shouldDeleteBook() throws Exception {
+        var expectedBook = expectedBooksDto.get(0);
+        doNothing().when(bookService).deleteById(anyLong());
 
-    //TODO: add tests for pages
+        mockMvc.perform(delete("/api/v1/books/{id}", expectedBook.getId()))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        verify(bookService, times((1))).deleteById(expectedBook.getId());
+    }
 }
