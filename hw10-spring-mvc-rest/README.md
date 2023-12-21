@@ -1,5 +1,6 @@
 # Домашнее задание №10
 TODO: update it
+TODO: add MapsTruct for mappers?
 CRUD приложение с Web UI и хранением данных в БД
 
 ## Цель:
