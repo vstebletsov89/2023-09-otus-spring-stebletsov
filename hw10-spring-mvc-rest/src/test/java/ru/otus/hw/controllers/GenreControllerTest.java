@@ -63,19 +63,4 @@ class GenreControllerTest {
 
         verify(genreService, times(1)).findAll();
     }
-
-    @DisplayName("должен загружать жанр")
-    @Test
-    void shouldReturnGenreById() throws Exception {
-        var expectedGenre = expectedGenresDto.get(0);
-        doReturn(expectedGenre).when(genreService).findById(expectedGenre.getId());
-
-        mockMvc.perform(get("/api/v1/genres/{id}", expectedGenre.getId()))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedGenre)));
-
-        verify(genreService, times(1)).findById(expectedGenre.getId());
-    }
 }

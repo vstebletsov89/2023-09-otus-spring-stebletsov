@@ -18,9 +18,4 @@ public class GenreController {
     public List<GenreDto> getAllGenres() {
         return genreService.findAll();
     }
-
-    @GetMapping("/api/v1/genres/{id}")
-    public GenreDto getGenreById(@PathVariable("id") long id) {
-        return genreService.findById(id);
-    }
 }

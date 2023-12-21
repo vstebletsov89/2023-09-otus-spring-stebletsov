@@ -67,9 +67,9 @@ class BookPagesControllerTest {
     @DisplayName("должен загружать view для просмотра книги")
     @Test
     void shouldReturnInfoViewForBook() throws Exception {
-        mockMvc.perform(get("/books/add"))
+        mockMvc.perform(get("/books/info"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(view().name("add"));
+                .andExpect(view().name("info"));
     }
 }

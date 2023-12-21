@@ -18,9 +18,4 @@ public class AuthorController {
     public List<AuthorDto> getAllAuthors() {
         return authorService.findAll();
     }
-
-    @GetMapping("/api/v1/authors/{id}")
-    public AuthorDto getAuthorById(@PathVariable("id") long id) {
-        return authorService.findById(id);
-    }
 }

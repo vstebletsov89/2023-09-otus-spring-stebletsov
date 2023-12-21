@@ -61,19 +61,4 @@ class AuthorControllerTest {
 
         verify(authorService, times(1)).findAll();
     }
-
-    @DisplayName("должен загружать автора")
-    @Test
-    void shouldReturnAuthorById() throws Exception {
-        var expectedAuthor = expectedAuthorsDto.get(0);
-        doReturn(expectedAuthor).when(authorService).findById(expectedAuthor.getId());
-
-        mockMvc.perform(get("/api/v1/authors/{id}", expectedAuthor.getId()))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedAuthor)));
-
-        verify(authorService, times(1)).findById(expectedAuthor.getId());
-    }
 }
