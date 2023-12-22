@@ -80,14 +80,14 @@ public class BookServiceImpl implements BookService {
 
     private BookDto addBook(BookCreateDto bookCreateDto) {
         var author =
-                authorRepository.findById(bookCreateDto.getAuthorDto().getId())
+                authorRepository.findById(bookCreateDto.getAuthorId())
                         .orElseThrow(() -> new NotFoundException("Author with id %d not found"
-                                .formatted(bookCreateDto.getAuthorDto().getId())
+                                .formatted(bookCreateDto.getAuthorId())
                         ));
         var genre =
-                genreRepository.findById(bookCreateDto.getGenreDto().getId())
+                genreRepository.findById(bookCreateDto.getGenreId())
                         .orElseThrow(() -> new NotFoundException("Genre with id %d not found"
-                                .formatted(bookCreateDto.getGenreDto().getId())
+                                .formatted(bookCreateDto.getGenreId())
                         ));
         var newBook = bookMapper.toModel(bookCreateDto, author, genre);
         return bookMapper.toDto(bookRepository.save(newBook));

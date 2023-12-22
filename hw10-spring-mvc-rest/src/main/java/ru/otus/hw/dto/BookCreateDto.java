@@ -14,9 +14,9 @@ public class BookCreateDto {
     private String title;
 
     @NotNull
-    private AuthorDto authorDto;
+    private Long authorId;
 
     @NotNull
-    private GenreDto genreDto;
+    private Long genreId;
 
 }

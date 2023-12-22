@@ -129,12 +129,10 @@ class BookServiceImplTest {
         doReturn(expectedBook).when(bookRepository).save(any());
         doReturn(Optional.of(expectedBook.getAuthor())).when(authorRepository).findById(expectedBook.getAuthor().getId());
         doReturn(Optional.of(expectedBook.getGenre())).when(genreRepository).findById(expectedBook.getGenre().getId());
-        var bookDto = bookService.create( new BookCreateDto(
+        var bookDto = bookService.create(new BookCreateDto(
                 expectedBook.getTitle(),
-                authorMapper.toDto(
-                        expectedBook.getAuthor()),
-                genreMapper.toDto(
-                        expectedBook.getGenre())));
+                expectedBook.getAuthor().getId(),
+                expectedBook.getGenre().getId()));
 
         assertThat(bookMapper.toModel(bookDto, expectedBook.getAuthor(), expectedBook.getGenre()))
                 .usingRecursiveComparison()

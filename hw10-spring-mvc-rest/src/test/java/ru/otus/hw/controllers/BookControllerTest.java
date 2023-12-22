@@ -94,9 +94,10 @@ class BookControllerTest {
     @DisplayName("должен добавить книгу")
     @Test
     void shouldAddBook() throws Exception {
-        BookCreateDto bookCreateDto = new BookCreateDto("NewBook",
-                new AuthorDto(3L, "Author"),
-                new GenreDto(3L, "Genre"));
+        BookCreateDto bookCreateDto = new BookCreateDto(
+                "NewBook",
+                3L,
+                3L);
         BookDto expectedBook = expectedBooksDto.get(0);
         doReturn(expectedBook).when(bookService).create(bookCreateDto);
 
