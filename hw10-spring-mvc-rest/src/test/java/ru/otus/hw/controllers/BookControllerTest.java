@@ -118,8 +118,8 @@ class BookControllerTest {
         BookUpdateDto bookUpdateDto = new BookUpdateDto(
                 1L,
                 "UpdateBook",
-                new AuthorDto(3L, "Author"),
-                new GenreDto(3L, "Genre"));
+                3L,
+                3L);
         BookDto expectedBook = expectedBooksDto.get(0);
         doReturn(expectedBook).when(bookService).update(bookUpdateDto);
 

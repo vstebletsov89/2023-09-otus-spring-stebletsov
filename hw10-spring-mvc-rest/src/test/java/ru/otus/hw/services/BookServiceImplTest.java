@@ -51,12 +51,6 @@ class BookServiceImplTest {
     @Autowired
     private BookMapper bookMapper;
 
-    @Autowired
-    private AuthorMapper authorMapper;
-
-    @Autowired
-    private GenreMapper genreMapper;
-
     static List<Book> expectedBooks = new ArrayList<>();
     static List<BookDto> expectedBooksDto = new ArrayList<>();
 
@@ -150,8 +144,8 @@ class BookServiceImplTest {
         var bookDto = bookService.update( new BookUpdateDto(
                 2L,
                 newBook.getTitle(),
-                authorMapper.toDto(newBook.getAuthor()),
-                genreMapper.toDto(newBook.getGenre())));
+                newBook.getAuthor().getId(),
+                newBook.getGenre().getId()));
 
         assertThat(bookMapper.toModel(bookDto, newBook.getAuthor(), newBook.getGenre()))
                 .usingRecursiveComparison()
