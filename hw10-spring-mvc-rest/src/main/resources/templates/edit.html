@@ -62,7 +62,6 @@
     function renderAuthorsInfo(authors, book) {
         authors.forEach(author => {
             const block = document.getElementById("book-author-input");
-            console.log(JSON.stringify(book));
             if (book.authorDto.id === author.id) {
                 block.add(new Option(author.fullName, author.id, false, true));
             } else {
