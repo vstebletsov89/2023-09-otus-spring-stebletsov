@@ -7,7 +7,9 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.otus.hw.dto.CommentCreateDto;
 import ru.otus.hw.dto.CommentDto;
+import ru.otus.hw.dto.CommentUpdateDto;
 import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.mappers.CommentMapper;
 import ru.otus.hw.models.Book;
@@ -97,7 +99,7 @@ class CommentServiceImplTest {
     @DisplayName("должен сохранять новый коммент")
     @Test
     void shouldSaveNewComment() {
-        var newComment = new CommentDto(null, "newComment", 1L);
+        var newComment = new CommentCreateDto("newComment", 1L);
         var expectedComment = new Comment(null, "newComment", expectedBook);
         var expectedCommentDto = commentMapper.toDto(
                 expectedComment);
@@ -118,7 +120,7 @@ class CommentServiceImplTest {
         doReturn(Optional.of(expectedBook)).when(bookRepository).findById(1L);
         doReturn(expectedComment).when(commentRepository).save(expectedComment);
         var actualComment = commentService.update(
-            new CommentDto(1L, expectedComment.getText(), expectedComment.getBook().getId())
+            new CommentUpdateDto(1L, expectedComment.getText(), expectedComment.getBook().getId())
         );
 
         assertThat(actualComment).isEqualTo(expectedCommentDto);

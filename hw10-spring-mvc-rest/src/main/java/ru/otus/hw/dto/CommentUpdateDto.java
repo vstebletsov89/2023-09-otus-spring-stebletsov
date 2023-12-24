@@ -7,14 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookDto {
-
+public class CommentUpdateDto {
     private Long id;
 
-    private String title;
+    private String text;
 
-    private AuthorDto authorDto;
-
-    private GenreDto genreDto;
-
+    private Long bookId;
 }

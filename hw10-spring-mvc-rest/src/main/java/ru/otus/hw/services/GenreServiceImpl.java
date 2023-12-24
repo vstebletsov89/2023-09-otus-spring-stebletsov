@@ -2,6 +2,7 @@ package ru.otus.hw.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.mappers.GenreMapper;
@@ -16,6 +17,7 @@ public class GenreServiceImpl implements GenreService {
 
     private final GenreMapper genreMapper;
 
+    @Transactional(readOnly = true)
     @Override
     public List<GenreDto> findAll() {
         return genreRepository.findAll()
@@ -24,6 +26,7 @@ public class GenreServiceImpl implements GenreService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public GenreDto findById(long id) {
         return genreMapper.toDto(
