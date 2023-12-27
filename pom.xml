@@ -18,6 +18,7 @@
         <module>hw08-spring-mongodb</module>
         <module>hw09-spring-mvc</module>
         <module>hw10-spring-mvc-rest</module>
+        <module>hw11-spring-webflux</module>
     </modules>
 
     <packaging>pom</packaging>
