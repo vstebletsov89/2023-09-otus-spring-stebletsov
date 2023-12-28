@@ -1,14 +1,25 @@
 spring:
   application:
     name: "Homework #11"
-  datasource:
-    url: jdbc:h2:mem:maindb
-  flyway:
-    enabled: true
-  jpa:
-    generate-ddl: false
-    hibernate:
-      ddl-auto: none
-    show-sql: true
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: awesomeMongo
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.hw.changelogs
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+logging:
+  level:
+    com.github.cloudyrock.mongock: INFO
+    root: ERROR
 
 

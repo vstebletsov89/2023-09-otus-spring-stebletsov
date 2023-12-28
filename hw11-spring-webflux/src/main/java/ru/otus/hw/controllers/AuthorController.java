@@ -3,18 +3,17 @@ package ru.otus.hw.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.otus.hw.dto.AuthorDto;
-import ru.otus.hw.services.AuthorService;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import ru.otus.hw.models.Author;
+import ru.otus.hw.repositories.AuthorRepository;
 
 @RequiredArgsConstructor
 @RestController
 public class AuthorController {
-    private final AuthorService authorService;
+    private final AuthorRepository authorRepository;
 
     @GetMapping("/api/v1/authors")
-    public List<AuthorDto> getAllAuthors() {
-        return authorService.findAll();
+    public Flux<Author> getAllAuthors() {
+        return authorRepository.findAll();
     }
 }

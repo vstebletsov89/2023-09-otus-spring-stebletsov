@@ -17,9 +17,9 @@ public class BookUpdateDto {
     private String title;
 
     @NotNull
-    private Long authorId;
+    private String authorId;
 
     @NotNull
-    private Long genreId;
+    private String genreId;
 
 }

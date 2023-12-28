@@ -10,35 +10,58 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.BookUpdateDto;
-import ru.otus.hw.services.BookService;
-
-import java.util.List;
+import ru.otus.hw.exceptions.NotFoundException;
+import ru.otus.hw.models.Book;
+import ru.otus.hw.repositories.AuthorRepository;
+import ru.otus.hw.repositories.BookRepository;
+import ru.otus.hw.repositories.GenreRepository;
 
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 public class BookController {
-    private final BookService bookService;
+    private final BookRepository bookRepository;
+
+    private final AuthorRepository authorRepository;
+
+    private final GenreRepository genreRepository;
+
+    //TODO: fix it
 
     @GetMapping("/api/v1/books")
-    public List<BookDto> getAllBooks() {
-        return bookService.findAll();
+    public Flux<Book> getAllBooks() {
+        return bookRepository.findAll();
     }
 
     @GetMapping("/api/v1/books/{id}")
-    public BookDto getBookById(@PathVariable("id") long id) {
-        return bookService.findById(id);
+    public Mono<Book> getBookById(@PathVariable("id") String id) {
+        return bookRepository.findById(id);
     }
 
     @PostMapping("/api/v1/books")
     public BookDto addBook(@RequestBody @Valid BookCreateDto bookCreateDto) {
         log.info(bookCreateDto.toString());
-        return bookService.create(bookCreateDto);
+        var author =
+                authorRepository.findById(bookCreateDto.getAuthorId())
+                        .switchIfEmpty(Mono.error(new NotFoundException("Author with id %s not found"
+                                .formatted(bookCreateDto.getAuthorId())
+                        ));
+        var genre =
+                genreRepository.findById(bookCreateDto.getGenreId())
+                        .orElseThrow(() -> new NotFoundException("Genre with id %d not found"
+                                .formatted(bookCreateDto.getGenreId())
+                        ));
+        var newBook = bookMapper.toModel(bookCreateDto, author, genre);
+        return bookMapper.toDto(bookRepository.save(newBook));
     }
+
+
 
     @PutMapping("/api/v1/books")
     public BookDto updateBook(@RequestBody @Valid BookUpdateDto bookUpdateDto) {

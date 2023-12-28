@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentUpdateDto {
     @NotNull
-    private Long id;
+    private String id;
 
     @NotBlank(message = "{text-field-must-not-be-blank}")
     private String text;
 
     @NotNull
-    private Long bookId;
+    private String bookId;
 }
