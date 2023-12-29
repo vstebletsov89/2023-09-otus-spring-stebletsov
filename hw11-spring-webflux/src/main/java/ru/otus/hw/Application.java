@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @SpringBootApplication
 public class Application {
     //TODO: редактирование и создание комментов <<!!!
-    //TODO: @RestControllerAdvice
+    //TODO: @RestControllerAdvice <<!!!
     //TODO: re-write tests
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
