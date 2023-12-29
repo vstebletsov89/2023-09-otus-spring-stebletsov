@@ -24,7 +24,6 @@
     function addComment() {
         const params = new URLSearchParams(window.location.search);
         const bookId = params.get("id");
-
         const text = document.getElementById("comment-text-input").value;
         const commentCreateDto = { text: text, bookId: bookId }
 

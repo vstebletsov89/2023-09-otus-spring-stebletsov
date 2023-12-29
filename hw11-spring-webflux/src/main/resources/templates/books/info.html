@@ -30,15 +30,25 @@
         block.appendChild(newDiv);
     }
 
-    function addEditButtonCommentToBody(text, id) {
+    function addCreateButtonCommentToBody(text, id) {
         const body = document.getElementById("body-info");
         const button = document.createElement("button");
         button.innerText = text;
         button.addEventListener('click', function () {
             location.href = "../comments/add?id=" + id;
         });
-        button.className = "btn btn-warning";
+        button.className = "btn btn-success btn-lg";
         body.appendChild(button);
+    }
+
+    function addEditButtonCommentToCell(cell, text, parmId, parmText) {
+        const button = document.createElement("button");
+        button.innerText = text;
+        button.addEventListener('click', function () {
+            location.href = "../comments/edit?id=" + parmId + "&text=" + parmText;
+        });
+        button.className = "btn btn-warning";
+        cell.appendChild(button);
     }
 
     function renderBookInfo(book) {
@@ -47,7 +57,7 @@
         addBookProperty(block, "Title:", "title-field", book.title);
         addBookProperty(block, "Author:", "author-field", book.authorDto.fullName);
         addBookProperty(block, "Genre:", "genre-field", book.genreDto.name);
-        addEditButtonCommentToBody("Add comment", book.id);
+        addCreateButtonCommentToBody("Add comment", book.id);
     }
 
     function renderCommentsInfo(comments) {
@@ -56,6 +66,7 @@
             const newItem = document.createElement("li");
             newItem.className = "list-group-item";
             newItem.innerText = comment.id + ":" + comment.text;
+            addEditButtonCommentToCell(newItem, "Edit", comment.id, comment.text);
             block.appendChild(newItem);
         });
     }
