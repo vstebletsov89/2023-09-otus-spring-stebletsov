@@ -8,6 +8,7 @@ spring:
       port: 27017
       database: awesomeMongo
 
+
 mongock:
   runner-type: "InitializingBean"
   change-logs-scan-package:
@@ -19,7 +20,7 @@ mongock:
 
 logging:
   level:
-    com.github.cloudyrock.mongock: INFO
-    root: ERROR
+    com.github.cloudyrock.mongock: debug
+    root: info
 
 

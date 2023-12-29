@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BookUpdateDto {
     @NotNull
-    private Long id;
+    private String id;
 
     @NotBlank(message = "{title-field-must-not-be-blank}")
     private String title;
