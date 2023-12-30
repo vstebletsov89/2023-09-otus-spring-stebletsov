@@ -41,11 +41,11 @@
         body.appendChild(button);
     }
 
-    function addEditButtonCommentToCell(cell, text, parmId, parmText) {
+    function addEditButtonCommentToCell(cell, text, id, bookId) {
         const button = document.createElement("button");
         button.innerText = text;
         button.addEventListener('click', function () {
-            location.href = "../comments/edit?id=" + parmId + "&text=" + parmText;
+            location.href = "../comments/edit?id=" + id + "&bookId=" + bookId;
         });
         button.className = "btn btn-warning";
         cell.appendChild(button);
@@ -66,7 +66,7 @@
             const newItem = document.createElement("li");
             newItem.className = "list-group-item";
             newItem.innerText = comment.id + ":" + comment.text;
-            addEditButtonCommentToCell(newItem, "Edit", comment.id, comment.text);
+            addEditButtonCommentToCell(newItem, "Edit", comment.id, comment.bookId);
             block.appendChild(newItem);
         });
     }
@@ -79,7 +79,7 @@
            .then(response => response.json())
            .then(book => renderBookInfo(book));
 
-        fetch(`/api/v1/comments/${id}`)
+        fetch(`/api/v1/comments/book/${id}`)
             .then(response => response.json())
             .then(comments => renderCommentsInfo(comments));
     }
