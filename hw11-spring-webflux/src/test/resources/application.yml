@@ -14,5 +14,3 @@ de:
 mongock:
   enabled: false
 
-logging:
-    root: DEBUG

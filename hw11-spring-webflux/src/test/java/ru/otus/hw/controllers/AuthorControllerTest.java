@@ -25,6 +25,8 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest
 class AuthorControllerTest {
 
+    private static List<AuthorDto> expectedAuthorsDto = new ArrayList<>();
+
     @MockBean
     private AuthorRepository authorRepository;
 
@@ -33,8 +35,6 @@ class AuthorControllerTest {
 
     @Autowired
     private AuthorMapper authorMapper;
-
-    static List<AuthorDto> expectedAuthorsDto = new ArrayList<>();
 
     @BeforeAll
     static void setExpectedAuthors() {
@@ -48,12 +48,14 @@ class AuthorControllerTest {
 
     @DisplayName("должен загружать список всех авторов")
     @Test
-    void shouldReturnAllAuthors() throws Exception {
-        doReturn(Flux.fromStream(expectedAuthorsDto.stream().map(authorMapper::toModel))).when(authorRepository).findAll();
-
+    void shouldReturnAllAuthors() {
+        doReturn(Flux.fromStream(expectedAuthorsDto.stream()
+                .map(authorMapper::toModel)))
+                .when(authorRepository)
+                .findAll();
         WebTestClient testClient = WebTestClient.bindToController(authorController).build();
 
-        var result = testClient.get()
+        testClient.get()
                 .uri("/api/v1/authors")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
