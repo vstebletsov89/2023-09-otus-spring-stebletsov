@@ -59,7 +59,6 @@ class GenreControllerTest {
                 .expectBodyList(GenreDto.class)
                 .isEqualTo(expectedGenresDto);
 
-
         verify(genreRepository, times(1)).findAll();
     }
 }

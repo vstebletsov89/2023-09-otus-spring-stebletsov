@@ -132,7 +132,6 @@ class BookControllerTest {
         doReturn(Mono.just(expectedBook.getGenre())).when(genreRepository).findById(anyString());
         WebTestClient testClient = WebTestClient.bindToController(bookController).build();
 
-
         testClient.post()
                 .uri("/api/v1/books")
                 .body(BodyInserters.fromValue(bookCreateDto))

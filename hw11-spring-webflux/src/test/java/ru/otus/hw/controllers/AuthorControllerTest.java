@@ -64,7 +64,6 @@ class AuthorControllerTest {
                 .expectBodyList(AuthorDto.class)
                 .isEqualTo(expectedAuthorsDto);
 
-
         verify(authorRepository, times(1)).findAll();
     }
 }
