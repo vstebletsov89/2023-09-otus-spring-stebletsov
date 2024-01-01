@@ -16,6 +16,7 @@ import ru.otus.hw.dto.CommentCreateDto;
 import ru.otus.hw.dto.CommentDto;
 import ru.otus.hw.dto.CommentUpdateDto;
 import ru.otus.hw.mappers.CommentMapper;
+import ru.otus.hw.mappers.CommentMapperImpl;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
@@ -33,7 +34,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("Проверка работы контроллера комментариев")
-@SpringBootTest
+@SpringBootTest(classes = {CommentController.class, CommentMapperImpl.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CommentControllerTest {
 
@@ -137,5 +138,24 @@ class CommentControllerTest {
 
         verify(commentRepository, times((1))).save(any(Comment.class));
         verify(bookRepository, times((1))).findById(anyString());
+    }
+
+    @DisplayName("должен загружать комментарий")
+    @Test
+    void shouldReturnCommentById() {
+        var expectedComment = expectedComments.get(0);
+        doReturn(Mono.just(expectedComment)).when(commentRepository).findById(expectedComment.getId());
+        WebTestClient testClient = WebTestClient.bindToController(commentController).build();
+
+        testClient.get()
+                .uri("/api/v1/comments/{id}", expectedComment.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(CommentDto.class)
+                .isEqualTo(expectedCommentsDto.get(0));
+
+        verify(commentRepository, times((1))).findById(expectedComment.getId());
     }
 }

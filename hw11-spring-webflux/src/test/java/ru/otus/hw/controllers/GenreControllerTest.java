@@ -11,6 +11,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.mappers.GenreMapper;
+import ru.otus.hw.mappers.GenreMapperImpl;
 import ru.otus.hw.repositories.GenreRepository;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("Проверка работы контроллера жанров")
-@SpringBootTest
+@SpringBootTest(classes = {GenreController.class, GenreMapperImpl.class})
 class GenreControllerTest {
 
     private static List<GenreDto> expectedGenresDto = new ArrayList<>();

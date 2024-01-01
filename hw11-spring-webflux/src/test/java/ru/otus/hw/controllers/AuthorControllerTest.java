@@ -11,6 +11,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.mappers.AuthorMapper;
+import ru.otus.hw.mappers.AuthorMapperImpl;
 import ru.otus.hw.repositories.AuthorRepository;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import static org.mockito.Mockito.verify;
 
 
 @DisplayName("Проверка работы контроллера авторов")
-@SpringBootTest
+@SpringBootTest(classes = { AuthorController.class, AuthorMapperImpl.class })
 class AuthorControllerTest {
 
     private static List<AuthorDto> expectedAuthorsDto = new ArrayList<>();
