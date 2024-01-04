@@ -45,7 +45,8 @@ public class BookController {
         return bookRepository.findById(id)
                 .map(bookMapper::toDto)
                 .map(ResponseEntity::ok)
-                .switchIfEmpty(Mono.fromCallable(() -> ResponseEntity.notFound().build()));
+                .switchIfEmpty(Mono.error(new NotFoundException("Book with id %s not found"
+                        .formatted(id))));
     }
 
     @PostMapping("/api/v1/books")
