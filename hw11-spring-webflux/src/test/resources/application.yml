@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: "Homework #11 (test env)"
+  data:
+    mongodb:
+      port: 0
+      database: test
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2
+
+mongock:
+  enabled: false
+
