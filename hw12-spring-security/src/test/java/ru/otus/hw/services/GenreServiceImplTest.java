@@ -10,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.mappers.GenreMapper;
+import ru.otus.hw.mappers.GenreMapperImpl;
 import ru.otus.hw.models.Genre;
 import ru.otus.hw.repositories.GenreRepository;
 
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса жанров")
-@SpringBootTest(classes = {GenreServiceImpl.class, GenreMapper.class})
+@SpringBootTest(classes = {GenreServiceImpl.class, GenreMapperImpl.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GenreServiceImplTest {
 

@@ -128,7 +128,7 @@ class RestExceptionHandlerTest {
     @DisplayName("должен обрабатывать исключени внутренней ошибки сервера")
     @Test
     void shouldHandleAnyRuntimeException() throws Exception {
-        doReturn(Optional.ofNullable(new RuntimeException())).when(bookRepository).findById(anyLong());
+        doReturn(Optional.of(new RuntimeException())).when(bookRepository).findById(anyLong());
 
         mockMvc.perform(get("/api/v1/books/{id}", 999))
                 .andDo(print())

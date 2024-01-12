@@ -11,9 +11,10 @@ import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.BookUpdateDto;
 import ru.otus.hw.exceptions.NotFoundException;
-import ru.otus.hw.mappers.AuthorMapper;
+import ru.otus.hw.mappers.AuthorMapperImpl;
 import ru.otus.hw.mappers.BookMapper;
-import ru.otus.hw.mappers.GenreMapper;
+import ru.otus.hw.mappers.BookMapperImpl;
+import ru.otus.hw.mappers.GenreMapperImpl;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
@@ -32,7 +33,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса книг")
-@SpringBootTest(classes = {BookServiceImpl.class, BookMapper.class, AuthorMapper.class, GenreMapper.class})
+@SpringBootTest(classes = {BookServiceImpl.class, BookMapperImpl.class, AuthorMapperImpl.class, GenreMapperImpl.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BookServiceImplTest {
 

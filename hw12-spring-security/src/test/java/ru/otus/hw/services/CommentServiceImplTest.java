@@ -12,6 +12,7 @@ import ru.otus.hw.dto.CommentDto;
 import ru.otus.hw.dto.CommentUpdateDto;
 import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.mappers.CommentMapper;
+import ru.otus.hw.mappers.CommentMapperImpl;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
 import ru.otus.hw.repositories.BookRepository;
@@ -28,7 +29,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса коментариев")
-@SpringBootTest(classes = {CommentServiceImpl.class, CommentMapper.class})
+@SpringBootTest(classes = {CommentServiceImpl.class, CommentMapperImpl.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CommentServiceImplTest {
 

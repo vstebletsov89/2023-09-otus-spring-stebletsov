@@ -10,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.mappers.AuthorMapper;
+import ru.otus.hw.mappers.AuthorMapperImpl;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.repositories.AuthorRepository;
 
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
 @DisplayName("Проверка работы сервиса авторов")
-@SpringBootTest(classes = {AuthorServiceImpl.class, AuthorMapper.class})
+@SpringBootTest(classes = {AuthorServiceImpl.class, AuthorMapperImpl.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AuthorServiceImplTest {
 
