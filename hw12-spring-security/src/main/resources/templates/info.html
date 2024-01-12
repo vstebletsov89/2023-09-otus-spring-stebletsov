@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Book details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body onload="fetchBook()">
+<h3 th:text="#{book-info-header}">Books details:</h3>
+<div id = "book-info"></div>
+<ul id = "comments-info" class="list-group"></ul>
+<a href="list.html" th:href="@{/}">
+<button class="btn btn-success btn-lg" type="button" th:text="#{back-button-caption}">Back</button>
+</a>
+
+<script>
+    function addBookProperty(block, text, id, value) {
+        const newDiv = document.createElement("div");
+        newDiv.className = "mb-3";
+        const newLabel = document.createElement("label");
+        newLabel.innerText = text;
+        newLabel.htmlFor = id;
+        const newInput = document.createElement("input");
+        newInput.id = id;
+        newInput.readOnly = "readonly";
+        newInput.value = value;
+        newDiv.appendChild(newLabel);
+        newDiv.appendChild(newInput);
+        block.appendChild(newDiv);
+    }
+
+    function renderBookInfo(book) {
+        const block = document.getElementById("book-info");
+        addBookProperty(block, "ID:", "id-field", book.id);
+        addBookProperty(block, "Title:", "title-field", book.title);
+        addBookProperty(block, "Author:", "author-field", book.authorDto.fullName);
+        addBookProperty(block, "Genre:", "genre-field", book.genreDto.name);
+    }
+
+    function renderCommentsInfo(comments) {
+        const block = document.getElementById("comments-info");
+        comments.forEach(comment => {
+            const newItem = document.createElement("li");
+            newItem.className = "list-group-item";
+            newItem.innerText = comment.id + ":" + comment.text;
+            block.appendChild(newItem);
+        });
+    }
+
+    function fetchBook() {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
+
+        fetch(`/api/v1/books/${id}`)
+           .then(response => response.json())
+           .then(book => renderBookInfo(book));
+
+        fetch(`/api/v1/comments/${id}`)
+            .then(response => response.json())
+            .then(comments => renderCommentsInfo(comments));
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
