@@ -8,21 +8,21 @@ public class BookPagesController {
 
     @GetMapping("/")
     public String listBooksPage() {
-        return "list";
+        return "books/list";
     }
 
     @GetMapping("/books/edit")
     public String editBookPage() {
-        return "edit";
+        return "books/edit";
     }
 
     @GetMapping("/books/add")
     public String addBookPage() {
-        return "add";
+        return "books/add";
     }
 
     @GetMapping("/books/info")
     public String viewBookPage() {
-        return "info";
+        return "books/info";
     }
 }
