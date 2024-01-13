@@ -3,7 +3,6 @@ package ru.otus.hw.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.otus.hw.dto.CommentCreateDto;
 import ru.otus.hw.dto.CommentDto;
 import ru.otus.hw.dto.CommentUpdateDto;
-import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.services.CommentService;
 
 import java.util.List;
@@ -45,6 +43,4 @@ public class CommentController {
         log.info(commentUpdateDto.toString());
         return commentService.update(commentUpdateDto);
     }
-
-    //TODO: add tests for new methods
 }
