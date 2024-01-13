@@ -1,10 +1,9 @@
 --date: 2023-04-11
 --author: vstebletsov
 
-create table if not exists books (
-   id bigserial,
-   title varchar(255),
-   author_id bigint references authors (id) on delete cascade,
-   genre_id bigint references genres(id) on delete cascade,
-   primary key (id)
+CREATE TABLE IF NOT EXISTS books (
+   id BIGSERIAL PRIMARY KEY,
+   title VARCHAR(255),
+   author_id BIGINT REFERENCES authors(id) ON DELETE CASCADE,
+   genre_id BIGINT REFERENCES genres(id) ON DELETE CASCADE
 )
