@@ -7,9 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.hw.dto.AuthorDto;
+import ru.otus.hw.security.SecurityConfiguration;
+import ru.otus.hw.security.UserService;
 import ru.otus.hw.services.AuthorService;
 
 import java.util.ArrayList;
@@ -26,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DisplayName("Проверка работы контроллера авторов")
 @WebMvcTest(AuthorController.class)
+@Import(SecurityConfiguration.class)
 class AuthorControllerTest {
 
     @Autowired
@@ -36,6 +41,9 @@ class AuthorControllerTest {
 
     @MockBean
     private AuthorService authorService;
+
+    @MockBean
+    private UserService userService;
 
     static List<AuthorDto> expectedAuthorsDto = new ArrayList<>();
 
@@ -49,6 +57,10 @@ class AuthorControllerTest {
     }
 
     @DisplayName("должен загружать список всех авторов")
+    @WithMockUser(
+            username = "user",
+            authorities = {"ROLE_USER"}
+    )
     @Test
     void shouldReturnAllAuthors() throws Exception {
         doReturn(expectedAuthorsDto).when(authorService).findAll();

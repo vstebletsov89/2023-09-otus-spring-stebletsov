@@ -1,2 +1,2 @@
-insert into genres(name)
-values ('TestGenre_1'), ('TestGenre_2'), ('TestGenre_3');
+INSERT INTO genres(name)
+VALUES ('TestGenre_1'), ('TestGenre_2'), ('TestGenre_3');
