@@ -27,6 +27,9 @@ import static org.mockito.Mockito.doReturn;
 @SpringBootTest(classes = {GenreServiceImpl.class, GenreMapperImpl.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GenreServiceImplTest {
+    private static List<Genre> expectedGenres = new ArrayList<>();
+
+    private static List<GenreDto> expectedGenresDto = new ArrayList<>();
 
     @MockBean
     private GenreRepository genreRepository;
@@ -36,9 +39,6 @@ class GenreServiceImplTest {
 
     @Autowired
     private GenreMapper genreMapper;
-
-    static List<Genre> expectedGenres = new ArrayList<>();
-    static List<GenreDto> expectedGenresDto = new ArrayList<>();
 
     @BeforeAll
     void setExpectedGenres() {

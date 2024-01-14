@@ -28,6 +28,10 @@ import static org.mockito.Mockito.doReturn;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AuthorServiceImplTest {
 
+    private static List<Author> expectedAuthors = new ArrayList<>();
+
+    private static List<AuthorDto> expectedAuthorsDto = new ArrayList<>();
+
     @MockBean
     private AuthorRepository authorRepository;
 
@@ -36,9 +40,6 @@ class AuthorServiceImplTest {
 
     @Autowired
     private AuthorMapper authorMapper;
-
-    static List<Author> expectedAuthors = new ArrayList<>();
-    static List<AuthorDto> expectedAuthorsDto = new ArrayList<>();
 
     @BeforeAll
     void setExpectedAuthors() {

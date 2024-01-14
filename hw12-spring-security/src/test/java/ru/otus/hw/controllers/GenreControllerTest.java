@@ -32,6 +32,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SecurityConfiguration.class)
 class GenreControllerTest {
 
+    private static List<GenreDto> expectedGenresDto = new ArrayList<>();
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -43,8 +45,6 @@ class GenreControllerTest {
 
     @MockBean
     private UserService userService;
-
-    static List<GenreDto> expectedGenresDto = new ArrayList<>();
 
     @BeforeAll
     static void setExpectedGenres() {

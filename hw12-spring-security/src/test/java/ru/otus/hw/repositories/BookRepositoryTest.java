@@ -9,7 +9,8 @@ import ru.otus.hw.models.Book;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 @DisplayName("Репозиторий для работы с книгами")
 @DataJpaTest

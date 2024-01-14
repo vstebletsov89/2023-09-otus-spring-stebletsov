@@ -41,6 +41,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SecurityConfiguration.class)
 class BookControllerTest {
 
+    private static List<BookDto> expectedBooksDto = new ArrayList<>();
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -52,8 +54,6 @@ class BookControllerTest {
 
     @MockBean
     private UserService userService;
-
-    static List<BookDto> expectedBooksDto = new ArrayList<>();
 
     @BeforeAll
     static void setExpectedBooks() {

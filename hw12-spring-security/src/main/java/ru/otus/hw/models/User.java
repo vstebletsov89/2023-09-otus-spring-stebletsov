@@ -32,7 +32,7 @@ public class User {
     private String password;
 
     @Column(name = "last_login", nullable = false)
-    private LocalDateTime last_login;
+    private LocalDateTime lastLogin;
 
     @Column(name = "active", nullable = false)
     private Boolean active;

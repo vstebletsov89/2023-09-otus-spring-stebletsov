@@ -38,6 +38,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SecurityConfiguration.class)
 class CommentControllerTest {
 
+    private static List<CommentDto> expectedCommentsDto = new ArrayList<>();
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -49,8 +51,6 @@ class CommentControllerTest {
 
     @MockBean
     private UserService userService;
-
-    static List<CommentDto> expectedCommentsDto = new ArrayList<>();
 
     @BeforeAll
     static void setExpectedAuthors() {

@@ -33,6 +33,12 @@ import static org.mockito.Mockito.doReturn;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CommentServiceImplTest {
 
+    private static List<Comment> expectedComments = new ArrayList<>();
+
+    private static List<CommentDto> expectedCommentsDto = new ArrayList<>();
+
+    private static Book expectedBook = new Book(1L, "testBook", null, null);
+
     @MockBean
     private BookRepository bookRepository;
 
@@ -44,10 +50,6 @@ class CommentServiceImplTest {
 
     @Autowired
     private CommentMapper commentMapper;
-
-    static List<Comment> expectedComments = new ArrayList<>();
-    static List<CommentDto> expectedCommentsDto = new ArrayList<>();
-    static Book expectedBook = new Book(1L, "testBook", null, null);
 
     @BeforeAll
     void setExpectedComments() {

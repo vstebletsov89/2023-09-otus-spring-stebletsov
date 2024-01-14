@@ -37,6 +37,10 @@ import static org.mockito.Mockito.doReturn;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BookServiceImplTest {
 
+    private static List<Book> expectedBooks = new ArrayList<>();
+
+    private static List<BookDto> expectedBooksDto = new ArrayList<>();
+
     @MockBean
     private AuthorRepository authorRepository;
 
@@ -51,9 +55,6 @@ class BookServiceImplTest {
 
     @Autowired
     private BookMapper bookMapper;
-
-    static List<Book> expectedBooks = new ArrayList<>();
-    static List<BookDto> expectedBooksDto = new ArrayList<>();
 
     @BeforeAll
     void setExpectedBooks() {
@@ -122,7 +123,9 @@ class BookServiceImplTest {
         );
         expectedBook.setId(null);
         doReturn(expectedBook).when(bookRepository).save(any());
-        doReturn(Optional.of(expectedBook.getAuthor())).when(authorRepository).findById(expectedBook.getAuthor().getId());
+        doReturn(Optional.of(expectedBook.getAuthor()))
+                .when(authorRepository)
+                .findById(expectedBook.getAuthor().getId());
         doReturn(Optional.of(expectedBook.getGenre())).when(genreRepository).findById(expectedBook.getGenre().getId());
         var bookDto = bookService.create(new BookCreateDto(
                 expectedBook.getTitle(),
@@ -142,7 +145,7 @@ class BookServiceImplTest {
         doReturn(Optional.of(newBook)).when(bookRepository).findById(2L);
         doReturn(Optional.of(newBook.getAuthor())).when(authorRepository).findById(newBook.getAuthor().getId());
         doReturn(Optional.of(newBook.getGenre())).when(genreRepository).findById(newBook.getGenre().getId());
-        var bookDto = bookService.update( new BookUpdateDto(
+        var bookDto = bookService.update(new BookUpdateDto(
                 2L,
                 newBook.getTitle(),
                 newBook.getAuthor().getId(),

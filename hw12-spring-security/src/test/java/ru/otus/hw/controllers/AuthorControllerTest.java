@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AuthorController.class)
 @Import(SecurityConfiguration.class)
 class AuthorControllerTest {
+    private static List<AuthorDto> expectedAuthorsDto = new ArrayList<>();
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,8 +45,6 @@ class AuthorControllerTest {
 
     @MockBean
     private UserService userService;
-
-    static List<AuthorDto> expectedAuthorsDto = new ArrayList<>();
 
     @BeforeAll
     static void setExpectedAuthors() {
