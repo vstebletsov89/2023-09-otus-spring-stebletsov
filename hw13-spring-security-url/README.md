@@ -16,6 +16,6 @@
 * Написать тесты контроллеров, которые проверяют, что все необходимые ресурсы действительно защищены
 
 Примечание: 
-тестовый пользователь (ROLE_USER)  "username: user  password: pass"
-тестовый пользователь (ROLE_ADMIN) "username: admin password: pass"
-тестовый пользователь (ROLE_GUEST) "username: guest password: pass"
+* тестовый пользователь (ROLE_USER)  "username: user  password: pass"
+* тестовый пользователь (ROLE_ADMIN) "username: admin password: pass"
+* тестовый пользователь (ROLE_GUEST) "username: guest password: pass"
