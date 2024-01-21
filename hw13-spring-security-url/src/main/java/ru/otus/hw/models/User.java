@@ -31,6 +31,9 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "role", nullable = false)
+    private String role;
+
     @Column(name = "last_login", nullable = false)
     private LocalDateTime lastLogin;
 

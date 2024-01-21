@@ -28,13 +28,39 @@ class BookPagesControllerTest {
     @MockBean
     private UserService userService;
 
-    @DisplayName("должен загружать страницу со списком книг")
+    @DisplayName("должен загружать страницу со списком книг для пользователя")
     @WithMockUser(
             username = "user",
             authorities = {"ROLE_USER"}
     )
     @Test
-    void shouldReturnViewWithAllBooks() throws Exception {
+    void shouldReturnViewWithAllBooksForUser() throws Exception {
+        mockMvc.perform(get("/"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("books/list"));
+    }
+
+    @DisplayName("должен загружать страницу со списком книг для админа")
+    @WithMockUser(
+            username = "user",
+            authorities = {"ROLE_ADMIN"}
+    )
+    @Test
+    void shouldReturnViewWithAllBooksForAdmin() throws Exception {
+        mockMvc.perform(get("/"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("books/list"));
+    }
+
+    @DisplayName("должен загружать страницу со списком книг для гостя")
+    @WithMockUser(
+            username = "user",
+            authorities = {"ROLE_GUEST"}
+    )
+    @Test
+    void shouldReturnViewWithAllBooksForGuest() throws Exception {
         mockMvc.perform(get("/"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -50,17 +76,29 @@ class BookPagesControllerTest {
                 .andExpect(redirectedUrl("http://localhost/login"));
     }
 
-    @DisplayName("должен загружать view редактирования книги")
+    @DisplayName("должен загружать view редактирования книги пользователя")
     @WithMockUser(
             username = "user",
             authorities = {"ROLE_USER"}
     )
     @Test
-    void shouldReturnEditViewForBook() throws Exception {
+    void shouldReturnEditViewForBookForUser() throws Exception {
         mockMvc.perform(get("/books/edit"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("books/edit"));
+    }
+
+    @DisplayName("должен запрещать view редактирования книги для гостя")
+    @WithMockUser(
+            username = "user",
+            authorities = {"ROLE_GUEST"}
+    )
+    @Test
+    void forbiddenEditViewForBookForGuest() throws Exception {
+        mockMvc.perform(get("/books/edit"))
+                .andDo(print())
+                .andExpect(status().isForbidden());
     }
 
     @DisplayName("должен возвращать страницу логина для редактирования книги")
@@ -85,6 +123,18 @@ class BookPagesControllerTest {
                 .andExpect(view().name("books/add"));
     }
 
+    @DisplayName("должен запрещать view для добавления книги для гостя")
+    @WithMockUser(
+            username = "user",
+            authorities = {"ROLE_GUEST"}
+    )
+    @Test
+    void forbiddenCreateViewForBook() throws Exception {
+        mockMvc.perform(get("/books/add"))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
     @DisplayName("должен возвращать страницу логина для добавления книги")
     @Test
     void shouldReturnLoginPageForCreateViewForBook() throws Exception {
@@ -105,6 +155,18 @@ class BookPagesControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("books/info"));
+    }
+
+    @DisplayName("должен запрещать view для просмотра книги для гостя")
+    @WithMockUser(
+            username = "user",
+            authorities = {"ROLE_GUEST"}
+    )
+    @Test
+    void forbiddenInfoViewForBook() throws Exception {
+        mockMvc.perform(get("/books/info"))
+                .andDo(print())
+                .andExpect(status().isForbidden());
     }
 
     @DisplayName("должен возвращать страницу логина для просмотра книги")

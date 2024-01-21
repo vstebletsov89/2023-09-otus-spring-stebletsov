@@ -94,7 +94,7 @@ class RestExceptionHandlerTest {
                 .andExpect(content().contentType(MediaType.valueOf("text/plain;charset=UTF-8")))
                 .andExpect(content().string("Book with id 999 not found"));
 
-        verify(bookRepository, times((1))).findById(anyLong());
+        verify(bookRepository, times(1)).findById(anyLong());
     }
 
     @DisplayName("должен обрабатывать исключение, когда автор не найден")
@@ -118,7 +118,7 @@ class RestExceptionHandlerTest {
                 .andExpect(content().contentType(MediaType.valueOf("text/plain;charset=UTF-8")))
                 .andExpect(content().string("Author with id 999 not found"));
 
-        verify(authorRepository, times((1))).findById(anyLong());
+        verify(authorRepository, times(1)).findById(anyLong());
     }
 
     @DisplayName("должен обрабатывать исключение, когда жанр не найден")
@@ -142,7 +142,7 @@ class RestExceptionHandlerTest {
                 .andExpect(content().contentType(MediaType.valueOf("text/plain;charset=UTF-8")))
                 .andExpect(content().string("Genre with id 999 not found"));
 
-        verify(authorRepository, times((1))).findById(anyLong());
+        verify(authorRepository, times(1)).findById(anyLong());
     }
 
     @DisplayName("должен обрабатывать исключени внутренней ошибки сервера")

@@ -85,7 +85,7 @@ class BookControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(expectedBooksDto)));
 
-        verify(bookService, times((1))).findAll();
+        verify(bookService, times(1)).findAll();
     }
 
     @DisplayName("должен загружать книгу")
@@ -104,7 +104,7 @@ class BookControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(expectedBook)));
 
-        verify(bookService, times((1))).findById(expectedBook.getId());
+        verify(bookService, times(1)).findById(expectedBook.getId());
     }
 
     @DisplayName("должен добавить книгу")
@@ -129,7 +129,7 @@ class BookControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(expectedBook)));
 
-        verify(bookService, times((1))).create(bookCreateDto);
+        verify(bookService, times(1)).create(bookCreateDto);
     }
 
     @DisplayName("должен обновить книгу")
@@ -155,16 +155,50 @@ class BookControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(expectedBook)));
 
-        verify(bookService, times((1))).update(bookUpdateDto);
+        verify(bookService, times(1)).update(bookUpdateDto);
     }
 
-    @DisplayName("должен удалить книгу")
+    @DisplayName("проверка запрета на удаление книги для гостя")
+    @WithMockUser(
+            username = "user",
+            authorities = {"ROLE_GUEST"}
+    )
+    @Test
+    void forbiddenDeleteBookForGuest() throws Exception {
+        var expectedBook = expectedBooksDto.get(0);
+        doNothing().when(bookService).deleteById(anyLong());
+
+        mockMvc.perform(delete("/api/v1/books/{id}", expectedBook.getId()))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+
+        verify(bookService, times(0)).deleteById(expectedBook.getId());
+    }
+
+    @DisplayName("проверка запрета на удаление книги для пользователя")
     @WithMockUser(
             username = "user",
             authorities = {"ROLE_USER"}
     )
     @Test
-    void shouldDeleteBook() throws Exception {
+    void forbiddenDeleteBookForUser() throws Exception {
+        var expectedBook = expectedBooksDto.get(0);
+        doNothing().when(bookService).deleteById(anyLong());
+
+        mockMvc.perform(delete("/api/v1/books/{id}", expectedBook.getId()))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+
+        verify(bookService, times(0)).deleteById(expectedBook.getId());
+    }
+
+    @DisplayName("должен удлалять книгу для админа")
+    @WithMockUser(
+            username = "user",
+            authorities = {"ROLE_ADMIN"}
+    )
+    @Test
+    void shouldDeleteBookForAdmin() throws Exception {
         var expectedBook = expectedBooksDto.get(0);
         doNothing().when(bookService).deleteById(anyLong());
 
@@ -172,6 +206,6 @@ class BookControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        verify(bookService, times((1))).deleteById(expectedBook.getId());
+        verify(bookService, times(1)).deleteById(expectedBook.getId());
     }
 }

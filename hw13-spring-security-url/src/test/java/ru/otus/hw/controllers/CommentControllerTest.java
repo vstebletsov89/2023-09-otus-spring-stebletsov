@@ -119,7 +119,7 @@ class CommentControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(expectedComment)));
 
-        verify(commentService, times((1))).create(commentCreateDto);
+        verify(commentService, times(1)).create(commentCreateDto);
     }
 
     @DisplayName("должен обновить комментарий")
@@ -144,6 +144,6 @@ class CommentControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(expectedComment)));
 
-        verify(commentService, times((1))).update(commentUpdateDto);
+        verify(commentService, times(1)).update(commentUpdateDto);
     }
 }

@@ -28,7 +28,7 @@ class CommentPagesControllerTest {
     @MockBean
     private UserService userService;
 
-    @DisplayName("должен загружать страницу редактирования комментарий")
+    @DisplayName("должен загружать страницу редактирования комментария для пользователя")
     @WithMockUser(
             username = "user",
             authorities = {"ROLE_USER"}
@@ -41,6 +41,18 @@ class CommentPagesControllerTest {
                 .andExpect(view().name("comments/edit"));
     }
 
+    @DisplayName("должен запрещать страницу редактирования комментария для гостя")
+    @WithMockUser(
+            username = "user",
+            authorities = {"ROLE_GUEST"}
+    )
+    @Test
+    void forbiddenViewForEditComment() throws Exception {
+        mockMvc.perform(get("/comments/edit"))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
     @DisplayName("должен возвращать страницу логина для редактирования комментария")
     @Test
     void shouldReturnLoginPageForEditComment() throws Exception {
@@ -50,7 +62,7 @@ class CommentPagesControllerTest {
                 .andExpect(redirectedUrl("http://localhost/login"));
     }
 
-    @DisplayName("должен загружать страницу добавления комментария")
+    @DisplayName("должен загружать страницу добавления комментария для пользователя")
     @WithMockUser(
             username = "user",
             authorities = {"ROLE_USER"}
@@ -61,6 +73,18 @@ class CommentPagesControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("comments/add"));
+    }
+
+    @DisplayName("должен запрещать страницу добавления комментария для гостя")
+    @WithMockUser(
+            username = "user",
+            authorities = {"ROLE_GUEST"}
+    )
+    @Test
+    void forbiddenViewForAddComment() throws Exception {
+        mockMvc.perform(get("/comments/add"))
+                .andDo(print())
+                .andExpect(status().isForbidden());
     }
 
     @DisplayName("должен возвращать страницу логина для добавления комментария")
