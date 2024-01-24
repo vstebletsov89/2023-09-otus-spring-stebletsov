@@ -23,8 +23,8 @@ public class RestExceptionHandler {
                 HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    ResponseEntity<String> internalError(RuntimeException exception) {
+    @ExceptionHandler(Exception.class)
+    ResponseEntity<String> internalError(Exception exception) {
         log.info("internalError exception: " + exception.getMessage());
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
