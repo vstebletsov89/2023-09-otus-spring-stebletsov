@@ -15,14 +15,14 @@ import ru.otus.hw.models.tables.GenreTable;
 @Component
 public class BookConverter implements Converter<BookTable, BookDocument> {
 
-    private final Converter<AuthorTable, AuthorDocument> authorDocumentConverter;
+    private final AuthorConverter authorConverter;
 
-    private final Converter<GenreTable, GenreDocument> genreDocumentConverter;
+    private final GenreConverter genreConverter;
 
     @Override
     public BookDocument convert(BookTable source) {
         return new BookDocument(source.getTitle(),
-                    authorDocumentConverter.convert(source.getAuthor()),
-                    genreDocumentConverter.convert(source.getGenre()));
+                authorConverter.convert(source.getAuthor()),
+                genreConverter.convert(source.getGenre()));
     }
 }
