@@ -1,11 +1,12 @@
-package ru.otus.hw.converters;
+package ru.otus.hw.output;
 
 import org.springframework.stereotype.Component;
 import ru.otus.hw.models.documents.AuthorDocument;
 
 @Component
-public class AuthorConverter {
+public class AuthorOutput {
+
     public String authorToString(AuthorDocument author) {
-        return "Id: %d, FullName: %s".formatted(author.getId(), author.getFullName());
+        return "Id: %s, FullName: %s".formatted(author.getId(), author.getFullName());
     }
 }
