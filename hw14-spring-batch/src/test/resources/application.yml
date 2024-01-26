@@ -1,16 +1,36 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:testdb
-  application:
-    name: "Homework #14 (test env)"
+  main:
+    allow-circular-references: true
+
+  batch:
+    job:
+      enabled: false
+
   shell:
     interactive:
       enabled: false
-  flyway:
-    enabled: true
-    locations: classpath:db/migration/1.0,classpath:db/tests
+    command:
+      version:
+        enabled: false
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+
+  data:
+    mongodb:
+      host: localhost
+      port: 0
+      database: mongoTest
+
   jpa:
     generate-ddl: false
     hibernate:
       ddl-auto: none
     show-sql: true
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2

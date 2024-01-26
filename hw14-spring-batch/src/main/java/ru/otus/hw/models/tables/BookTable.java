@@ -24,13 +24,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "books")
-@NamedEntityGraph(
-        name = "book-entity-graph",
-        attributeNodes = {
-                @NamedAttributeNode("author"),
-                @NamedAttributeNode("genre")
-        }
-)
 public class BookTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

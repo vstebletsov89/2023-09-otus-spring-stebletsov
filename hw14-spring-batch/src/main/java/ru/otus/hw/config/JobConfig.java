@@ -24,7 +24,7 @@ import org.springframework.core.task.TaskExecutor;
 public class JobConfig {
     private static final String IMPORT_LIBRARY_JOB_NAME = "importLibraryJob";
 
-    private JobRepository jobRepository;
+    private final JobRepository jobRepository;
 
     @Bean
     public Job importLibraryJob(Step migrateAuthorsStep,
