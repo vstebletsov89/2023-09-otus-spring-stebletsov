@@ -72,7 +72,7 @@ public class CommentConfig {
                 .reader(reader)
                 .processor(itemProcessor)
                 .writer(writer)
-                .listener(new ItemReadListener<CommentTable>() {
+                .listener(new ItemReadListener<>() {
                     public void onReadError(@NonNull Exception e) {
                         log.error("Comment migration read error: " + e.getMessage());
                     }
@@ -84,7 +84,7 @@ public class CommentConfig {
                 })
                 .listener(new ChunkListener() {
                     public void afterChunkError(@NonNull ChunkContext chunkContext) {
-                        log.error("Comment migration chunk error: " + chunkContext.toString());
+                        log.error("Comment migration chunk error: " + chunkContext);
                     }
                 })
                 .build();

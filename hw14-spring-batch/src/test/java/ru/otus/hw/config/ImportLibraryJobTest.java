@@ -53,8 +53,6 @@ class ImportLibraryJobTest {
 
     @Test
     void testJob() throws Exception {
-        var classLoader = ImportLibraryJobTest.class.getClassLoader();
-
         Job job = jobLauncherTestUtils.getJob();
         assertThat(job).isNotNull()
                 .extracting(Job::getName)

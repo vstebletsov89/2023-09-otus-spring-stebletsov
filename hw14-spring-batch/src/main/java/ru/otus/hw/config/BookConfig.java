@@ -72,7 +72,7 @@ public class BookConfig {
                 .reader(reader)
                 .processor(itemProcessor)
                 .writer(writer)
-                .listener(new ItemReadListener<BookTable>() {
+                .listener(new ItemReadListener<>() {
                     public void onReadError(@NonNull Exception e) {
                         log.error("Book migration read error: " + e.getMessage());
                     }
@@ -84,7 +84,7 @@ public class BookConfig {
                 })
                 .listener(new ChunkListener() {
                     public void afterChunkError(@NonNull ChunkContext chunkContext) {
-                        log.error("Book migration chunk error: " + chunkContext.toString());
+                        log.error("Book migration chunk error: " + chunkContext);
                     }
                 })
                 .build();
