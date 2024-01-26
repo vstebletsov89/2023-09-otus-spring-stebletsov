@@ -36,6 +36,7 @@ public class AuthorConfig {
     private final EntityManagerFactory entityManagerFactory;
 
     private final AuthorConverter authorConverter;
+
     private final JobRepository jobRepository;
 
     private final PlatformTransactionManager platformTransactionManager;
@@ -71,7 +72,7 @@ public class AuthorConfig {
                 .reader(reader)
                 .processor(itemProcessor)
                 .writer(writer)
-                .listener(new ItemReadListener<AuthorTable>() {
+                .listener(new ItemReadListener<>() {
                     public void onReadError(@NonNull Exception e) {
                         log.error("Author migration read error: " + e.getMessage());
                     }
@@ -83,7 +84,7 @@ public class AuthorConfig {
                 })
                 .listener(new ChunkListener() {
                     public void afterChunkError(@NonNull ChunkContext chunkContext) {
-                        log.error("Author migration chunk error: " + chunkContext.toString());
+                        log.error("Author migration chunk error: " + chunkContext);
                     }
                 })
                 .build();

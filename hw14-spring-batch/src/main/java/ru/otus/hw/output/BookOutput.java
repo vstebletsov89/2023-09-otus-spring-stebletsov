@@ -2,7 +2,6 @@ package ru.otus.hw.output;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.otus.hw.mappers.AuthorConverter;
 import ru.otus.hw.models.documents.BookDocument;
 
 @RequiredArgsConstructor
@@ -13,11 +12,11 @@ public class BookOutput {
     private final GenreOutput genreOutput;
 
     public void printBook(BookDocument book) {
-        System.out.println("Id: %s, title: %s, author: {%s}, genres: [%s]"
-                .formatted(
+        System.out.printf(
+                "Id: %s, title: %s, author: {%s}, genre: [%s]%n",
                 book.getId(),
                 book.getTitle(),
                 authorOutput.authorToString(book.getAuthor()),
-                genreOutput.genreToString(book.getGenre())));
+                genreOutput.genreToString(book.getGenre()));
     }
 }

@@ -36,6 +36,7 @@ public class GenreConfig {
     private final EntityManagerFactory entityManagerFactory;
 
     private final GenreConverter genreConverter;
+
     private final JobRepository jobRepository;
 
     private final PlatformTransactionManager platformTransactionManager;
@@ -71,7 +72,7 @@ public class GenreConfig {
                 .reader(reader)
                 .processor(itemProcessor)
                 .writer(writer)
-                .listener(new ItemReadListener<GenreTable>() {
+                .listener(new ItemReadListener<>() {
                     public void onReadError(@NonNull Exception e) {
                         log.error("Genre migration read error: " + e.getMessage());
                     }
@@ -83,7 +84,7 @@ public class GenreConfig {
                 })
                 .listener(new ChunkListener() {
                     public void afterChunkError(@NonNull ChunkContext chunkContext) {
-                        log.error("Genre migration chunk error: " + chunkContext.toString());
+                        log.error("Genre migration chunk error: " + chunkContext);
                     }
                 })
                 .build();
