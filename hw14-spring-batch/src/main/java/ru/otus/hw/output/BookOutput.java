@@ -12,11 +12,12 @@ public class BookOutput {
 
     private final GenreOutput genreOutput;
 
-    public String bookToString(BookDocument book) {
-        return "Id: %s, title: %s, author: {%s}, genres: [%s]".formatted(
+    public void printBook(BookDocument book) {
+        System.out.println("Id: %s, title: %s, author: {%s}, genres: [%s]"
+                .formatted(
                 book.getId(),
                 book.getTitle(),
                 authorOutput.authorToString(book.getAuthor()),
-                genreOutput.genreToString(book.getGenre()));
+                genreOutput.genreToString(book.getGenre())));
     }
 }

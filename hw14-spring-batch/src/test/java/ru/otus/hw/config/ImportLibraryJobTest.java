@@ -15,6 +15,9 @@ import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
+import ru.otus.hw.output.BookOutput;
+import ru.otus.hw.repositories.BookRepository;
+
 
 import java.io.File;
 import java.net.URLDecoder;
@@ -22,12 +25,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @SpringBatchTest
 class ImportLibraryJobTest {
 
-    // TODO: fix it (add local mongodb(flapdoodle) + update properties)
     private static final String IMPORT_LIBRARY_JOB_NAME = "importLibraryJob";
 
     @Autowired
@@ -35,6 +38,12 @@ class ImportLibraryJobTest {
 
     @Autowired
     private JobRepositoryTestUtils jobRepositoryTestUtils;
+
+    @Autowired
+    private BookRepository bookRepository;
+
+    @Autowired
+    private BookOutput bookOutput;
 
     @BeforeEach
     void clearMetaData() {
@@ -53,7 +62,10 @@ class ImportLibraryJobTest {
         JobParameters parameters = new JobParametersBuilder()
                 .toJobParameters();
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(parameters);
+        var books = bookRepository.findAll();
+        books.forEach(bookOutput::printBook);
 
         assertThat(jobExecution.getExitStatus().getExitCode()).isEqualTo("COMPLETED");
+        assertEquals(3, books.size());
     }
 }

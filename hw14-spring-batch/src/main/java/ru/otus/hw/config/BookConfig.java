@@ -23,6 +23,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import ru.otus.hw.mappers.BookConverter;
 import ru.otus.hw.models.documents.BookDocument;
 import ru.otus.hw.models.tables.BookTable;
+import ru.otus.hw.service.BookService;
 
 import java.util.List;
 
@@ -30,12 +31,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Configuration
 public class BookConfig {
-
     private static final int CHUNK_SIZE = 10;
+
+    private final BookService bookService;
 
     private final EntityManagerFactory entityManagerFactory;
 
-    private final BookConverter bookConverter;
     private final JobRepository jobRepository;
 
     private final PlatformTransactionManager platformTransactionManager;
@@ -59,7 +60,7 @@ public class BookConfig {
 
     @Bean
     public ItemProcessor<BookTable, BookDocument> bookProcessor(BookConverter bookConverter) {
-        return bookConverter::convert;
+        return bookService::doConversion;
     }
 
     @Bean

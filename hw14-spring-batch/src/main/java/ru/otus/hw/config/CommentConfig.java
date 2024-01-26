@@ -20,9 +20,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
-import ru.otus.hw.mappers.CommentConverter;
 import ru.otus.hw.models.documents.CommentDocument;
 import ru.otus.hw.models.tables.CommentTable;
+import ru.otus.hw.service.CommentService;
 
 import java.util.List;
 
@@ -33,9 +33,10 @@ public class CommentConfig {
 
     private static final int CHUNK_SIZE = 10;
 
+    private final CommentService commentService;
+
     private final EntityManagerFactory entityManagerFactory;
 
-    private final CommentConverter commentConverter;
     private final JobRepository jobRepository;
 
     private final PlatformTransactionManager platformTransactionManager;
@@ -58,8 +59,8 @@ public class CommentConfig {
     }
 
     @Bean
-    public ItemProcessor<CommentTable, CommentDocument> commentProcessor(CommentConverter commentConverter) {
-        return commentConverter::convert;
+    public ItemProcessor<CommentTable, CommentDocument> commentProcessor(CommentService commentService) {
+        return commentService::doConversion;
     }
 
     @Bean
