@@ -33,9 +33,11 @@ class ImportLibraryJobTest {
 
     private static final String IMPORT_LIBRARY_JOB_NAME = "importLibraryJob";
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private JobRepositoryTestUtils jobRepositoryTestUtils;
 
