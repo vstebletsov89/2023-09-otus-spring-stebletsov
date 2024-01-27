@@ -30,9 +30,6 @@ public class BatchCommands {
 
     private final CommentService commentService;
 
-    //TODO: update commands here
-    //TODO: add command to get all consolidated data from migrated mongodb
-
     @SuppressWarnings("unused")
     @ShellMethod(value = "startMigrationJob", key = "sm")
     public void startMigrationJobWithJobOperator() throws Exception {
