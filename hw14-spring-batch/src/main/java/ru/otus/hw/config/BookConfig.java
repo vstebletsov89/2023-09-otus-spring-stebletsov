@@ -20,18 +20,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
-import ru.otus.hw.mappers.BookConverter;
 import ru.otus.hw.models.documents.BookDocument;
 import ru.otus.hw.models.tables.BookTable;
 import ru.otus.hw.service.BookService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
 public class BookConfig {
     private static final int CHUNK_SIZE = 10;
+
+    private static Map<Long, BookDocument> jpaIdToMongoObjectMap = new HashMap<>();
 
     private final BookService bookService;
 
@@ -40,6 +43,10 @@ public class BookConfig {
     private final JobRepository jobRepository;
 
     private final PlatformTransactionManager platformTransactionManager;
+
+    public static Map<Long, BookDocument> getJpaIdToMongoObjectMap() {
+        return jpaIdToMongoObjectMap;
+    }
 
     @Bean
     public ItemReader<BookTable> bookTableItemReader() {
@@ -59,7 +66,7 @@ public class BookConfig {
     }
 
     @Bean
-    public ItemProcessor<BookTable, BookDocument> bookProcessor(BookConverter bookConverter) {
+    public ItemProcessor<BookTable, BookDocument> bookProcessor() {
         return bookService::doConversion;
     }
 

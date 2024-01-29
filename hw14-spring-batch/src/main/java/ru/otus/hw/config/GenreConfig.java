@@ -20,11 +20,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
-import ru.otus.hw.mappers.GenreConverter;
 import ru.otus.hw.models.documents.GenreDocument;
 import ru.otus.hw.models.tables.GenreTable;
+import ru.otus.hw.service.GenreService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,13 +35,19 @@ public class GenreConfig {
 
     private static final int CHUNK_SIZE = 10;
 
-    private final EntityManagerFactory entityManagerFactory;
+    private static Map<Long, GenreDocument> jpaIdToMongoObjectMap = new HashMap<>();
 
-    private final GenreConverter genreConverter;
+    private final GenreService genreService;
+
+    private final EntityManagerFactory entityManagerFactory;
 
     private final JobRepository jobRepository;
 
     private final PlatformTransactionManager platformTransactionManager;
+
+    public static Map<Long, GenreDocument> getJpaIdToMongoObjectMap() {
+        return jpaIdToMongoObjectMap;
+    }
 
     @Bean
     public ItemReader<GenreTable> genreTableItemReader() {
@@ -59,8 +67,8 @@ public class GenreConfig {
     }
 
     @Bean
-    public ItemProcessor<GenreTable, GenreDocument> genreProcessor(GenreConverter genreConverter) {
-        return genreConverter::convert;
+    public ItemProcessor<GenreTable, GenreDocument> genreProcessor() {
+        return genreService::doConversion;
     }
 
     @Bean

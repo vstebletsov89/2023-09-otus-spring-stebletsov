@@ -1,14 +1,15 @@
 package ru.otus.hw.service;
 
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
+import ru.otus.hw.config.AuthorConfig;
+import ru.otus.hw.config.BookConfig;
+import ru.otus.hw.config.GenreConfig;
 import ru.otus.hw.mappers.BookConverter;
 import ru.otus.hw.models.documents.BookDocument;
 import ru.otus.hw.models.tables.BookTable;
-import ru.otus.hw.output.BookOutput;
-import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
-import ru.otus.hw.repositories.GenreRepository;
 
 import java.util.List;
 
@@ -18,22 +19,18 @@ public class BookService {
 
     private final BookConverter bookConverter;
 
-    private final BookOutput bookOutput;
-
-    private final AuthorRepository authorRepository;
-
-    private final GenreRepository genreRepository;
-
     private final BookRepository bookRepository;
 
     public BookDocument doConversion(BookTable bookTable) {
 
         var convertedBook = bookConverter.convert(bookTable);
-        var author = authorRepository.findByFullName(bookTable.getAuthor().getFullName());
-        var genre = genreRepository.findByName(bookTable.getGenre().getName());
+        var author = AuthorConfig.getJpaIdToMongoObjectMap().get(bookTable.getAuthor().getId());
+        var genre = GenreConfig.getJpaIdToMongoObjectMap().get(bookTable.getGenre().getId());
         convertedBook.setAuthor(author);
         convertedBook.setGenre(genre);
-
+        convertedBook.setId(new ObjectId().toString());
+        var booksMap = BookConfig.getJpaIdToMongoObjectMap();
+        booksMap.put(bookTable.getId(), convertedBook);
         return convertedBook;
     }
 

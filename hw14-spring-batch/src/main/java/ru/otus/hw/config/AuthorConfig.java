@@ -20,11 +20,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
-import ru.otus.hw.mappers.AuthorConverter;
 import ru.otus.hw.models.documents.AuthorDocument;
 import ru.otus.hw.models.tables.AuthorTable;
+import ru.otus.hw.service.AuthorService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,13 +35,19 @@ public class AuthorConfig {
 
     private static final int CHUNK_SIZE = 10;
 
-    private final EntityManagerFactory entityManagerFactory;
+    private static Map<Long, AuthorDocument> jpaIdToMongoObjectMap = new HashMap<>();
 
-    private final AuthorConverter authorConverter;
+    private final AuthorService authorService;
+
+    private final EntityManagerFactory entityManagerFactory;
 
     private final JobRepository jobRepository;
 
     private final PlatformTransactionManager platformTransactionManager;
+
+    public static Map<Long, AuthorDocument> getJpaIdToMongoObjectMap() {
+        return jpaIdToMongoObjectMap;
+    }
 
     @Bean
     public ItemReader<AuthorTable> authorTableItemReader() {
@@ -59,8 +67,8 @@ public class AuthorConfig {
     }
 
     @Bean
-    public ItemProcessor<AuthorTable, AuthorDocument> authorProcessor(AuthorConverter authorConverter) {
-        return authorConverter::convert;
+    public ItemProcessor<AuthorTable, AuthorDocument> authorProcessor() {
+        return authorService::doConversion;
     }
 
     @Bean

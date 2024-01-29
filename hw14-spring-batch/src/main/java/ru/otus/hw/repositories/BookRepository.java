@@ -5,5 +5,4 @@ import ru.otus.hw.models.documents.BookDocument;
 
 public interface BookRepository extends MongoRepository<BookDocument, String> {
 
-    BookDocument findByTitle(String title);
 }

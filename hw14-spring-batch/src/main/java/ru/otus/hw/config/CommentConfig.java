@@ -59,7 +59,7 @@ public class CommentConfig {
     }
 
     @Bean
-    public ItemProcessor<CommentTable, CommentDocument> commentProcessor(CommentService commentService) {
+    public ItemProcessor<CommentTable, CommentDocument> commentProcessor() {
         return commentService::doConversion;
     }
 
