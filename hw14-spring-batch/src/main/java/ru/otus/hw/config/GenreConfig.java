@@ -35,7 +35,7 @@ public class GenreConfig {
 
     private static final int CHUNK_SIZE = 10;
 
-    private static Map<Long, GenreDocument> jpaIdToMongoObjectMap = new HashMap<>();
+    private static Map<Long, String> jpaIdToMongoIdMap = new HashMap<>();
 
     private final GenreService genreService;
 
@@ -45,8 +45,8 @@ public class GenreConfig {
 
     private final PlatformTransactionManager platformTransactionManager;
 
-    public static Map<Long, GenreDocument> getJpaIdToMongoObjectMap() {
-        return jpaIdToMongoObjectMap;
+    public static Map<Long, String> getJpaIdToMongoIdMap() {
+        return jpaIdToMongoIdMap;
     }
 
     @Bean

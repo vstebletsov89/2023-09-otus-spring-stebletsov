@@ -57,6 +57,8 @@ class ImportLibraryJobTest {
         assertThat(job).isNotNull()
                 .extracting(Job::getName)
                 .isEqualTo(IMPORT_LIBRARY_JOB_NAME);
+        assertEquals(0, bookRepository.findAll().size());
+
 
         JobParameters parameters = new JobParametersBuilder()
                 .toJobParameters();

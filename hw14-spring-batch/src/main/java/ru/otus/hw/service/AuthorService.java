@@ -1,7 +1,6 @@
 package ru.otus.hw.service;
 
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import ru.otus.hw.config.AuthorConfig;
 import ru.otus.hw.mappers.AuthorConverter;
@@ -17,9 +16,9 @@ public class AuthorService {
     public AuthorDocument doConversion(AuthorTable authorTable) {
 
         var convertedAuthor = authorConverter.convert(authorTable);
-        convertedAuthor.setId(new ObjectId().toString());
-        var authorsMap = AuthorConfig.getJpaIdToMongoObjectMap();
-        authorsMap.put(authorTable.getId(), convertedAuthor);
+        var authorsMap = AuthorConfig.getJpaIdToMongoIdMap();
+        authorsMap.put(authorTable.getId(), convertedAuthor.getId());
+
         return convertedAuthor;
     }
 }

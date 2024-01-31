@@ -1,5 +1,6 @@
 package ru.otus.hw.mappers;
 
+import org.bson.types.ObjectId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ru.otus.hw.models.documents.GenreDocument;
@@ -10,6 +11,9 @@ public class GenreConverter implements Converter<GenreTable, GenreDocument> {
 
     @Override
     public GenreDocument convert(GenreTable source) {
-        return new GenreDocument(source.getName());
+
+        return new GenreDocument(
+                new ObjectId().toString(),
+                source.getName());
     }
 }

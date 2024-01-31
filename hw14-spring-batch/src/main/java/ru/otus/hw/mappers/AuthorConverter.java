@@ -1,5 +1,6 @@
 package ru.otus.hw.mappers;
 
+import org.bson.types.ObjectId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ru.otus.hw.models.documents.AuthorDocument;
@@ -10,6 +11,9 @@ public class AuthorConverter implements Converter<AuthorTable, AuthorDocument> {
 
     @Override
     public AuthorDocument convert(AuthorTable source) {
-        return new AuthorDocument(source.getFullName());
+
+        return new AuthorDocument(
+                new ObjectId().toString(),
+                source.getFullName());
     }
 }

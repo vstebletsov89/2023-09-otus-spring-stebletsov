@@ -35,7 +35,7 @@ public class AuthorConfig {
 
     private static final int CHUNK_SIZE = 10;
 
-    private static Map<Long, AuthorDocument> jpaIdToMongoObjectMap = new HashMap<>();
+    private static Map<Long, String> jpaIdToMongoIdMap = new HashMap<>();
 
     private final AuthorService authorService;
 
@@ -45,8 +45,8 @@ public class AuthorConfig {
 
     private final PlatformTransactionManager platformTransactionManager;
 
-    public static Map<Long, AuthorDocument> getJpaIdToMongoObjectMap() {
-        return jpaIdToMongoObjectMap;
+    public static Map<Long, String> getJpaIdToMongoIdMap() {
+        return jpaIdToMongoIdMap;
     }
 
     @Bean

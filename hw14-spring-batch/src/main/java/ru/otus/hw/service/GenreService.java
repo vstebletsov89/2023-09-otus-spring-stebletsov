@@ -1,7 +1,6 @@
 package ru.otus.hw.service;
 
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import ru.otus.hw.config.GenreConfig;
 import ru.otus.hw.mappers.GenreConverter;
@@ -17,9 +16,9 @@ public class GenreService {
     public GenreDocument doConversion(GenreTable genreTable) {
 
         var convertedGenre = genreConverter.convert(genreTable);
-        convertedGenre.setId(new ObjectId().toString());
-        var genresMap = GenreConfig.getJpaIdToMongoObjectMap();
-        genresMap.put(genreTable.getId(), convertedGenre);
+        var genresMap = GenreConfig.getJpaIdToMongoIdMap();
+        genresMap.put(genreTable.getId(), convertedGenre.getId());
+
         return convertedGenre;
     }
 }
