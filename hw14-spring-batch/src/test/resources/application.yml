@@ -1,0 +1,39 @@
+spring:
+  main:
+    allow-circular-references: true
+
+  application:
+    name: "Homework #14 (test env)"
+
+  batch:
+    job:
+      enabled: false
+
+  shell:
+    interactive:
+      enabled: false
+    command:
+      version:
+        enabled: false
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+
+  data:
+    mongodb:
+      host: localhost
+      port: 0
+      database: mongoTest
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2
