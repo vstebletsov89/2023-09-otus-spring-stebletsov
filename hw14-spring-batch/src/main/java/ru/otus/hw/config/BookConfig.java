@@ -34,7 +34,7 @@ import java.util.Map;
 public class BookConfig {
     private static final int CHUNK_SIZE = 10;
 
-    private static Map<Long, BookDocument> jpaIdToMongoObjectMap = new HashMap<>();
+    private static Map<Long, String> jpaIdToMongoIdMap = new HashMap<>();
 
     private final BookService bookService;
 
@@ -44,8 +44,8 @@ public class BookConfig {
 
     private final PlatformTransactionManager platformTransactionManager;
 
-    public static Map<Long, BookDocument> getJpaIdToMongoObjectMap() {
-        return jpaIdToMongoObjectMap;
+    public static Map<Long, String> getJpaIdToMongoIdMap() {
+        return jpaIdToMongoIdMap;
     }
 
     @Bean

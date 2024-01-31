@@ -29,8 +29,8 @@ public class BookService {
         convertedBook.setAuthor(author);
         convertedBook.setGenre(genre);
         convertedBook.setId(new ObjectId().toString());
-        var booksMap = BookConfig.getJpaIdToMongoObjectMap();
-        booksMap.put(bookTable.getId(), convertedBook);
+        var booksMap = BookConfig.getJpaIdToMongoIdMap();
+        booksMap.put(bookTable.getId(), convertedBook.getId());
         return convertedBook;
     }
 
