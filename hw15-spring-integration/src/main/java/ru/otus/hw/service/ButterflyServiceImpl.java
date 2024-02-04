@@ -7,7 +7,7 @@ import ru.otus.hw.domain.Caterpillar;
 
 @Slf4j
 @Service
-public class ButterflyServiceImpl implements ButterflyService{
+public class ButterflyServiceImpl implements ButterflyService {
 
     @Override
     public Butterfly transform(Caterpillar caterpillar) {
