@@ -1,0 +1,9 @@
+spring:
+
+  application:
+    name: "Homework #15"
+
+logging:
+  level:
+    root: info
+
