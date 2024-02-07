@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>List of all books</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body onload="fetchBooks()">
+<h3 th:text="#{book-table-header}">Books:</h3>
+<table class="table table-hover text-center align-middle">
+    <thead>
+    <tr>
+        <th th:text="#{book-field-id}">ID</th>
+        <th th:text="#{book-field-title}">Title</th>
+        <th th:text="#{book-field-author}">Author</th>
+        <th th:text="#{book-field-genre}">Genre</th>
+        <th th:text="#{edit-button-caption}" >Edit</th>
+        <th th:text="#{delete-button-caption}">Delete</th>
+    </tr>
+    </thead>
+    <tbody id = "output">
+    </tbody>
+</table>
+<a href="add.html" th:href="@{/books/add}">
+<button class="btn btn-success btn-lg" type="button" th:text="#{book-add-new}">Add book</button>
+</a>
+
+<script>
+    function addLinkToCell(cell, text, href) {
+        const link = document.createElement("a");
+        link.innerText = text;
+        link.href = href;
+        cell.appendChild(link);
+    }
+
+    function addTexToCell(cell, text) {
+        cell.innerText = text;
+    }
+
+    function deleteBook(id) {
+         fetch(`/api/v1/books/${id}`, {method: "DELETE"})
+            .then(response => response)
+            .then(function () {
+                location.href = "/";
+            });
+    }
+
+    function addDeleteButtonToCell(cell, text, id) {
+        const button = document.createElement("button");
+        button.innerText = text;
+        button.addEventListener('click', function () {
+            deleteBook(id);
+        });
+        button.className = "btn btn-danger";
+        cell.appendChild(button);
+    }
+
+    function addEditButtonToCell(cell, text, id) {
+        const button = document.createElement("button");
+        button.innerText = text;
+        button.addEventListener('click', function () {
+            location.href = "/books/edit?id=" + id;
+        });
+        button.className = "btn btn-warning";
+        cell.appendChild(button);
+    }
+
+    function renderData(books) {
+        const table = document.getElementById("output");
+        books.forEach(book => {
+            const newRow = table.insertRow();
+            addTexToCell(newRow.insertCell(), book.id)
+            addLinkToCell(newRow.insertCell(), book.title, "/books/info?id=" + book.id);
+            addTexToCell(newRow.insertCell(), book.authorDto.fullName)
+            addTexToCell(newRow.insertCell(), book.genreDto.name)
+            addEditButtonToCell(newRow.insertCell(), "Edit", book.id);
+            addDeleteButtonToCell(newRow.insertCell(), "Delete", book.id)
+        });
+    }
+
+    function fetchBooks() {
+        fetch("/api/v1/books")
+            .then(response => response.json())
+            .then(books => renderData(books));
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
