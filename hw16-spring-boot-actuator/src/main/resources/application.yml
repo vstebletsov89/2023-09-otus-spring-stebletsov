@@ -10,6 +10,11 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
+  data:
+    rest:
+      basePath: /datarest
+      default-page-size: 20
+
 logging:
   level:
     root: info
