@@ -1,6 +1,7 @@
 package ru.otus.hw.actuator;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.Status;
@@ -33,7 +34,7 @@ public class LibraryHealthIndicator implements HealthIndicator {
         catch (Exception exception) {
             return Health.down()
                     .status(Status.DOWN)
-                    .withDetail("message", "Ошибка обращения к базе: " + exception.getStackTrace())
+                    .withDetail("message", "Ошибка обращения к базе: " + ExceptionUtils.getStackTrace(exception))
                     .build();
         }
     }
