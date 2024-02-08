@@ -16,3 +16,10 @@
 * UI для данных от Spring Boot Actuator реализовывать не нужно
 * Опционально: переписать приложение на HATEOAS принципах с помощью Spring
 Data REST Repository
+
+Примечание:
+
+**Только admin имеет доступ к actuator и datarest endpoints.**
+* тестовый пользователь (ROLE_USER)  "username: user  password: pass"
+* тестовый пользователь (ROLE_ADMIN) "username: admin password: pass"
+* тестовый пользователь (ROLE_GUEST) "username: guest password: pass"

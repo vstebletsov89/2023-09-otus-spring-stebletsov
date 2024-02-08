@@ -25,7 +25,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
@@ -44,13 +44,10 @@ public class SecurityConfiguration {
                                 "/api/v1/comments").hasRole("USER")
                         .requestMatchers(HttpMethod.DELETE,
                                 "/api/v1/books/{id}").hasRole("ADMIN")
-                        .requestMatchers(
-                                "/datarest/**",
-                                "/actuator/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                )
-                .formLogin(Customizer.withDefaults());
-        return http.build();
+                        .requestMatchers("/datarest/**", "/actuator/**").hasRole("ADMIN")
+                        .anyRequest().authenticated())
+                .formLogin(Customizer.withDefaults())
+                .build();
     }
 
     @Bean

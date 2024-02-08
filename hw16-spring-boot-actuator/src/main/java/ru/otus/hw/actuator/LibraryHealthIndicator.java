@@ -30,8 +30,7 @@ public class LibraryHealthIndicator implements HealthIndicator {
             } else {
                 return Health.up().withDetail("message", "Сервис в порядке!").build();
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             return Health.down()
                     .status(Status.DOWN)
                     .withDetail("message", "Ошибка обращения к базе: " + ExceptionUtils.getStackTrace(exception))
