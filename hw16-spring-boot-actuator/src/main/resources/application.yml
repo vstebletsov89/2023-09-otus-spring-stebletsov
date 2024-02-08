@@ -22,7 +22,8 @@ management:
         include: "metrics,health,logfile,prometheus,flyway"
   endpoint:
     health:
-      show-details: always
+      show-details: when_authorized
+      roles: "ADMIN"
   health:
     defaults:
       enabled: true

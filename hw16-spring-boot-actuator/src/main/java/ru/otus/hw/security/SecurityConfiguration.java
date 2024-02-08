@@ -44,6 +44,9 @@ public class SecurityConfiguration {
                                 "/api/v1/comments").hasRole("USER")
                         .requestMatchers(HttpMethod.DELETE,
                                 "/api/v1/books/{id}").hasRole("ADMIN")
+                        .requestMatchers(
+                                "/datarest/**",
+                                "/actuator/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults());
