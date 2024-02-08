@@ -15,6 +15,18 @@ spring:
       basePath: /datarest
       default-page-size: 20
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "metrics,health,logfile,prometheus,flyway"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+
 logging:
   level:
     root: info

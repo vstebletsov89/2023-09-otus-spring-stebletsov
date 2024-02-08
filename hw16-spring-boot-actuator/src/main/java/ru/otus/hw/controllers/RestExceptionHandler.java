@@ -24,7 +24,7 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    ResponseEntity<String> internalError(RuntimeException exception) {
+    ResponseEntity<String> internalError(Exception exception) {
         log.info("internalError exception: " + exception.getMessage());
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
