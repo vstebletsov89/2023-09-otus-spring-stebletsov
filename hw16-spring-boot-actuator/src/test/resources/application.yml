@@ -23,3 +23,6 @@ management:
   health:
     defaults:
       enabled: true
+logging:
+  file:
+    name: ./test_logs/library.log

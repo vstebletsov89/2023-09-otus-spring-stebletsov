@@ -33,6 +33,7 @@ public class ActuatorTest {
     @ParameterizedTest
     @ValueSource(strings = {
             "/actuator",
+            "/actuator/logfile",
             "/actuator/health",
             "/actuator/flyway",
             "/actuator/metrics"})
@@ -50,6 +51,7 @@ public class ActuatorTest {
     @ParameterizedTest
     @ValueSource(strings = {
             "/actuator",
+            "/actuator/logfile",
             "/actuator/health",
             "/actuator/flyway",
             "/actuator/metrics"})
