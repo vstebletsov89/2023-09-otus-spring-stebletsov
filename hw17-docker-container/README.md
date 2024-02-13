@@ -22,6 +22,10 @@
 
 Примечание:
 
+* сгенерировать jar: перейти в директорию hw17-docker-container и выполнить 
+```console 
+mvn clean package
+```
 * тестовый пользователь (ROLE_USER)  "username: user  password: pass"
 * тестовый пользователь (ROLE_ADMIN) "username: admin password: pass"
 * тестовый пользователь (ROLE_GUEST) "username: guest password: pass"
