@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 
 services:
 
@@ -14,7 +14,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=pguser
       - SPRING_DATASOURCE_PASSWORD=pgpass
     depends_on:
-      postgres
+      postgres:
         condition: service_healthy
 
   postgres:
