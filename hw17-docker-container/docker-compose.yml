@@ -25,7 +25,7 @@ services:
       - POSTGRES_USER=pguser
       - POSTGRES_PASSWORD=pgpass
       - POSTGRES_DB=pgdb
-      - PGUSER=postgres
+      - PGUSER=pguser
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U pguser -d pgdb"]
