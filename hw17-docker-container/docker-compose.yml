@@ -20,12 +20,11 @@ services:
   postgres:
     image: "postgres:16"
     ports:
-      - "5432:5432"
+      - "6432:5432"
     environment:
       - POSTGRES_USER=pguser
       - POSTGRES_PASSWORD=pgpass
       - POSTGRES_DB=pgdb
-      - PGUSER=pguser
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U pguser -d pgdb"]

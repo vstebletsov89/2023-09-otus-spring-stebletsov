@@ -1,10 +1,12 @@
+server:
+  port: 8081
 spring:
   application:
     name: "Homework #17"
   datasource:
-    url: jdbc:postgresql://localhost:5432/db
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://localhost:6432/pgdb
+    username: pguser
+    password: pgpass
   flyway:
     enabled: true
   jpa:
