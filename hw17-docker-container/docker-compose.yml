@@ -13,6 +13,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/pgdb
       - SPRING_DATASOURCE_USERNAME=pguser
       - SPRING_DATASOURCE_PASSWORD=pgpass
+      - SERVER_PORT=8080
     depends_on:
       postgres:
         condition: service_healthy
