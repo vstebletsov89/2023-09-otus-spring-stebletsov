@@ -1,0 +1,39 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: "Homework #17"
+  datasource:
+    url: jdbc:postgresql://localhost:6432/pgdb
+    username: pguser
+    password: pgpass
+  flyway:
+    enabled: true
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  data:
+    rest:
+      basePath: /datarest
+      default-page-size: 20
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "metrics,health,logfile,prometheus,flyway"
+  endpoint:
+    health:
+      show-details: when_authorized
+      roles: "ADMIN"
+  health:
+    defaults:
+      enabled: true
+
+logging:
+  file:
+    name: ./logs/library.log
+
+
