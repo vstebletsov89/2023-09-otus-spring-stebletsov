@@ -1,5 +1,6 @@
 package ru.otus.hw.services;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import ru.otus.hw.mappers.CommentMapper;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.CommentRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,6 +26,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentMapper commentMapper;
 
+    @HystrixCommand(commandKey="getComment", fallbackMethod="buildFallbackComment")
     @Transactional(readOnly = true)
     @Override
     public CommentDto findById(long id) {
@@ -32,6 +35,12 @@ public class CommentServiceImpl implements CommentService {
                         .orElseThrow(() -> new NotFoundException("Comment with id %d not found".formatted(id))));
     }
 
+    @SuppressWarnings("unused")
+    public CommentDto buildFallbackComment(long id) {
+        return new CommentDto();
+    }
+
+    @HystrixCommand(commandKey="getCommentsByBookId", fallbackMethod="buildFallbackComments")
     @Transactional(readOnly = true)
     @Override
     public List<CommentDto> findAllByBookId(long id) {
@@ -44,6 +53,11 @@ public class CommentServiceImpl implements CommentService {
                 .stream()
                 .map(commentMapper::toDto)
                 .toList();
+    }
+
+    @SuppressWarnings("unused")
+    public List<CommentDto> buildFallbackComments(long id) {
+        return Collections.emptyList();
     }
 
     @Transactional
