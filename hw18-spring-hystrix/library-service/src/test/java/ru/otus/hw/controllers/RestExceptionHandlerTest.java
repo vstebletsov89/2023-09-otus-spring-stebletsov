@@ -8,9 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.mappers.AuthorMapperImpl;
@@ -20,8 +18,6 @@ import ru.otus.hw.models.Author;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.GenreRepository;
-import ru.otus.hw.security.SecurityConfiguration;
-import ru.otus.hw.security.UserService;
 import ru.otus.hw.services.BookService;
 import ru.otus.hw.services.BookServiceImpl;
 
@@ -49,7 +45,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 })
 @AutoConfigureWebMvc
 @AutoConfigureMockMvc
-@Import(SecurityConfiguration.class)
 class RestExceptionHandlerTest {
 
     @Autowired
@@ -70,9 +65,6 @@ class RestExceptionHandlerTest {
     @MockBean
     private GenreRepository genreRepository;
 
-    @MockBean
-    private UserService userService;
-
     @Autowired
     private BookController bookController;
 
@@ -80,10 +72,6 @@ class RestExceptionHandlerTest {
     private RestExceptionHandler restExceptionHandler;
 
     @DisplayName("должен обрабатывать исключение, когда книга не найдена")
-    @WithMockUser(
-            username = "user",
-            authorities = {"ROLE_USER"}
-    )
     @Test
     void shouldHandleNotFoundExceptionForBook() throws Exception {
         doReturn(Optional.empty()).when(bookRepository).findById(anyLong());
@@ -98,10 +86,6 @@ class RestExceptionHandlerTest {
     }
 
     @DisplayName("должен обрабатывать исключение, когда автор не найден")
-    @WithMockUser(
-            username = "user",
-            authorities = {"ROLE_USER"}
-    )
     @Test
     void shouldHandleNotFoundExceptionForAuthor() throws Exception {
         doReturn(Optional.empty()).when(authorRepository).findById(anyLong());
@@ -122,10 +106,6 @@ class RestExceptionHandlerTest {
     }
 
     @DisplayName("должен обрабатывать исключение, когда жанр не найден")
-    @WithMockUser(
-            username = "user",
-            authorities = {"ROLE_USER"}
-    )
     @Test
     void shouldHandleNotFoundExceptionForGenre() throws Exception {
         doReturn(Optional.of(new Author())).when(authorRepository).findById(anyLong());
@@ -146,10 +126,6 @@ class RestExceptionHandlerTest {
     }
 
     @DisplayName("должен обрабатывать исключени внутренней ошибки сервера")
-    @WithMockUser(
-            username = "user",
-            authorities = {"ROLE_USER"}
-    )
     @Test
     void shouldHandleAnyRuntimeException() throws Exception {
         doReturn(Optional.of(new RuntimeException())).when(bookRepository).findById(anyLong());

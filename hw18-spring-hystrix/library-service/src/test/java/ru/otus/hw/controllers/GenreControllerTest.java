@@ -7,13 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.hw.dto.GenreDto;
-import ru.otus.hw.security.SecurityConfiguration;
-import ru.otus.hw.security.UserService;
 import ru.otus.hw.services.GenreService;
 
 import java.util.ArrayList;
@@ -29,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DisplayName("Проверка работы контроллера жанров")
 @WebMvcTest(GenreController.class)
-@Import(SecurityConfiguration.class)
 class GenreControllerTest {
 
     private static List<GenreDto> expectedGenresDto = new ArrayList<>();
@@ -43,9 +38,6 @@ class GenreControllerTest {
     @MockBean
     private GenreService genreService;
 
-    @MockBean
-    private UserService userService;
-
     @BeforeAll
     static void setExpectedGenres() {
         expectedGenresDto = List.of(
@@ -56,10 +48,6 @@ class GenreControllerTest {
     }
 
     @DisplayName("должен загружать список всех жанров")
-    @WithMockUser(
-            username = "user",
-            authorities = {"ROLE_USER"}
-    )
     @Test
     void shouldReturnAllGenres() throws Exception {
         doReturn(expectedGenresDto).when(genreService).findAll();

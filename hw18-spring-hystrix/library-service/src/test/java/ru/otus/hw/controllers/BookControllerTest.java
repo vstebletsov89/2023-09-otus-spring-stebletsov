@@ -7,17 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.BookUpdateDto;
 import ru.otus.hw.dto.GenreDto;
-import ru.otus.hw.security.SecurityConfiguration;
-import ru.otus.hw.security.UserService;
 import ru.otus.hw.services.BookService;
 
 import java.util.ArrayList;
@@ -38,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DisplayName("Проверка работы контроллера книг")
 @WebMvcTest(BookController.class)
-@Import(SecurityConfiguration.class)
 class BookControllerTest {
 
     private static List<BookDto> expectedBooksDto = new ArrayList<>();
@@ -51,9 +46,6 @@ class BookControllerTest {
 
     @MockBean
     private BookService bookService;
-
-    @MockBean
-    private UserService userService;
 
     @BeforeAll
     static void setExpectedBooks() {
@@ -71,10 +63,6 @@ class BookControllerTest {
     }
 
     @DisplayName("должен загружать список всех книг")
-    @WithMockUser(
-            username = "user",
-            authorities = {"ROLE_USER"}
-    )
     @Test
     void shouldReturnAllBooks() throws Exception {
         doReturn(expectedBooksDto).when(bookService).findAll();
@@ -89,10 +77,6 @@ class BookControllerTest {
     }
 
     @DisplayName("должен загружать книгу")
-    @WithMockUser(
-            username = "user",
-            authorities = {"ROLE_USER"}
-    )
     @Test
     void shouldReturnBookById() throws Exception {
         var expectedBook = expectedBooksDto.get(0);
@@ -108,10 +92,6 @@ class BookControllerTest {
     }
 
     @DisplayName("должен добавить книгу")
-    @WithMockUser(
-            username = "user",
-            authorities = {"ROLE_USER"}
-    )
     @Test
     void shouldAddBook() throws Exception {
         BookCreateDto bookCreateDto = new BookCreateDto(
@@ -133,10 +113,6 @@ class BookControllerTest {
     }
 
     @DisplayName("должен обновить книгу")
-    @WithMockUser(
-            username = "user",
-            authorities = {"ROLE_USER"}
-    )
     @Test
     void shouldUpdateBook() throws Exception {
         BookUpdateDto bookUpdateDto = new BookUpdateDto(
@@ -158,45 +134,8 @@ class BookControllerTest {
         verify(bookService, times(1)).update(bookUpdateDto);
     }
 
-    @DisplayName("проверка запрета на удаление книги для гостя")
-    @WithMockUser(
-            username = "user",
-            authorities = {"ROLE_GUEST"}
-    )
-    @Test
-    void forbiddenDeleteBookForGuest() throws Exception {
-        var expectedBook = expectedBooksDto.get(0);
-        doNothing().when(bookService).deleteById(anyLong());
-
-        mockMvc.perform(delete("/api/v1/books/{id}", expectedBook.getId()))
-                .andDo(print())
-                .andExpect(status().isForbidden());
-
-        verify(bookService, times(0)).deleteById(expectedBook.getId());
-    }
-
-    @DisplayName("проверка запрета на удаление книги для пользователя")
-    @WithMockUser(
-            username = "user",
-            authorities = {"ROLE_USER"}
-    )
-    @Test
-    void forbiddenDeleteBookForUser() throws Exception {
-        var expectedBook = expectedBooksDto.get(0);
-        doNothing().when(bookService).deleteById(anyLong());
-
-        mockMvc.perform(delete("/api/v1/books/{id}", expectedBook.getId()))
-                .andDo(print())
-                .andExpect(status().isForbidden());
-
-        verify(bookService, times(0)).deleteById(expectedBook.getId());
-    }
 
     @DisplayName("должен удлалять книгу для админа")
-    @WithMockUser(
-            username = "user",
-            authorities = {"ROLE_ADMIN"}
-    )
     @Test
     void shouldDeleteBookForAdmin() throws Exception {
         var expectedBook = expectedBooksDto.get(0);
