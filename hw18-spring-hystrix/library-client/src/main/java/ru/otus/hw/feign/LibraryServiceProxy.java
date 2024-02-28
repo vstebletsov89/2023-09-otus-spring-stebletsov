@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.BookUpdateDto;
@@ -19,17 +18,17 @@ import java.util.List;
 public interface LibraryServiceProxy {
 
     @GetMapping("/api/v1/books")
-    public List<BookDto> getAllBooks();
+    List<BookDto> getAllBooks();
 
     @GetMapping("/api/v1/books/{id}")
-    public BookDto getBookById(@PathVariable("id") long id);
+    BookDto getBookById(@PathVariable("id") long id);
 
     @PostMapping("/api/v1/books")
-    public BookDto addBook(@RequestBody @Valid BookCreateDto bookCreateDto);
+    BookDto addBook(@RequestBody @Valid BookCreateDto bookCreateDto);
 
     @PutMapping("/api/v1/books")
-    public BookDto updateBook(@RequestBody @Valid BookUpdateDto bookUpdateDto);
+    BookDto updateBook(@RequestBody @Valid BookUpdateDto bookUpdateDto);
 
     @DeleteMapping("/api/v1/books/{id}")
-    public void deleteBook (@PathVariable("id") long id);
+    void deleteBook(@PathVariable("id") long id);
 }
