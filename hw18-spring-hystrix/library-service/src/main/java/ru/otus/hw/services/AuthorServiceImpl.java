@@ -1,6 +1,6 @@
 package ru.otus.hw.services;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,7 +9,6 @@ import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.mappers.AuthorMapper;
 import ru.otus.hw.repositories.AuthorRepository;
 
-import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,7 +18,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorMapper authorMapper;
 
-    @HystrixCommand(commandKey="getAuthors", fallbackMethod="buildFallbackAuthors")
+    @CircuitBreaker(name = "getAuthors", fallbackMethod = "buildFallbackAuthors")
     @Transactional(readOnly = true)
     @Override
     public List<AuthorDto> findAll() {
@@ -30,11 +29,11 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @SuppressWarnings("unused")
-    public List<AuthorDto> buildFallbackAuthors() {
-        return Collections.emptyList();
+    public List<AuthorDto> buildFallbackAuthors(Throwable e) {
+        return List.of(new AuthorDto(0, "fallbackAuthors"));
     }
 
-    @HystrixCommand(commandKey="getAuthor", fallbackMethod="buildFallbackAuthor")
+    @CircuitBreaker(name = "getAuthors", fallbackMethod = "buildFallbackAuthor")
     @Transactional(readOnly = true)
     @Override
     public AuthorDto findById(long id) {
@@ -44,7 +43,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @SuppressWarnings("unused")
-    public AuthorDto buildFallbackAuthor(long id) {
-        return new AuthorDto();
+    public AuthorDto buildFallbackAuthor(Throwable e) {
+        return new AuthorDto(0, "fallbackAuthor");
     }
 }

@@ -14,6 +14,12 @@ spring:
       ddl-auto: none
     show-sql: true
 
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+
 eureka:
   client:
     register-with-eureka: true
@@ -27,13 +33,12 @@ management:
   endpoints:
     web:
       exposure:
-        include: "metrics,health,logfile,prometheus,flyway"
-  health:
-    defaults:
-      enabled: true
+        include: "*"
 
 logging:
   file:
     name: ./logs/library.log
+  level:
+    io.github.resilience4j: DEBUG
 
 

@@ -1,6 +1,6 @@
 package ru.otus.hw.services;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ public class GenreServiceImpl implements GenreService {
 
     private final GenreMapper genreMapper;
 
-    @HystrixCommand(commandKey="getGenres", fallbackMethod="buildFallbackGenres")
+    @CircuitBreaker(name = "getGenres", fallbackMethod = "buildFallbackGenres")
     @Transactional(readOnly = true)
     @Override
     public List<GenreDto> findAll() {
@@ -30,11 +30,11 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @SuppressWarnings("unused")
-    public List<GenreDto> buildFallbackGenres() {
-        return Collections.emptyList();
+    public List<GenreDto> buildFallbackGenres(Throwable e) {
+        return List.of(new GenreDto(0, "fallbackGenre"));
     }
 
-    @HystrixCommand(commandKey="getGenre", fallbackMethod="buildFallbackGenre")
+    @CircuitBreaker(name = "getGenre", fallbackMethod = "buildFallbackGenre")
     @Transactional(readOnly = true)
     @Override
     public GenreDto findById(long id) {
@@ -44,7 +44,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @SuppressWarnings("unused")
-    public GenreDto buildFallbackGenre(long id) {
+    public GenreDto buildFallbackGenre(Throwable e) {
         return new GenreDto();
     }
 }

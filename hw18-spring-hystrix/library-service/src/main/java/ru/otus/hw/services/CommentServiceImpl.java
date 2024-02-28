@@ -1,6 +1,6 @@
 package ru.otus.hw.services;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentMapper commentMapper;
 
-    @HystrixCommand(commandKey="getComment", fallbackMethod="buildFallbackComment")
+    @CircuitBreaker(name = "getComment", fallbackMethod = "buildFallbackComment")
     @Transactional(readOnly = true)
     @Override
     public CommentDto findById(long id) {
@@ -36,11 +36,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @SuppressWarnings("unused")
-    public CommentDto buildFallbackComment(long id) {
-        return new CommentDto();
+    public CommentDto buildFallbackComment(Throwable e) {
+        return new CommentDto(0L, "fallbackComment", null);
     }
 
-    @HystrixCommand(commandKey="getCommentsByBookId", fallbackMethod="buildFallbackComments")
+    @CircuitBreaker(name = "getCommentsByBookId", fallbackMethod = "buildFallbackComments")
     @Transactional(readOnly = true)
     @Override
     public List<CommentDto> findAllByBookId(long id) {
@@ -56,7 +56,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @SuppressWarnings("unused")
-    public List<CommentDto> buildFallbackComments(long id) {
+    public List<CommentDto> buildFallbackComments(Throwable e) {
         return Collections.emptyList();
     }
 

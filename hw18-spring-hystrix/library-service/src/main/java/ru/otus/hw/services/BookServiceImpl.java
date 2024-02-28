@@ -1,6 +1,6 @@
 package ru.otus.hw.services;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +13,6 @@ import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.GenreRepository;
 
-import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class BookServiceImpl implements BookService {
 
     private final BookMapper bookMapper;
 
-    @HystrixCommand(commandKey="getBook", fallbackMethod="buildFallbackBook")
+    @CircuitBreaker(name = "getBook", fallbackMethod = "buildFallbackBook")
     @Transactional(readOnly = true)
     @Override
     public BookDto findById(long id) {
@@ -37,11 +36,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @SuppressWarnings("unused")
-    public BookDto buildFallbackBook(long id) {
-        return new BookDto();
+    public BookDto buildFallbackBook(Throwable throwable) {
+        return new BookDto(1L, "fallbackBook", null, null);
     }
 
-    @HystrixCommand(commandKey="getBooks", fallbackMethod="buildFallbackBooks")
+    @CircuitBreaker(name = "getBooks", fallbackMethod = "buildFallbackBooks")
     @Transactional(readOnly = true)
     @Override
     public List<BookDto> findAll() {
@@ -52,19 +51,19 @@ public class BookServiceImpl implements BookService {
     }
 
     @SuppressWarnings("unused")
-    public List<BookDto> buildFallbackBooks() {
-        return Collections.emptyList();
+    public List<BookDto> buildFallbackBooks(Throwable throwable) {
+        return List.of(new BookDto(1L, "fallbackBook", null, null));
     }
 
 
-    @HystrixCommand(commandKey="saveBook", fallbackMethod="buildFallbackBook")
+    @CircuitBreaker(name = "saveBook", fallbackMethod = "buildFallbackBook")
     @Transactional
     @Override
     public BookDto create(BookCreateDto bookCreateDto) {
         return addBook(bookCreateDto);
     }
 
-    @HystrixCommand(commandKey="updateBook", fallbackMethod="buildFallbackBook")
+    @CircuitBreaker(name = "updateBook", fallbackMethod = "buildFallbackBook")
     @Transactional
     @Override
     public BookDto update(BookUpdateDto bookUpdateDto) {
