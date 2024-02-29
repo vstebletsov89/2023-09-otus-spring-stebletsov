@@ -9,7 +9,6 @@ import ru.otus.hw.exceptions.NotFoundException;
 import ru.otus.hw.mappers.GenreMapper;
 import ru.otus.hw.repositories.GenreRepository;
 
-import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
