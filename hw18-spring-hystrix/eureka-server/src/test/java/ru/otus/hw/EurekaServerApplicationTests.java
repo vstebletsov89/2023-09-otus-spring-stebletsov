@@ -1,4 +1,4 @@
-package ru.otus.hw.eurekaserver;
+package ru.otus.hw;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
