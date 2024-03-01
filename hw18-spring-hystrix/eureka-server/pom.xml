@@ -19,6 +19,11 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2023.0.0</spring-cloud.version>
+		<checkstyle-plugin.version>3.2.2</checkstyle-plugin.version>
+		<checkstyle.version>10.11.0</checkstyle.version>
+		<checkstyle.config.url>
+			https://raw.githubusercontent.com/OtusTeam/Spring/master/checkstyle.xml
+		</checkstyle.config.url>
 	</properties>
 
 	<dependencies>
@@ -51,6 +56,31 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${checkstyle-plugin.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.puppycrawl.tools</groupId>
+						<artifactId>checkstyle</artifactId>
+						<version>${checkstyle.version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<configLocation>${checkstyle.config.url}</configLocation>
+					<sourceDirectories>
+						<sourceDirectory>${project.basedir}/src/</sourceDirectory>
+					</sourceDirectories>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
