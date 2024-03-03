@@ -15,6 +15,7 @@ import ru.otus.hw.mappers.AuthorMapperImpl;
 import ru.otus.hw.mappers.BookMapperImpl;
 import ru.otus.hw.mappers.GenreMapperImpl;
 import ru.otus.hw.models.Author;
+import ru.otus.hw.models.ResponseServerMessage;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.GenreRepository;
@@ -28,6 +29,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -75,12 +77,15 @@ class RestExceptionHandlerTest {
     @Test
     void shouldHandleNotFoundExceptionForBook() throws Exception {
         doReturn(Optional.empty()).when(bookRepository).findById(anyLong());
+        var expectedResponse = ResponseServerMessage.builder()
+                .errorMessage("Book with id 999 not found")
+                .stackTrace(null);
 
         mockMvc.perform(get("/api/v1/books/{id}", 999))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.valueOf("text/plain;charset=UTF-8")))
-                .andExpect(content().string("Book with id 999 not found"));
+                .andExpect(content().contentType(MediaType.valueOf("application/json")))
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
 
         verify(bookRepository, times(1)).findById(anyLong());
     }
@@ -90,6 +95,9 @@ class RestExceptionHandlerTest {
     void shouldHandleNotFoundExceptionForAuthor() throws Exception {
         doReturn(Optional.empty()).when(authorRepository).findById(anyLong());
         doReturn(Optional.empty()).when(genreRepository).findById(anyLong());
+        var expectedResponse = ResponseServerMessage.builder()
+                .errorMessage("Author with id 999 not found")
+                .stackTrace(null);
 
         mockMvc.perform(post("/api/v1/books")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -99,8 +107,8 @@ class RestExceptionHandlerTest {
                                         999L))))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.valueOf("text/plain;charset=UTF-8")))
-                .andExpect(content().string("Author with id 999 not found"));
+                .andExpect(content().contentType(MediaType.valueOf("application/json")))
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
 
         verify(authorRepository, times(1)).findById(anyLong());
     }
@@ -110,6 +118,9 @@ class RestExceptionHandlerTest {
     void shouldHandleNotFoundExceptionForGenre() throws Exception {
         doReturn(Optional.of(new Author())).when(authorRepository).findById(anyLong());
         doReturn(Optional.empty()).when(genreRepository).findById(anyLong());
+        var expectedResponse = ResponseServerMessage.builder()
+                .errorMessage("Genre with id 999 not found")
+                .stackTrace(null);
 
         mockMvc.perform(post("/api/v1/books")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -119,8 +130,8 @@ class RestExceptionHandlerTest {
                                         999L))))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.valueOf("text/plain;charset=UTF-8")))
-                .andExpect(content().string("Genre with id 999 not found"));
+                .andExpect(content().contentType(MediaType.valueOf("application/json")))
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
 
         verify(authorRepository, times(1)).findById(anyLong());
     }
@@ -128,14 +139,14 @@ class RestExceptionHandlerTest {
     @DisplayName("должен обрабатывать исключени внутренней ошибки сервера")
     @Test
     void shouldHandleAnyRuntimeException() throws Exception {
-        doReturn(Optional.of(new RuntimeException())).when(bookRepository).findById(anyLong());
+        when(bookRepository.findById(anyLong())).thenThrow(new RuntimeException());
 
         mockMvc.perform(get("/api/v1/books/{id}", 999))
                 .andDo(print())
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().contentType(MediaType.valueOf("text/plain;charset=UTF-8")))
+                .andExpect(content().contentType(MediaType.valueOf("application/json")))
                 .andExpect(content()
-                        .string(containsString("class java.lang.RuntimeException")));
+                        .string(containsString("stackTrace\":\"java.lang.RuntimeException")));
 
     }
 }
