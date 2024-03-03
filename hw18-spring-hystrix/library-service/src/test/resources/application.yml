@@ -12,12 +12,6 @@ spring:
       ddl-auto: none
     show-sql: true
 
-resilience4j:
-  circuitbreaker:
-    configs:
-      default:
-        registerHealthIndicator: true
-
 eureka:
   client:
     register-with-eureka: false
@@ -27,7 +21,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: "metrics,health,logfile,flyway"
+  health:
+    defaults:
+      enabled: true
 
 logging:
   file:

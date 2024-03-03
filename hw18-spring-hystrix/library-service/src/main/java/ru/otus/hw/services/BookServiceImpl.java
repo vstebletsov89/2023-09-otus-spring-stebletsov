@@ -1,6 +1,5 @@
 package ru.otus.hw.services;
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +25,6 @@ public class BookServiceImpl implements BookService {
 
     private final BookMapper bookMapper;
 
-    @CircuitBreaker(name = "getBook", fallbackMethod = "buildFallbackBook")
     @Transactional(readOnly = true)
     @Override
     public BookDto findById(long id) {
@@ -35,12 +33,6 @@ public class BookServiceImpl implements BookService {
                         .orElseThrow(() -> new NotFoundException("Book with id %d not found".formatted(id))));
     }
 
-    @SuppressWarnings("unused")
-    public BookDto buildFallbackBook(Throwable throwable) {
-        return new BookDto(1L, "fallbackBook", null, null);
-    }
-
-    @CircuitBreaker(name = "getBooks", fallbackMethod = "buildFallbackBooks")
     @Transactional(readOnly = true)
     @Override
     public List<BookDto> findAll() {
@@ -50,20 +42,12 @@ public class BookServiceImpl implements BookService {
                 .toList();
     }
 
-    @SuppressWarnings("unused")
-    public List<BookDto> buildFallbackBooks(Throwable throwable) {
-        return List.of(new BookDto(1L, "fallbackBook", null, null));
-    }
-
-
-    @CircuitBreaker(name = "saveBook", fallbackMethod = "buildFallbackBook")
     @Transactional
     @Override
     public BookDto create(BookCreateDto bookCreateDto) {
         return addBook(bookCreateDto);
     }
 
-    @CircuitBreaker(name = "updateBook", fallbackMethod = "buildFallbackBook")
     @Transactional
     @Override
     public BookDto update(BookUpdateDto bookUpdateDto) {

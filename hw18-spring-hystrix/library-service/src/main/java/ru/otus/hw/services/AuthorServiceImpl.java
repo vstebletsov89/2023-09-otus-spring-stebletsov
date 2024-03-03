@@ -1,6 +1,5 @@
 package ru.otus.hw.services;
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +17,6 @@ public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorMapper authorMapper;
 
-    @CircuitBreaker(name = "getAuthors", fallbackMethod = "buildFallbackAuthors")
     @Transactional(readOnly = true)
     @Override
     public List<AuthorDto> findAll() {
@@ -28,12 +26,6 @@ public class AuthorServiceImpl implements AuthorService {
                 .toList();
     }
 
-    @SuppressWarnings("unused")
-    public List<AuthorDto> buildFallbackAuthors(Throwable e) {
-        return List.of(new AuthorDto(0, "fallbackAuthors"));
-    }
-
-    @CircuitBreaker(name = "getAuthors", fallbackMethod = "buildFallbackAuthor")
     @Transactional(readOnly = true)
     @Override
     public AuthorDto findById(long id) {
@@ -42,8 +34,4 @@ public class AuthorServiceImpl implements AuthorService {
                         .orElseThrow(() -> new NotFoundException("Author with id %d not found".formatted(id))));
     }
 
-    @SuppressWarnings("unused")
-    public AuthorDto buildFallbackAuthor(Throwable e) {
-        return new AuthorDto(0, "fallbackAuthor");
-    }
 }

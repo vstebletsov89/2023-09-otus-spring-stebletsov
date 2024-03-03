@@ -23,14 +23,18 @@ public class ActuatorTest {
     @ParameterizedTest
     @ValueSource(strings = {
             "/actuator",
-            "/actuator/logfile",
-            "/actuator/health",
-            "/actuator/flyway",
-            "/actuator/metrics"})
+            "/actuator/circuitbreakers",
+            "/actuator/circuitbreakerevents",
+            "/actuator/ratelimiters",
+            "/actuator/ratelimiterevents",
+            "/actuator/retries",
+            "/actuator/retryevents",
+            "/actuator/timelimiters",
+            "/actuator/timelimiterevents",
+    })
     void shouldHaveAccessToActuator(String endpoint) throws Exception {
         mockMvc.perform(get(endpoint))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
-
 }

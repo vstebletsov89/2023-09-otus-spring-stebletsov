@@ -1,6 +1,5 @@
 package ru.otus.hw.services;
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +17,6 @@ public class GenreServiceImpl implements GenreService {
 
     private final GenreMapper genreMapper;
 
-    @CircuitBreaker(name = "getGenres", fallbackMethod = "buildFallbackGenres")
     @Transactional(readOnly = true)
     @Override
     public List<GenreDto> findAll() {
@@ -28,12 +26,6 @@ public class GenreServiceImpl implements GenreService {
                 .toList();
     }
 
-    @SuppressWarnings("unused")
-    public List<GenreDto> buildFallbackGenres(Throwable e) {
-        return List.of(new GenreDto(0, "fallbackGenre"));
-    }
-
-    @CircuitBreaker(name = "getGenre", fallbackMethod = "buildFallbackGenre")
     @Transactional(readOnly = true)
     @Override
     public GenreDto findById(long id) {
@@ -42,8 +34,4 @@ public class GenreServiceImpl implements GenreService {
                         .orElseThrow(() -> new NotFoundException("Genre with id %d not found".formatted(id))));
     }
 
-    @SuppressWarnings("unused")
-    public GenreDto buildFallbackGenre(Throwable e) {
-        return new GenreDto();
-    }
 }

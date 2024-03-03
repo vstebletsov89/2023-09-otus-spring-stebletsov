@@ -26,16 +26,7 @@ public class ActuatorTest {
             "/actuator/logfile",
             "/actuator/health",
             "/actuator/flyway",
-            "/actuator/metrics",
-            "/actuator/circuitbreakers",
-            "/actuator/circuitbreakerevents",
-            "/actuator/ratelimiters",
-            "/actuator/ratelimiterevents",
-            "/actuator/retries",
-            "/actuator/retryevents",
-            "/actuator/timelimiters",
-            "/actuator/timelimiterevents",
-    })
+            "/actuator/metrics"})
     void shouldHaveAccessToActuator(String endpoint) throws Exception {
         mockMvc.perform(get(endpoint))
                 .andDo(print())
