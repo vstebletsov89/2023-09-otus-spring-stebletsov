@@ -10,6 +10,7 @@
     <modules>
         <module>library-service</module>
         <module>library-client</module>
+        <module>library-dto</module>
         <module>eureka-server</module>
     </modules>
 
