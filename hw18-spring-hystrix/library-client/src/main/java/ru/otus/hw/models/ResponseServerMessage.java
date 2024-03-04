@@ -8,7 +8,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @Builder
 public class ResponseServerMessage {
-    private final String errorMessage;
+    private String errorMessage;
 
-    private final String stackTrace;
+    private String stackTrace;
 }
