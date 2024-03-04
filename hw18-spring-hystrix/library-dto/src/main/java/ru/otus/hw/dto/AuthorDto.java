@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class AuthorDto {
     private long id;
 
-    @NotBlank(message = "FullName field should not be blank")
+    @NotBlank(message = "FullName field must not be blank")
     private String fullName;
 
 }

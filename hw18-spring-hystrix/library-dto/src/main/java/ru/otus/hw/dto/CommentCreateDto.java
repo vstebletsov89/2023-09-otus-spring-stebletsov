@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentCreateDto {
-    @NotBlank(message = "{text-field-must-not-be-blank}")
+    @NotBlank(message = "Text field must not be blank")
     private String text;
 
     @NotNull

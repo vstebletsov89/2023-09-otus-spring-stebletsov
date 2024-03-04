@@ -13,7 +13,7 @@ public class CommentUpdateDto {
     @NotNull
     private Long id;
 
-    @NotBlank(message = "{text-field-must-not-be-blank}")
+    @NotBlank(message = "Text field must not be blank")
     private String text;
 
     @NotNull

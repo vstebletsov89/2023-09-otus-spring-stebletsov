@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookCreateDto {
-    @NotBlank(message = "{title-field-must-not-be-blank}")
+    @NotBlank(message = "Title field must not be blank")
     private String title;
 
     @NotNull

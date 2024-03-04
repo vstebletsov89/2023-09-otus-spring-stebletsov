@@ -13,7 +13,7 @@ public class BookUpdateDto {
     @NotNull
     private Long id;
 
-    @NotBlank(message = "{title-field-must-not-be-blank}")
+    @NotBlank(message = "Title field must not be blank")
     private String title;
 
     @NotNull
