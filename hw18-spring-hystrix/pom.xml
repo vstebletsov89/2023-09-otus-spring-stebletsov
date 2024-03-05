@@ -5,27 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.otus</groupId>
-    <artifactId>otus-spring</artifactId>
+    <artifactId>hw18-spring-hystrix</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>hw01-xml-config</module>
-        <module>hw02-annotation-config</module>
-        <module>hw03-spring-boot</module>
-        <module>hw04-spring-shell</module>
-        <module>hw05-spring-jdbc</module>
-        <module>hw06-spring-orm</module>
-        <module>hw07-spring-data</module>
-        <module>hw08-spring-mongodb</module>
-        <module>hw09-spring-mvc</module>
-        <module>hw10-spring-mvc-rest</module>
-        <module>hw11-spring-webflux</module>
-        <module>hw12-spring-security</module>
-        <module>hw13-spring-security-url</module>
-        <module>hw14-spring-batch</module>
-        <module>hw15-spring-integration</module>
-        <module>hw16-spring-boot-actuator</module>
-        <module>hw17-docker-container</module>
-        <module>hw18-spring-hystrix</module>
+        <module>library-service</module>
+        <module>library-client</module>
+        <module>library-dto</module>
+        <module>eureka-server</module>
     </modules>
 
     <packaging>pom</packaging>
